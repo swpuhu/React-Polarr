@@ -1,6 +1,9 @@
-import React, {useEffect, useRef} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import styled from "styled-components";
 import {useFile} from "../lib/useFile";
+import {Context} from "../Context";
+import {ActionType, EditStatus} from "../types/type";
+import {WebGL} from "../render/WebGL";
 
 const Wrapper = styled.div`
     flex: 1;
@@ -17,38 +20,66 @@ const Button = styled.button`
     border-radius: 10px;
     background: #333;
 `;
+const Center = styled.div`
+    width: 100%;
+    height: 100%;
+    text-align: center;
+`;
 
-const Main: React.FC = (props) => {
+const Main: React.FC = () => {
+    const {state, dispatch} = useContext(Context);
     const {input} = useFile((file) => {
-        console.log(file);
+        if (/\.png$/.test(file.name) || /\.jpe?g$/.test(file.name) || /\.bmp$/.test(file.name)) {
+            let image = document.createElement('img');
+            let url = URL.createObjectURL(file);
+            image.onload = () => {
+                dispatch({type: ActionType.addLayer, payload: {source: image, position: [0.0, 0.0, 1.0, 1.0]}});
+                URL.revokeObjectURL(url);
+            };
+            image.src = url;
+        }
     });
+
     const open = () => {
         input.click();
     };
     const canvas = useRef(document.createElement('canvas'));
     useEffect(() => {
+        console.log(canvas.current);
         if (canvas.current !== null) {
             let canvasEle = canvas.current;
             if (canvasEle) {
-                canvasEle.width = 500;
-                canvasEle.height = 500;
-                canvasEle.getContext('webgl');
+                canvasEle.width = 2 * window.innerWidth;
+                canvasEle.height = 2 * (window.innerHeight - 89);
+                let gl = canvasEle.getContext('webgl', {
+                    premultipliedAlpha: false,
+                    antialias: true
+                });
+                if (gl) {
+                    let renderer = WebGL(gl);
+                    renderer.render(state.layers);
+                }
             }
 
         }
-    }, []);
-
+    });
+    const buttons = (
+        <div>
+            <Button onClick={open}>打开照片</Button>
+            <Button>打开样本照片</Button>
+        </div>
+    );
+    const reactCanvas = (
+        <Center>
+            <canvas style={{width: "100%", height: "100%"}} ref={canvas}/>
+        </Center>
+    );
+    const content = state.editStatus === EditStatus.IDLE ? buttons : reactCanvas;
     return (
         <Wrapper>
-            <div>
-                <Button onClick={open}>打开照片</Button>
-                <Button>打开样本照片</Button>
-            </div>
-            <div>
-                <canvas ref={canvas}/>
-            </div>
+            {content}
         </Wrapper>
     )
-}
+};
 
 export {Main}

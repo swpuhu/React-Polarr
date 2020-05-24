@@ -5,5 +5,6 @@ export enum EditStatus {
 }
 
 export enum ActionType {
-    updateEditStatus
-};
+    updateEditStatus,
+    addLayer
+}
