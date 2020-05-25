@@ -95,7 +95,8 @@
     "node-sass": "npm:dart-sass@^1.25.0",
     "styled-components": "^5.1.0",
     "svg-sprite-loader": "^5.0.0",
-    "svgo-loader": "^2.2.1"
+    "svgo-loader": "^2.2.1",
+    "worker-loader": "^2.0.0"
   },
   "jest": {
     "roots": [

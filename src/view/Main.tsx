@@ -3,8 +3,10 @@ import styled from "styled-components";
 import {useFile} from "../lib/useFile";
 import {Context} from "../Context";
 import {ActionType, EditStatus} from "../types/type";
-import {WebGL} from "../render/WebGL";
-
+import {Canvas} from "../render/Cavans";
+// @ts-ignore
+import StatisticColorWorker from '../lib/statisticColor.worker';
+const worker = new StatisticColorWorker();
 const Wrapper = styled.div`
     flex: 1;
     display: flex;
@@ -24,8 +26,15 @@ const Center = styled.div`
     width: 100%;
     height: 100%;
     text-align: center;
+    > canvas {
+        width: 100%;
+        height: 100%;
+    }
 `;
-
+worker.onmessage = (e: any) => {
+    console.log(e.data);
+}
+const canvas = Canvas(0, 0);
 const Main: React.FC = () => {
     const {state, dispatch} = useContext(Context);
     const {input} = useFile((file) => {
@@ -43,24 +52,17 @@ const Main: React.FC = () => {
     const open = () => {
         input.click();
     };
-    const canvas = useRef(document.createElement('canvas'));
+    const canvasContainer = useRef(document.createElement('div'));
     useEffect(() => {
-        console.log(canvas.current);
-        if (canvas.current !== null) {
-            let canvasEle = canvas.current;
-            if (canvasEle) {
-                canvasEle.width = 2 * window.innerWidth;
-                canvasEle.height = 2 * (window.innerHeight - 89);
-                let gl = canvasEle.getContext('webgl', {
-                    premultipliedAlpha: false,
-                    antialias: true
-                });
-                if (gl) {
-                    let renderer = WebGL(gl);
-                    renderer.render(state.layers);
-                }
+        if (canvasContainer.current !== null) {
+            let container = canvasContainer.current;
+            if (canvas && container) {
+                container.appendChild(canvas.canvasElement);
+                let width = window.devicePixelRatio * window.innerWidth;
+                let height = window.devicePixelRatio * (window.innerHeight - 92);
+                canvas.viewport(width, height);
+                canvas.renderer.render(state.layers);
             }
-
         }
     });
     const buttons = (
@@ -70,8 +72,8 @@ const Main: React.FC = () => {
         </div>
     );
     const reactCanvas = (
-        <Center>
-            <canvas style={{width: "100%", height: "100%"}} ref={canvas}/>
+        <Center ref={canvasContainer}>
+            {/*<canvas style={{width: "100%", height: "100%"}} ref={canvas}/>*/}
         </Center>
     );
     const content = state.editStatus === EditStatus.IDLE ? buttons : reactCanvas;

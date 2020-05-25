@@ -6,5 +6,6 @@ export enum EditStatus {
 
 export enum ActionType {
     updateEditStatus,
-    addLayer
+    addLayer,
+    updateCanvasSize
 }

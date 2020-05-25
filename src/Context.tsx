@@ -8,11 +8,13 @@ export type Layer = {
         y1: number,
         x2: number,
         y2: number
-    }
+    },
 }
 type StateType = {
     editStatus: EditStatus;
-    layers :Array<Layer>
+    layers :Array<Layer>,
+    width: number,
+    height: number
 }
 
 
@@ -20,7 +22,9 @@ const initialState: StateType = {
     editStatus: EditStatus.IDLE,
     layers: [
 
-    ]
+    ],
+    width: 0,
+    height: 0,
 };
 
 const reducer = (state: typeof initialState, action: {type: ActionType, payload: any}) => {
@@ -37,6 +41,12 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                     ...state.layers,
                     action.payload
                 ]
+            };
+        case ActionType.updateCanvasSize:
+            return {
+                ...state,
+                width: action.payload.width,
+                height: action.payload.height
             };
         default:
             return state;

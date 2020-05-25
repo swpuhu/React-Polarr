@@ -4,9 +4,9 @@ import {Layer} from "../Context";
 
 
 export const WebGL = (gl: WebGLRenderingContext) => {
-    const width = gl.canvas.width;
-    const height = gl.canvas.height;
-    const vertexPoint = new Float32Array([
+    let width = gl.canvas.width;
+    let height = gl.canvas.height;
+    let vertexPoint = new Float32Array([
         -width / 2, -height / 2,
         width / 2, -height / 2,
         width / 2, height / 2,
@@ -34,6 +34,19 @@ export const WebGL = (gl: WebGLRenderingContext) => {
 
     const normalFilter = NormalFilter(gl, vertexBuffer, texCoordBuffer);
     const texture = createTexture(gl);
+    const viewport = (_width: number, _height: number) => {
+        gl.viewport(0, 0, _width, _height);
+        width = _width;
+        height = _height;
+        vertexPoint = new Float32Array([
+            -width / 2, -height / 2,
+            width / 2, -height / 2,
+            width / 2, height / 2,
+            width / 2, height / 2,
+            -width / 2, height / 2,
+            -width / 2, -height / 2,
+        ]);
+    };
     const render = (layers: Layer[]) => {
         normalFilter.program && gl.useProgram(normalFilter.program);
         let layer = layers[0];
@@ -46,7 +59,8 @@ export const WebGL = (gl: WebGLRenderingContext) => {
     };
 
     return {
-        render
+        render,
+        viewport
     }
 
 };

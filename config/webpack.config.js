@@ -349,6 +349,10 @@ module.exports = function(webpackEnv) {
           // back to the "file" loader at the end of the loader list.
           oneOf: [
             {
+              test: /\.worker.js$/,
+              use: {loader: 'worker-loader'}
+            },
+            {
               test: /\.svg$/,
               use: [
                 { loader: 'svg-sprite-loader', options: {} },

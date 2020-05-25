@@ -14,7 +14,7 @@ const Wrapper = styled.div`
         fill: #b4b3af;
         margin-bottom: 5px;
         &.active {
-            fill: #f60;
+            fill: #fff;
         }
     }
 `;
