@@ -6,8 +6,9 @@ import {
     setAttributes,
     setUniforms
 } from "../GLUtil";
+import {WebGLRenderer} from "../../types/type";
 
-export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, vertexBuffer: WebGLBuffer | null, texCoordBuffer: WebGLBuffer | null) => {
+export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, vertexBuffer: WebGLBuffer | null, texCoordBuffer: WebGLBuffer | null): WebGLRenderer => {
     const vertexShader = `
     attribute vec4 a_position;
     attribute vec2 a_texCoord;
@@ -29,29 +30,42 @@ export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext,
     `;
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
     const program = initWebGL(gl, vertexShader, fragmentShader);
-    if (program) {
-        gl.useProgram(program);
-        const attributeSetter = createAttributeSetters(gl, program);
-        const uniformSetter = createUniformSetters(gl, program);
-        const attributes = {
-            a_position: {
-                numComponents: 2,
-                buffer: vertexBuffer
-            },
-            a_texCoord: {
-                numComponents: 2,
-                buffer: texCoordBuffer
-            }
+    if (!program) {
+        return {
+            viewport: () => {},
+            program: null
         };
-        const uniforms = {
-            u_projection: createProjection(-gl.canvas.width / 2, gl.canvas.width / 2, gl.canvas.height / 2, -gl.canvas.height / 2, 1)
-        };
-
-        setAttributes(attributeSetter, attributes);
-        setUniforms(uniformSetter, uniforms);
     }
 
+    gl.useProgram(program);
+    const attributeSetter = createAttributeSetters(gl, program);
+    const uniformSetter = createUniformSetters(gl, program);
+    const attributes = {
+        a_position: {
+            numComponents: 2,
+            buffer: vertexBuffer
+        },
+        a_texCoord: {
+            numComponents: 2,
+            buffer: texCoordBuffer
+        }
+    };
+    const uniforms = {
+        u_projection: createProjection(-gl.canvas.width / 2, gl.canvas.width / 2, gl.canvas.height / 2, -gl.canvas.height / 2, 1)
+    };
+
+    const viewport = (width: number, height: number) => {
+        uniforms.u_projection = createProjection(-gl.canvas.width / 2, gl.canvas.width / 2, gl.canvas.height / 2, -gl.canvas.height / 2, 1);
+        setAttributes(attributeSetter, attributes);
+        setUniforms(uniformSetter, uniforms);
+    };
+
+    setAttributes(attributeSetter, attributes);
+    setUniforms(uniformSetter, uniforms);
+
+
     return {
-        program
+        program,
+        viewport
     }
 };

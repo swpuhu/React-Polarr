@@ -1,6 +1,7 @@
 import {NormalFilter} from "./shader/normal";
 import {createTexture} from "./GLUtil";
 import {Layer} from "../Context";
+import {IdentityObject, WebGLRenderer} from "../types/type";
 
 
 export const WebGL = (gl: WebGLRenderingContext) => {
@@ -32,7 +33,9 @@ export const WebGL = (gl: WebGLRenderingContext) => {
     gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, texCoordPoint, gl.STATIC_DRAW);
 
-    const normalFilter = NormalFilter(gl, vertexBuffer, texCoordBuffer);
+    const filters: IdentityObject<WebGLRenderer> = {
+        normalFilter: NormalFilter(gl, vertexBuffer, texCoordBuffer)
+    };
     const texture = createTexture(gl);
     const viewport = (_width: number, _height: number) => {
         gl.viewport(0, 0, _width, _height);
@@ -46,9 +49,17 @@ export const WebGL = (gl: WebGLRenderingContext) => {
             -width / 2, height / 2,
             -width / 2, -height / 2,
         ]);
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertexPoint, gl.STATIC_DRAW);
+        for (let key in filters) {
+            if (filters.hasOwnProperty(key)) {
+                let filter = filters[key] as WebGLRenderer;
+                filter.viewport(_width, _height);
+            }
+        }
     };
     const render = (layers: Layer[]) => {
-        normalFilter.program && gl.useProgram(normalFilter.program);
+        filters.normalFilter && gl.useProgram(filters.normalFilter.program);
         let layer = layers[0];
         if (layer) {
             gl.activeTexture(gl.TEXTURE0);

@@ -23,8 +23,8 @@ const initialState: StateType = {
     layers: [
 
     ],
-    width: 0,
-    height: 0,
+    width: 100,
+    height: 100,
 };
 
 const reducer = (state: typeof initialState, action: {type: ActionType, payload: any}) => {
