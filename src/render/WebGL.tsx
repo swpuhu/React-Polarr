@@ -58,15 +58,19 @@ export const WebGL = (gl: WebGLRenderingContext) => {
             }
         }
     };
-    const render = (layers: Layer[]) => {
+    const render = (layers: Layer[]): boolean => {
         filters.normalFilter && gl.useProgram(filters.normalFilter.program);
         let layer = layers[0];
         if (layer) {
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, layer.source);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            return true;
         }
-        gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+        return false;
+
     };
 
     return {

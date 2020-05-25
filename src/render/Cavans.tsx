@@ -18,6 +18,7 @@ export const Canvas = (width: number, height: number) => {
     return {
         renderer: renderer,
         canvasElement: canvas,
+        gl: gl,
         viewport: viewport
     }
 
