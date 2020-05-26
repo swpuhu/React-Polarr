@@ -26,6 +26,7 @@ const Button = styled.button`
     background: #333;
 `;
 const Center = styled.div`
+    position: relative;
     width: 100%;
     height: 100%;
     text-align: center;
@@ -39,7 +40,7 @@ worker.onmessage = (e: any) => {
     histogramCanvas.draw(data[0], data[1], data[2]);
 }
 const canvas = Canvas(0, 0);
-const histogramCanvas = Histogram(200, 200);
+const histogramCanvas = Histogram(360, 150);
 const Main: React.FC = () => {
     const {state, dispatch} = useContext(Context);
     const {input} = useFile((file) => {
