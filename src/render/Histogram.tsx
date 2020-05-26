@@ -1,10 +1,12 @@
+import {dragable} from "../lib/util";
+
 export const Histogram = (width: number, height: number) => {
     const canvas = document.createElement('canvas');
     canvas.classList.add('histogram');
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext('2d');
-
+    dragable(canvas, (e) => {}, (e) => {console.log('move')});
     const draw = (r: Array<number>, g: Array<number>, b: Array<number>) => {
         let step = width / 256;
         if (ctx) {
@@ -41,7 +43,6 @@ export const Histogram = (width: number, height: number) => {
             ctx.closePath();
             ctx.fill();
         }
-
     }
     return {
         draw,

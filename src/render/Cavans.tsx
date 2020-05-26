@@ -2,6 +2,10 @@ import {WebGL} from "./WebGL";
 
 export const Canvas = (width: number, height: number) => {
     const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
     const gl = canvas.getContext('webgl', {
         premultipliedAlpha: false,
         alpha: false,

@@ -10,6 +10,12 @@ export enum ActionType {
     updateCanvasSize
 }
 
+export enum EditType {
+    none,
+    transform
+}
+
+
 export type IdentityObject<T> = {
     [propsName: string]: T;
 }
@@ -17,4 +23,34 @@ export type IdentityObject<T> = {
 export type WebGLRenderer = {
     viewport: (width: number, height: number) => void;
     program: WebGLProgram | null
+}
+
+export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+
+export type Layer = {
+    editStatus: EditType,
+    source: MyImage,
+    position: {
+        x1: number,
+        y1: number,
+        x2: number,
+        y2: number
+    },
+    transform: {
+        left: number,
+        right: number,
+        top: number,
+        bottom: number,
+        scaleX: number,
+        scaleY: number,
+        offsetX: number,
+        offsetY: number,
+        rotate: number
+    }
+}
+export type StateType = {
+    editStatus: EditStatus;
+    layers :Array<Layer>,
+    width: number,
+    height: number
 }
