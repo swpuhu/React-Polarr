@@ -7,7 +7,9 @@ export enum EditStatus {
 export enum ActionType {
     updateEditStatus,
     addLayer,
-    updateCanvasSize
+    updateCanvasSize,
+    savePicture,
+    finishSavePicture
 }
 
 export enum EditType {
@@ -26,16 +28,17 @@ export type WebGLRenderer = {
 }
 
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-
+export type Position = {
+    x1: number
+    y1: number
+    x2: number
+    y2: number
+}
 export type Layer = {
-    editStatus: EditType,
-    source: MyImage,
-    position: {
-        x1: number,
-        y1: number,
-        x2: number,
-        y2: number
-    },
+    editStatus: EditType;
+    source: MyImage;
+    position: Position;
+    originPosition: Position;
     transform: {
         left: number,
         right: number,
@@ -50,6 +53,7 @@ export type Layer = {
 }
 export type StateType = {
     editStatus: EditStatus;
+    savePicture: boolean;
     layers :Array<Layer>,
     width: number,
     height: number

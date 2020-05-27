@@ -40,9 +40,10 @@ const Center = styled.div`
 worker.onmessage = (e: any) => {
     let data = e.data;
     histogramCanvas.draw(data[0], data[1], data[2]);
-}
+};
 const histogramCanvas = Histogram(360, 150);
 const canvas = Canvas(window.devicePixelRatio * window.innerWidth, window.devicePixelRatio * (window.innerHeight - 92));
+const offCanvas = Canvas(300, 200, true);
 const Main: React.FC = () => {
     const {state, dispatch} = useContext(Context);
     const {input} = useFile((file) => {
@@ -62,6 +63,8 @@ const Main: React.FC = () => {
         input.click();
     };
     const canvasContainer = useRef(document.createElement('div'));
+    const canvas2d = document.createElement('canvas');
+    const ctx = canvas2d.getContext('2d');
     useEffect(() => {
         if (canvasContainer.current !== null) {
             let container = canvasContainer.current;
@@ -72,6 +75,20 @@ const Main: React.FC = () => {
                 if (x1 !== undefined) {
                     let data = new Uint8ClampedArray((x2 - x1) * (y2 - y1) * 4);
                     canvas.gl.readPixels(x1, y1, x2 - x1, y2 - y1, canvas.gl.RGBA, canvas.gl.UNSIGNED_BYTE, data);
+                    if (state.savePicture && offCanvas) {
+                        console.log(state);
+                        if (offCanvas.canvasElement.width !== state.width || offCanvas.canvasElement.height !== state.height) {
+                            offCanvas.viewport(state.width, state.height);
+                        }
+                        offCanvas.renderer.render(state.layers);
+                        let url = offCanvas.canvasElement.toDataURL();
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.download = '保存图片.png';
+                        a.click();
+                        dispatch({type: ActionType.finishSavePicture, payload: null});
+                    }
+
                     worker.postMessage([data, histogramCanvas.canvasElement.height], [data.buffer]);
                 }
             }

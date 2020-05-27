@@ -4,6 +4,7 @@ import {ActionType, EditStatus, Layer, StateType} from "./types/type";
 
 const initialState: StateType = {
     editStatus: EditStatus.IDLE,
+    savePicture: false,
     layers: [
 
     ],
@@ -27,6 +28,10 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 layer.position.x2 = 1;
                 layer.position.y1 = -height / state.height;
                 layer.position.y2 = height / state.height;
+                layer.originPosition.x1 = layer.position.x1;
+                layer.originPosition.x2 = layer.position.x2;
+                layer.originPosition.y1 = layer.position.y1;
+                layer.originPosition.y2 = layer.position.y2;
             } else {
                 // 高适配
                 let width = state.height * (layer.source.width / layer.source.height);
@@ -34,6 +39,10 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 layer.position.y2 = 1;
                 layer.position.x1 = -width / state.width;
                 layer.position.x2 = width / state.width;
+                layer.originPosition.x1 = layer.position.x1;
+                layer.originPosition.x2 = layer.position.x2;
+                layer.originPosition.y1 = layer.position.y1;
+                layer.originPosition.y2 = layer.position.y2;
             }
             return {
                 ...state,
@@ -47,6 +56,16 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 ...state,
                 width: action.payload.width,
                 height: action.payload.height
+            };
+        case ActionType.savePicture:
+            return {
+                ...state,
+                savePicture: true
+            };
+        case ActionType.finishSavePicture:
+            return {
+                ...state,
+                savePicture: false
             };
         default:
             return state;

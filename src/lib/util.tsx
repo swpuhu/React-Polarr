@@ -10,6 +10,12 @@ export const initLayer = (source: MyImage): Layer => {
             x2: 1,
             y2: 1
         },
+        originPosition: {
+            x1: 0,
+            y1: 0,
+            x2: 1,
+            y2: 1
+        },
         transform: {
             left: 0,
             right: 0,
