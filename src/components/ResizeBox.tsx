@@ -8,8 +8,8 @@ const Wrapper = styled.div`
 export const ResizeBox: React.FC = () => {
     const {state, dispatch} = useContext(Context);
     return (
-        <Wrapper style={{
-        }}>
+        <Wrapper>
+
         </Wrapper>
     )
 };

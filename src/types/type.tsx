@@ -4,6 +4,15 @@ export enum EditStatus {
     EDTING
 }
 
+export enum ProcessStatus {
+    none,
+    clip,
+    filter,
+    light,
+    color,
+    effect
+}
+
 export enum ActionType {
     updateEditStatus,
     addLayer,
@@ -53,6 +62,7 @@ export type Layer = {
 }
 export type StateType = {
     editStatus: EditStatus;
+    processStatus: ProcessStatus;
     savePicture: boolean;
     layers :Array<Layer>,
     width: number,

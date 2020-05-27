@@ -16,17 +16,22 @@ const Wrapper = styled.div`
         &.active {
             fill: #fff;
         }
+        &.selected {
+            fill: #f60;
+        }
     }
 `;
 type Props = {
     label: string,
     iconName: string,
-    isActive: boolean
+    isActive: boolean,
+    onClick: () => void,
+    isSelected: boolean
 }
 const IconButton: React.FC<Props> = (props) => {
     return (
-        <Wrapper>
-            <Icon name={props.iconName} className={props.isActive ? 'active' : ''}/>
+        <Wrapper onClick={props.onClick}>
+            <Icon name={props.iconName} className={(props.isActive ? 'active' : '') + ' ' + (props.isSelected ? 'selected' : '')}/>
             <div>{props.label}</div>
         </Wrapper>
     )

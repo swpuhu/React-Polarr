@@ -1,9 +1,10 @@
 import React, {createContext, useReducer} from "react";
-import {ActionType, EditStatus, Layer, StateType} from "./types/type";
+import {ActionType, EditStatus, Layer, ProcessStatus, StateType} from "./types/type";
 
 
 const initialState: StateType = {
     editStatus: EditStatus.IDLE,
+    processStatus: ProcessStatus.none,
     savePicture: false,
     layers: [
 
