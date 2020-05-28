@@ -26,6 +26,10 @@ export const initLayer = (source: MyImage): Layer => {
             offsetX: 0,
             offsetY: 0,
             rotate: 0
+        },
+        color: {
+            temperature: 0,
+            tint: 0
         }
     }
 };

@@ -69,12 +69,13 @@ const Footer: React.FC = () => {
         <Wrapper>
             <div>
                 {
-                    activeButton && activeButton.id === 3 ? <Color/> : null
+                    activeButton && activeButton.id === 5 ? <Color/> : null
                 }
             </div>
             <div className="footer-icon">
 
                 {buttons.map(button => <IconButton onClick={() => onClick(button.id)}
+                                                   key={button.id}
                                                    label={button.label}
                                                    iconName={button.iconName}
                                                    isActive={state.editStatus === EditStatus.EDTING}

@@ -338,3 +338,42 @@ export function setAttributes (setters: AttributeSetter | any, attribs: any) {
         }
     });
 }
+
+export function createFramebufferTexture (gl: WebGLRenderingContext | WebGL2RenderingContext, number: number, width: number, height: number): [WebGLFramebuffer[], WebGLTexture[]] {
+    let framebuffers: Array<WebGLFramebuffer> = [];
+    let textures: Array<WebGLTexture> = [];
+    for (let i = 0; i < number; i++) {
+        let framebuffer = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+        let texture = createTexture(gl);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+        texture && textures.push(texture);
+        framebuffer && framebuffers.push(framebuffer);
+    }
+    return [framebuffers, textures];
+}
+
+
+export function deleteFramebuffer(gl: WebGLRenderingContext | WebGL2RenderingContext, frameBuffer: WebGLFramebuffer | WebGLFramebuffer[]): void {
+    if (Array.isArray(frameBuffer)) {
+        for (let i = 0; i < frameBuffer.length; i++) {
+            gl.deleteFramebuffer(frameBuffer[i]);
+        }
+        frameBuffer.length = 0;
+    } else {
+        gl.deleteFramebuffer(frameBuffer);
+    }
+}
+
+
+export function deleteTexture(gl: WebGLRenderingContext | WebGL2RenderingContext, texture: WebGLTexture | WebGLTexture[]): void {
+    if (Array.isArray(texture)) {
+        for (let i = 0; i < texture.length; i++) {
+            gl.deleteTexture(texture[i]);
+        }
+        texture.length = 0;
+    } else {
+        gl.deleteTexture(texture);
+    }
+}

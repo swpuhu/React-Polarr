@@ -32,7 +32,7 @@ export type IdentityObject<T> = {
 }
 
 export type WebGLRenderer = {
-    viewport: (width: number, height: number) => void;
+    viewport: () => void;
     program: WebGLProgram | null
 }
 
@@ -43,22 +43,29 @@ export type Position = {
     x2: number
     y2: number
 }
+export type Transform = {
+    left: number,
+    right: number,
+    top: number,
+    bottom: number,
+    scaleX: number,
+    scaleY: number,
+    offsetX: number,
+    offsetY: number,
+    rotate: number
+}
+
+export type Color = {
+    temperature: number
+    tint?: number
+}
 export type Layer = {
     editStatus: EditType;
     source: MyImage;
     position: Position;
     originPosition: Position;
-    transform: {
-        left: number,
-        right: number,
-        top: number,
-        bottom: number,
-        scaleX: number,
-        scaleY: number,
-        offsetX: number,
-        offsetY: number,
-        rotate: number
-    }
+    transform: Transform;
+    color: Color
 }
 export type StateType = {
     editStatus: EditStatus;
