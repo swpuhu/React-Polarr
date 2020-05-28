@@ -28,7 +28,6 @@ export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext,
         gl_FragColor = color;
     }
     `;
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
     const program = initWebGL(gl, vertexShader, fragmentShader);
     if (!program) {
         return {
@@ -55,17 +54,22 @@ export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext,
     };
 
     const viewport = () => {
+        gl.useProgram(program);
         uniforms.u_projection = createProjection(-gl.canvas.width / 2, gl.canvas.width / 2, gl.canvas.height / 2, -gl.canvas.height / 2, 1);
         setAttributes(attributeSetter, attributes);
         setUniforms(uniformSetter, uniforms);
     };
-
+    const setColor = () => {
+        setAttributes(attributeSetter, attributes);
+        setUniforms(uniformSetter, uniforms);
+    };
     setAttributes(attributeSetter, attributes);
     setUniforms(uniformSetter, uniforms);
 
 
     return {
         program,
-        viewport
+        viewport,
+        setColor
     }
 };

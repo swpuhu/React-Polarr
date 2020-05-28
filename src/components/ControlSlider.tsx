@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
 import {Icon} from "./Icon";
-import {clamp, dragable} from "../lib/util";
+import {clamp, debounce, dragable, throttle} from "../lib/util";
 import {roundNumber} from "../render/GLUtil";
 
 const Wrapper = styled.div`
@@ -46,6 +46,7 @@ const Point = styled.div`
     position: absolute;
     top: 50%;
     transform: translate(-10px, -50%);
+    touch-action: none;
 `;
 
 type Props = {
@@ -58,19 +59,22 @@ type Props = {
 export const ControlSlider:React.FC<Props> = (props) => {
     const pointRef = useRef<HTMLDivElement>(null);
     const barRef = useRef<HTMLDivElement>(null);
-    const shadowbarRef = useRef<HTMLDivElement>(null);
     const range = props.max - props.min;
-    const [value, setValue] = useState(props.value);
+    const [value, _setValue] = useState(props.value);
+    const setValue = (v: number) => {
+        _setValue(v);
+        props.onChange(v);
+    };
     const touchStart = (e: React.TouchEvent) => {
         e.persist();
         let bar = barRef.current;
-        const touchmove = (ev: TouchEvent) => {
+        const touchmove = throttle((ev: TouchEvent) => {
             if (bar) {
                 let _value = roundNumber(value + (ev.touches[0].clientX - e.touches[0].clientX) / bar.offsetWidth * range, props.step);
                 _value = clamp(_value, props.min, props.max);
                 setValue(_value);
             }
-        };
+        });
         const touchend = () => {
             document.removeEventListener('touchmove', touchmove);
             document.removeEventListener('touchend', touchend);
@@ -85,11 +89,11 @@ export const ControlSlider:React.FC<Props> = (props) => {
             <Icon name="arrowLeft" className="slider-button" onClick={() => setValue(clamp(value - props.step, props.min, props.max))}/>
             <div className="slider-bar">
                 <Bar ref={barRef}/>
-                <Shadowbar ref={shadowbarRef} style={{
-                    width: `${value / (props.max - props.min) * 100}%`
-                }}/>
+                {/*<Shadowbar ref={shadowbarRef} style={{*/}
+                {/*    width: `${(value - props.min) / (props.max - props.min) * 100}%`*/}
+                {/*}}/>*/}
                 <Point ref={pointRef} onTouchStart={touchStart} style={{
-                    left: `${value / (props.max - props.min) * 100}%`
+                    left: `${(value - props.min) / (props.max - props.min) * 100}%`
                 }}/>
             </div>
             <Icon name="arrowRight" className="slider-button" onClick={() => setValue(clamp(value + props.step, props.min, props.max))}/>

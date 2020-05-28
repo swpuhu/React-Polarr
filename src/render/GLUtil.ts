@@ -380,7 +380,7 @@ export function deleteTexture(gl: WebGLRenderingContext | WebGL2RenderingContext
 
 export function mapValue(v1: number, v2: number, w1: number, w2: number): (v: number) => number {
     return function (v) {
-        return (w1 - w2) / (v1 - v2) * v + ((w2 * v1 - -w2 * v2) / (v1 - v2));
+        return (w1 - w2) / (v1 - v2) * v + ((w1 * v2 - w2 * v1) / (v2 - v1));
     }
 }
 

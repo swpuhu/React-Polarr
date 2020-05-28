@@ -4,11 +4,11 @@ import {
     createUniformSetters,
     createProjection,
     setAttributes,
-    setUniforms
+    setUniforms, mapValue
 } from "../GLUtil";
-import {ColorRenderer, WebGLRenderer} from "../../types/type";
+import {WebGLRenderer} from "../../types/type";
 
-export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, vertexBuffer: WebGLBuffer | null, texCoordBuffer: WebGLBuffer | null): ColorRenderer => {
+export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, vertexBuffer: WebGLBuffer | null, texCoordBuffer: WebGLBuffer | null): WebGLRenderer => {
     const vertexShader = `
     attribute vec4 a_position;
     attribute vec2 a_texCoord;
@@ -41,7 +41,6 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
         gl_FragColor = vec4(mix(rgb, processed, u_temperature), source.a);
     }
     `;
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
     const program = initWebGL(gl, vertexShader, fragmentShader);
     if (!program) {
         return {
@@ -72,14 +71,15 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
 
     const viewport = () => {
         uniforms.u_projection = createProjection(-gl.canvas.width / 2, gl.canvas.width / 2, gl.canvas.height / 2, -gl.canvas.height / 2, 1);
+        gl.useProgram(program);
         setAttributes(attributeSetter, attributes);
         setUniforms(uniformSetter, uniforms);
     };
-
+    const mapTemperature = mapValue(-100, 100, 0, 10000);
     const setColor = (temperature: number, tint?: number) => {
-        // temperature -100 ~ 100 map to 0 ~ 8000
-        temperature = 40 * temperature + 4000;
-        uniforms.u_temperature = temperature < 5000 ? 0.0004 * (temperature-5000.0) : 0.00006 * (temperature-5000.0);
+        // temperature -100 ~ 100 map to 0 ~ 10000
+        temperature = mapTemperature(temperature);
+        uniforms.u_temperature = temperature < 5000 ? 0.0002 * (temperature-5000.0) : 0.00007 * (temperature-5000.0);
         setUniforms(uniformSetter, uniforms);
     };
 

@@ -1,11 +1,10 @@
 import {NormalFilter} from "./shader/normal";
 import {createFramebufferTexture, createTexture, deleteFramebuffer, deleteTexture} from "./GLUtil";
-import {IdentityObject, Layer, WebGLRenderer} from "../types/type";
+import {IdentityObject, Layer, MyImage, MyWebGLRender, WebGLRenderer} from "../types/type";
 import {ColorFilter} from "./shader/Color";
-import {render} from "@testing-library/react";
 
-
-export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false) => {
+export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWebGLRender => {
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
     let width = gl.canvas.width;
     let height = gl.canvas.height;
     let vertexPoint = new Float32Array([
@@ -17,6 +16,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false) => {
         -width / 2, -height / 2,
     ]);
     let fullPoint = vertexPoint;
+    let cacheImage: MyImage | null = null;
 
     const texCoordPoint = new Float32Array([
         0.0, 0.0,
@@ -40,7 +40,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false) => {
         colorFilter: ColorFilter(gl, vertexBuffer, texCoordBuffer)
     };
     let [framebuffers, textures] = createFramebufferTexture(gl, 2, width, height);
-    const texture = createTexture(gl);
+    let texture = createTexture(gl);
     const viewport = (_width: number, _height: number) => {
         gl.viewport(0, 0, _width, _height);
         width = _width;
@@ -66,6 +66,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false) => {
             }
         }
     };
+
     const render = (layers: Layer[]): Array<number> => {
         let layer = layers[0];
         let renderCount = 0;
@@ -84,12 +85,21 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false) => {
             }
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, layer.source);
+            if (cacheImage !== layer.source) {
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, layer.source);
+                cacheImage = layer.source;
+            }
+
 
             gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[renderCount % 2]);
             gl.useProgram(filters.colorFilter.program);
             gl.clear(gl.COLOR_BUFFER_BIT);
+            if (filters.colorFilter && filters.colorFilter.setColor) {
+                filters.colorFilter.setColor(layer.color.temperature);
+            }
             gl.drawArrays(gl.TRIANGLES, 0, 6);
+            // 第一次渲染要回复到全屏的顶点位置
             gl.bindTexture(gl.TEXTURE_2D, textures[renderCount % 2]);
             gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, fullPoint, gl.STATIC_DRAW);

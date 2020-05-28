@@ -1,6 +1,7 @@
 import {WebGL} from "./WebGL";
+import {MyCanvas} from "../types/type";
 
-export const Canvas = (width: number, height: number, isSave: boolean = false) => {
+export const Canvas = (width: number, height: number, isSave: boolean = false): MyCanvas => {
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -25,5 +26,4 @@ export const Canvas = (width: number, height: number, isSave: boolean = false) =
         gl: gl,
         viewport: viewport
     }
-
 }

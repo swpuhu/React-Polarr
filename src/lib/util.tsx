@@ -1,4 +1,4 @@
-import {EditType, Layer, MyImage} from "../types/type";
+import {ActionType, EditType, Layer, MyImage} from "../types/type";
 
 export const initLayer = (source: MyImage): Layer => {
     return {
@@ -103,4 +103,47 @@ export const dragable = (container: HTMLElement,
         'mousedown': mousedownHandler,
         'touchstart': touchstartHandler
     }
+};
+
+export const throttle = function (fn: (...args: any) => any, delay = 50) {
+    // @ts-ignore
+    let self = this;
+    let timer: number;
+    return function () {
+        let args = Array.prototype.slice.call(arguments);
+        if (timer) {
+            return;
+        }
+        timer = setTimeout(() => {
+            timer = 0;
+            clearTimeout(timer);
+            fn.apply(self, args);
+        }, delay);
+    }
+};
+
+export const debounce = function (fn: (...args: any) => any, delay = 50) {
+    let timer: number;
+    // @ts-ignore
+    let self = this;
+    return function (...args: any) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn.apply(self, args);
+        }, delay);
+    }
+};
+
+
+export const saveCanvasPicture = (canvas: HTMLCanvasElement, name: string) => {
+    return new Promise(resolve => {
+        canvas.toBlob(function (blob) {
+            let href = URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = href;
+            a.download = name;
+            a.click();
+            resolve();
+        });
+    })
 };

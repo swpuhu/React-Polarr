@@ -10,6 +10,7 @@ export const Histogram = (width: number, height: number) => {
     const draw = (r: Array<number>, g: Array<number>, b: Array<number>) => {
         let step = width / 256;
         if (ctx) {
+            ctx.clearRect(0, 0, width, height);
             ctx.globalCompositeOperation = 'lighter';
             ctx.fillStyle = '#ff0000';
             ctx.clearRect(0, height - 0, width, height);

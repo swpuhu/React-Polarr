@@ -6,6 +6,7 @@ const initialState: StateType = {
     editStatus: EditStatus.IDLE,
     processStatus: ProcessStatus.none,
     savePicture: false,
+    currentLayer: null,
     layers: [
 
     ],
@@ -14,6 +15,7 @@ const initialState: StateType = {
 };
 
 const reducer = (state: typeof initialState, action: {type: ActionType, payload: any}) => {
+    let layer: Layer;
     switch (action.type) {
         case ActionType.updateEditStatus:
             return {
@@ -21,7 +23,7 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 editStatus: action.payload
             };
         case ActionType.addLayer:
-            const layer: Layer = action.payload;
+            layer = action.payload as Layer;
             if (layer.source.width / layer.source.height > state.width / state.height) {
                 // 宽适配
                 let height = state.width / (layer.source.width / layer.source.height);
@@ -47,9 +49,10 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             }
             return {
                 ...state,
+                currentLayer: layer,
                 layers: [
                     ...state.layers,
-                    action.payload
+                    layer
                 ]
             };
         case ActionType.updateCanvasSize:
@@ -68,6 +71,23 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 ...state,
                 savePicture: false
             };
+        case ActionType.updateTemperature:
+            if (state.currentLayer) {
+                let index = state.layers.indexOf(state.currentLayer);
+                let newLayer = {...state.currentLayer};
+                newLayer.color.temperature = action.payload;
+                return {
+                    ...state,
+                    currentLayer: newLayer,
+                    layers: state.layers.map((layer, i) => {
+                        if (index === i) {
+                            return newLayer;
+                        }
+                        return layer;
+                    })
+                };
+            }
+            return state;
         default:
             return state;
     }

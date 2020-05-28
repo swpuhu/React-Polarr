@@ -18,7 +18,8 @@ export enum ActionType {
     addLayer,
     updateCanvasSize,
     savePicture,
-    finishSavePicture
+    finishSavePicture,
+    updateTemperature
 }
 
 export enum EditType {
@@ -33,12 +34,9 @@ export type IdentityObject<T> = {
 
 export type WebGLRenderer = {
     viewport: () => void;
-    program: WebGLProgram | null
+    program: WebGLProgram | null;
+    setColor?: (temperature: number, tint?: number) => void;
 }
-
-export type ColorRenderer = {
-    setColor: (temperature: number, tint?: number) => void;
-} & WebGLRenderer;
 
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 export type Position = {
@@ -76,6 +74,19 @@ export type StateType = {
     processStatus: ProcessStatus;
     savePicture: boolean;
     layers :Array<Layer>,
+    currentLayer: Layer | null,
     width: number,
     height: number
 }
+
+export type MyWebGLRender = {
+    render: (layer: Layer[]) => number[];
+    viewport: (width: number, height: number) =>  void
+
+}
+export type MyCanvas = {
+    renderer: MyWebGLRender,
+    canvasElement: HTMLCanvasElement,
+    gl: WebGLRenderingContext | WebGL2RenderingContext,
+    viewport: (width: number, height: number) => void
+} | null;
