@@ -8,7 +8,8 @@ require('../icons/color.svg');
 require('../icons/effect.svg');
 require('../icons/filter.svg');
 require('../icons/light.svg');
-
+require('../icons/arrowLeft.svg');
+require('../icons/arrowRight.svg');
 type Props = {
     name?: string
 } & React.SVGAttributes<SVGElement>

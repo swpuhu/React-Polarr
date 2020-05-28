@@ -93,7 +93,6 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false) => {
             gl.bindTexture(gl.TEXTURE_2D, textures[renderCount % 2]);
             gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
             gl.bufferData(gl.ARRAY_BUFFER, fullPoint, gl.STATIC_DRAW);
-
             renderCount++;
 
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);

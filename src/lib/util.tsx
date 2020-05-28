@@ -34,14 +34,30 @@ export const initLayer = (source: MyImage): Layer => {
     }
 };
 
+export const clamp = (x: number, min: number, max: number) => {
+    if (x < min) {
+        x = min;
+    } else if (x > max) {
+        x = max;
+    }
+    return x;
+};
+
 export const dragable = (container: HTMLElement,
                          mousedown?: (e: MouseEvent | TouchEvent) => void,
-                         mousemove?: (e: MouseEvent | TouchEvent) => void,
-                         mouseup?: (e: MouseEvent | TouchEvent) => void) => {
-    container.addEventListener('mousedown', (e: MouseEvent) => {
+                         mousemove?: (offsetX: number, offsetY: number) => void,
+                         mouseup?: (e: MouseEvent | TouchEvent) => void,
+                         allowX = true,
+                         allowY = true,
+                         minX = 0,
+                         maxX = Infinity,
+                         minY = 0,
+                         maxY = Infinity) => {
+    const mousedownHandler = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
         mousedown && mousedown(e);
         const move = (ev: MouseEvent) => {
-            mousemove && mousemove(ev);
         };
 
         const up = (ev: MouseEvent) => {
@@ -51,18 +67,26 @@ export const dragable = (container: HTMLElement,
         };
         document.addEventListener('mousemove', move);
         document.addEventListener('mousemove', up);
-    });
-
-    container.addEventListener('touchstart', (e: TouchEvent) => {
+    };
+    const touchstartHandler = (e: TouchEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
         mousedown && mousedown(e);
         let startX = container.offsetLeft;
         let startY = container.offsetTop;
         const move = (ev: TouchEvent) => {
             let offsetX = ev.touches[0].clientX - e.touches[0].clientX;
             let offsetY = ev.touches[0].clientY - e.touches[0].clientY;
-            container.style.left = startX + offsetX + 'px';
-            container.style.top = startY + offsetY + 'px';
-            mousemove && mousemove(ev);
+            let left = minX, top = minY;
+            if (allowX) {
+                left = ~~clamp(offsetX + startX, minX, maxX);
+                container.style.left = left + 'px';
+            }
+            if (allowY) {
+                top = ~~clamp(offsetY + startY, minY, maxY);
+                container.style.top = top + 'px';
+            }
+            mousemove && mousemove(left, top);
         };
 
         const up = (ev: TouchEvent) => {
@@ -72,5 +96,11 @@ export const dragable = (container: HTMLElement,
         };
         document.addEventListener('touchmove', move);
         document.addEventListener('touchend', up);
-    });
+    };
+    container.addEventListener('mousedown', mousedownHandler);
+    container.addEventListener('touchstart', touchstartHandler);
+    return {
+        'mousedown': mousedownHandler,
+        'touchstart': touchstartHandler
+    }
 };

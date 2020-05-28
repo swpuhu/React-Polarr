@@ -377,3 +377,14 @@ export function deleteTexture(gl: WebGLRenderingContext | WebGL2RenderingContext
         gl.deleteTexture(texture);
     }
 }
+
+export function mapValue(v1: number, v2: number, w1: number, w2: number): (v: number) => number {
+    return function (v) {
+        return (w1 - w2) / (v1 - v2) * v + ((w2 * v1 - -w2 * v2) / (v1 - v2));
+    }
+}
+
+export function roundNumber(value: number, step: number) {
+    let x = Math.round(value / step);
+    return step * x;
+}

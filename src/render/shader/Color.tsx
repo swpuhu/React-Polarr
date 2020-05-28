@@ -6,9 +6,9 @@ import {
     setAttributes,
     setUniforms
 } from "../GLUtil";
-import {WebGLRenderer} from "../../types/type";
+import {ColorRenderer, WebGLRenderer} from "../../types/type";
 
-export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, vertexBuffer: WebGLBuffer | null, texCoordBuffer: WebGLBuffer | null): WebGLRenderer => {
+export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, vertexBuffer: WebGLBuffer | null, texCoordBuffer: WebGLBuffer | null): ColorRenderer => {
     const vertexShader = `
     attribute vec4 a_position;
     attribute vec2 a_texCoord;
@@ -46,7 +46,8 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
     if (!program) {
         return {
             viewport: () => {},
-            program: null
+            program: null,
+            setColor: () => {}
         };
     }
 
@@ -75,12 +76,20 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
         setUniforms(uniformSetter, uniforms);
     };
 
+    const setColor = (temperature: number, tint?: number) => {
+        // temperature -100 ~ 100 map to 0 ~ 8000
+        temperature = 40 * temperature + 4000;
+        uniforms.u_temperature = temperature < 5000 ? 0.0004 * (temperature-5000.0) : 0.00006 * (temperature-5000.0);
+        setUniforms(uniformSetter, uniforms);
+    };
+
     setAttributes(attributeSetter, attributes);
     setUniforms(uniformSetter, uniforms);
 
 
     return {
         program,
-        viewport
+        viewport,
+        setColor
     }
 };

@@ -36,6 +36,10 @@ export type WebGLRenderer = {
     program: WebGLProgram | null
 }
 
+export type ColorRenderer = {
+    setColor: (temperature: number, tint?: number) => void;
+} & WebGLRenderer;
+
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 export type Position = {
     x1: number
