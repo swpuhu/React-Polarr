@@ -11,12 +11,20 @@ type Props = {
     step: number
 }
 export const SliderWithIndicator:React.FC<Props> = (props) => {
+    const [showSlider, setShowSlider] = useState(false);
+    const toggle = () => {
+        setShowSlider(!showSlider);
+    };
     return (
         <div>
-            <ControlSlider onChange={(value) => {
-                props.onChange(value);
-            }} min={props.min} max={props.max} value={props.value} step={props.step}/>
-            <Indicator className="temperature" value={props.value} min={props.min} max={props.max} label={props.label}/>
+            {
+                showSlider ?
+                <ControlSlider onChange={(value) => {
+                    props.onChange(value);
+                }} min={props.min} max={props.max} value={props.value} step={props.step}/> :
+                null
+            }
+            <Indicator onClick={toggle} className="temperature" value={props.value} min={props.min} max={props.max} label={props.label}/>
         </div>
     )
 };

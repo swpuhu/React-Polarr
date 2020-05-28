@@ -38,7 +38,8 @@ type Props = {
     min: number
     max: number
     label: string
-    className: string
+    className: string,
+    onClick?: () => void
 }
 export const Indicator:React.FC<Props> = (props) => {
     let mid = (props.min + props.max) / 2;
@@ -46,7 +47,7 @@ export const Indicator:React.FC<Props> = (props) => {
     let percent = props.value > mid ? props.value / halfRange: -props.value / halfRange;
     percent *= 100;
     return (
-        <Wrapper className={props.className}>
+        <Wrapper onClick={props.onClick} className={props.className}>
             <div className="flex">
                 <div className="value">
                     {props.value}

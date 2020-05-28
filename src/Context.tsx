@@ -13,6 +13,8 @@ const initialState: StateType = {
     width: window.innerWidth,
     height: window.innerHeight - 92,
 };
+const screenWidth = window.innerWidth;
+const screenHeight = window.innerHeight - 92;
 
 const reducer = (state: typeof initialState, action: {type: ActionType, payload: any}) => {
     let layer: Layer;
@@ -24,24 +26,24 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             };
         case ActionType.addLayer:
             layer = action.payload as Layer;
-            if (layer.source.width / layer.source.height > state.width / state.height) {
+            if (layer.source.width / layer.source.height > screenWidth / screenHeight) {
                 // 宽适配
-                let height = state.width / (layer.source.width / layer.source.height);
+                let height = screenWidth / (layer.source.width / layer.source.height);
                 layer.position.x1 = -1;
                 layer.position.x2 = 1;
-                layer.position.y1 = -height / state.height;
-                layer.position.y2 = height / state.height;
+                layer.position.y1 = -height / screenHeight;
+                layer.position.y2 = height / screenHeight;
                 layer.originPosition.x1 = layer.position.x1;
                 layer.originPosition.x2 = layer.position.x2;
                 layer.originPosition.y1 = layer.position.y1;
                 layer.originPosition.y2 = layer.position.y2;
             } else {
                 // 高适配
-                let width = state.height * (layer.source.width / layer.source.height);
+                let width = screenHeight * (layer.source.width / layer.source.height);
                 layer.position.y1 = -1;
                 layer.position.y2 = 1;
-                layer.position.x1 = -width / state.width;
-                layer.position.x2 = width / state.width;
+                layer.position.x1 = -width / screenWidth;
+                layer.position.x2 = width / screenWidth;
                 layer.originPosition.x1 = layer.position.x1;
                 layer.originPosition.x2 = layer.position.x2;
                 layer.originPosition.y1 = layer.position.y1;
@@ -51,7 +53,6 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 ...state,
                 currentLayer: layer,
                 layers: [
-                    ...state.layers,
                     layer
                 ]
             };

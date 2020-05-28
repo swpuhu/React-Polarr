@@ -57,16 +57,6 @@ const analyzeImage = debounce((canvas: MyCanvas, layers: Layer[]) => {
 const Main: React.FC = () => {
     const {state, dispatch} = useContext(Context);
     const {input} = useFile((file) => {
-        if (/\.png$/.test(file.name) || /\.jpe?g$/.test(file.name) || /\.bmp$/.test(file.name)) {
-            let image = document.createElement('img');
-            let url = URL.createObjectURL(file);
-            image.onload = () => {
-                dispatch({type: ActionType.addLayer, payload: initLayer(image)});
-                dispatch({type: ActionType.updateCanvasSize, payload: {width: image.width, height: image.height}});
-                URL.revokeObjectURL(url);
-            };
-            image.src = url;
-        }
     });
 
     const open = () => {
