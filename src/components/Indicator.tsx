@@ -10,6 +10,7 @@ const Wrapper = styled.div`
     background: #f60;
     border-radius: 5px;
     border: 1px solid #fff;
+    text-shadow: 1px 1px 2px #000;
     &.temperature {
         background: linear-gradient(45deg, #06f, #f60);
     }

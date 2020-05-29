@@ -7,7 +7,13 @@ import {Indicator} from "../../components/Indicator";
 
 const Wrapper = styled.div`
     display: flex;
-`
+`;
+const OuterWrapper = styled.div`
+    position: absolute;
+    width: 100%;
+    bottom: 55px;
+    background: #000000
+`;
 
 export const ColorFilter:React.FC = (props) => {
     const {state, dispatch} = useContext(Context);
@@ -70,7 +76,7 @@ export const ColorFilter:React.FC = (props) => {
     ];
 
     return (
-        <div>
+        <OuterWrapper>
             <ControlSlider onChange={onChange} min={getMinMax().min} max={getMinMax().max} value={getValue()} step={1}/>
             <Wrapper>
                 {indicators.map(item => {
@@ -82,29 +88,8 @@ export const ColorFilter:React.FC = (props) => {
                                       label={item.label}
                                       className={item.type}/>
                 })}
-                {/*<Indicator className={"temperature"}*/}
-                {/*           onClick={() => dispatch({type: ActionType.updateColorType, payload: 'temperature'})}*/}
-                {/*           value={state.currentLayer ? state.currentLayer.color.temperature : 0}*/}
-                {/*           min={-100}*/}
-                {/*           max={100}*/}
-                {/*           label={"色温"}/>*/}
-
-                {/*<Indicator className={"tint"}*/}
-                {/*           onClick={() => dispatch({type: ActionType.updateColorType, payload: 'tint'})}*/}
-                {/*           value={state.currentLayer ? state.currentLayer.color.tint : 0}*/}
-                {/*           min={-100}*/}
-                {/*           max={100}*/}
-                {/*           label={"色调"}/>*/}
-
-
-                {/*<Indicator className={"hue"}*/}
-                {/*           onClick={() => dispatch({type: ActionType.updateColorType, payload: 'hue'})}*/}
-                {/*           value={state.currentLayer ? state.currentLayer.color.hue : 0}*/}
-                {/*           min={-180}*/}
-                {/*           max={180}*/}
-                {/*           label={"色相"}/>*/}
             </Wrapper>
 
-        </div>
+        </OuterWrapper>
     )
 };
