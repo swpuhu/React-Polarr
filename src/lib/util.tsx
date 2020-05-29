@@ -145,6 +145,6 @@ export const saveCanvasPicture = (canvas: HTMLCanvasElement, name: string) => {
             a.download = name;
             a.click();
             resolve();
-        });
+        }, "image/jpeg");
     })
 };

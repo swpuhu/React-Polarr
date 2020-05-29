@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
     return (
 
         <Wrapper>
-            <div>
+            <div style={{position: 'relative'}}>
                 {
                     activeButton && activeButton.id === 5 ? <ColorFilter/> : null
                 }

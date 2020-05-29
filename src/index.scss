@@ -30,5 +30,8 @@ button {
     position: absolute;
     top: 0;
     left: 0;
+    min-width: 180px;
+    min-height: 100px;
+    width: 50%;
     opacity: 0.7;
 }

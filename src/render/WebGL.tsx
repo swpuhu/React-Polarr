@@ -2,6 +2,7 @@ import {NormalFilter} from "./shader/normal";
 import {createFramebufferTexture, createTexture, deleteFramebuffer, deleteTexture} from "./GLUtil";
 import {IdentityObject, Layer, MyImage, MyWebGLRender, WebGLRenderer} from "../types/type";
 import {ColorFilter} from "./shader/Color";
+import {ColorOffset} from "./shader/colorOffset";
 
 export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWebGLRender => {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
@@ -37,7 +38,8 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
 
     const filters: IdentityObject<WebGLRenderer> = {
         normalFilter: NormalFilter(gl, vertexBuffer, texCoordBuffer),
-        colorFilter: ColorFilter(gl, vertexBuffer, texCoordBuffer)
+        colorFilter: ColorFilter(gl, vertexBuffer, texCoordBuffer),
+        colorOffsetFilter: ColorOffset(gl, vertexBuffer, texCoordBuffer)
     };
     let [framebuffers, textures] = createFramebufferTexture(gl, 2, width, height);
     let texture = createTexture(gl);
@@ -67,7 +69,17 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
         }
     };
 
-    const render = (layers: Layer[]): Array<number> => {
+    const passFramebuffer = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram | null, renderCount: number, fn: (...args: any) => void): number => {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[renderCount % 2]);
+        gl.useProgram(program);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        fn();
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        gl.bindTexture(gl.TEXTURE_2D, textures[renderCount % 2]);
+        return ++renderCount;
+    };
+
+    const render = (layers: Layer[], renderOrigin?: boolean): Array<number> => {
         let layer = layers[0];
         let renderCount = 0;
         if (layer) {
@@ -91,24 +103,31 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                 cacheImage = layer.source;
             }
 
+            if (renderOrigin) {
+                // only render origin image
+                filters.normalFilter && gl.useProgram(filters.normalFilter.program);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            } else {
+                renderCount = passFramebuffer(gl, filters.colorFilter.program, renderCount, () => {
+                    if (filters.colorFilter && filters.colorFilter.setColor) {
+                        filters.colorFilter.setColor(layer.color.temperature, layer.color.tint, layer.color.hue, layer.color.saturation);
+                    }
+                });
+                // 第一次渲染要回复到全屏的顶点位置
+                gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, fullPoint, gl.STATIC_DRAW);
 
-            gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[renderCount % 2]);
-            gl.useProgram(filters.colorFilter.program);
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            if (filters.colorFilter && filters.colorFilter.setColor) {
-                filters.colorFilter.setColor(layer.color.temperature, layer.color.tint, layer.color.hue, layer.color.saturation);
+                renderCount = passFramebuffer(gl, filters.colorOffsetFilter.program, renderCount, () => {
+                    if (filters.colorOffsetFilter && filters.colorOffsetFilter.setIntensity) {
+                        filters.colorOffsetFilter.setIntensity(0);
+                    }
+                });
+
+                gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+                filters.normalFilter && gl.useProgram(filters.normalFilter.program);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                return [~~(width / 2 * (layer.position.x1 + 1)), ~~(height / 2 * (layer.position.y1 + 1)), ~~(width / 2 * (layer.position.x2 + 1)), ~~(height / 2 * (layer.position.y2 + 1))];
             }
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            // 第一次渲染要回复到全屏的顶点位置
-            gl.bindTexture(gl.TEXTURE_2D, textures[renderCount % 2]);
-            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, fullPoint, gl.STATIC_DRAW);
-            renderCount++;
-
-            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-            filters.normalFilter && gl.useProgram(filters.normalFilter.program);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            return [~~(width / 2 * (layer.position.x1 + 1)), ~~(height / 2 * (layer.position.y1 + 1)), ~~(width / 2 * (layer.position.x2 + 1)), ~~(height / 2 * (layer.position.y2 + 1))];
         }
 
         return [];

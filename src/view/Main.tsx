@@ -51,7 +51,7 @@ const analyzeImage = debounce((canvas: MyCanvas, layers: Layer[]) => {
         canvas.gl.readPixels(x1, y1, x2 - x1, y2 - y1, canvas.gl.RGBA, canvas.gl.UNSIGNED_BYTE, data);
         worker.postMessage([data, histogramCanvas.canvasElement.height], [data.buffer]);
     }
-}, 500);
+}, 100);
 
 
 const Main: React.FC = () => {
@@ -76,9 +76,8 @@ const Main: React.FC = () => {
                         if (offCanvas.canvasElement.width !== state.width || offCanvas.canvasElement.height !== state.height) {
                             offCanvas.viewport(state.width, state.height);
                         }
-
                         offCanvas.renderer.render(state.layers);
-                        saveCanvasPicture(offCanvas.canvasElement, '保存图片.png').then(r => dispatch({type: ActionType.finishSavePicture, payload: null}))
+                        saveCanvasPicture(offCanvas.canvasElement, '保存图片.jpeg').then(r => dispatch({type: ActionType.finishSavePicture, payload: null}))
 
                     }
                 }
@@ -91,8 +90,18 @@ const Main: React.FC = () => {
             <Button>打开样本照片</Button>
         </div>
     );
+    const touchStart = (e: React.TouchEvent) => {
+        if (canvas) {
+            canvas.renderer.render(state.layers, true);
+        }
+    };
+    const touchEnd = () => {
+        if (canvas) {
+            canvas.renderer.render(state.layers);
+        }
+    };
     const reactCanvas = (
-        <Center ref={canvasContainer}>
+        <Center ref={canvasContainer} onTouchStart={touchStart} onTouchEnd={touchEnd}>
             {state.layers[0] && state.layers[0].editStatus === EditType.none ? <ResizeBox/> : null}
         </Center>
     );

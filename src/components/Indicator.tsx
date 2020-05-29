@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
+import cs from 'classnames';
 
 const Wrapper = styled.div`
     display: inline-block;
@@ -11,6 +12,10 @@ const Wrapper = styled.div`
     border-radius: 5px;
     border: 1px solid #fff;
     text-shadow: 1px 1px 2px #000;
+    &.active {
+        border: 2px solid #ffffff;
+        box-shadow: 1px 1px 2px #ffffff;
+    }
     &.temperature {
         background: linear-gradient(45deg, #06f, #f60);
     }
@@ -49,7 +54,8 @@ type Props = {
     min: number
     max: number
     label: string
-    className: string,
+    className: string
+    isActive: boolean
     onClick?: () => void
 }
 export const Indicator:React.FC<Props> = (props) => {
@@ -58,7 +64,7 @@ export const Indicator:React.FC<Props> = (props) => {
     let percent = props.value > mid ? props.value / halfRange: -props.value / halfRange;
     percent *= 100;
     return (
-        <Wrapper onClick={props.onClick} className={props.className}>
+        <Wrapper onClick={props.onClick} className={cs(props.className, props.isActive ? 'active' : '')}>
             <div className="flex">
                 <div className="value">
                     {props.value}
@@ -68,7 +74,7 @@ export const Indicator:React.FC<Props> = (props) => {
                 </div>
             </div>
             <div className="mask" style={{
-                clipPath: props.value > mid ? `polygon(0% 0%, ${percent}% 0%, 100% ${100 - percent}%, 100% 100%, 0% 0%)` : `polygon(0% 0%, 0% ${percent}%, ${100 - percent}% 100%, 100% 100%, 0% 0%)`
+                clipPath: props.value > mid ? `polygon(0% 0%, ${percent}% 0%, 100% ${100 - percent}%, 100% 100%, 0% 0%)` : `polygon(0% 0%, 0% ${percent}%, ${100 - percent}% 100%, 100% 100%, 0% 0%)`,
             }}/>
         </Wrapper>
     )

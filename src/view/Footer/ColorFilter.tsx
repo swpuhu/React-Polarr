@@ -11,8 +11,8 @@ const Wrapper = styled.div`
 const OuterWrapper = styled.div`
     position: absolute;
     width: 100%;
-    bottom: 55px;
-    background: #000000
+    bottom: 0;
+    background: #00000066;
 `;
 
 export const ColorFilter:React.FC = (props) => {
@@ -59,25 +59,25 @@ export const ColorFilter:React.FC = (props) => {
             type: "temperature",
             min: -100,
             max: 100,
-            label: "色温"
+            label: "色温",
         },
         {
             type: "tint",
             min: -100,
             max: 100,
-            label: "色调"
+            label: "色调",
         },
         {
             type: "hue",
             min: -180,
             max: 180,
-            label: "色相"
+            label: "色相",
         },
         {
             type: "saturation",
             min: -100,
             max: 100,
-            label: "饱和度"
+            label: "饱和度",
         }
     ];
 
@@ -92,6 +92,7 @@ export const ColorFilter:React.FC = (props) => {
                                       min={item.min}
                                       max={item.max}
                                       label={item.label}
+                                      isActive={state.currentLayer ? state.currentLayer.color.editingProperty === item.type : false}
                                       className={item.type}/>
                 })}
             </Wrapper>

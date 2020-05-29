@@ -39,6 +39,7 @@ export type WebGLRenderer = {
     viewport: () => void;
     program: WebGLProgram | null;
     setColor?: (temperature: number, tint: number, hue: number, saturation: number) => void;
+    setIntensity?: (intensity: number) => void
 }
 
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
@@ -86,7 +87,7 @@ export type StateType = {
 }
 
 export type MyWebGLRender = {
-    render: (layer: Layer[]) => number[];
+    render: (layer: Layer[], onlyRenderOrigin?: boolean) => number[];
     viewport: (width: number, height: number) =>  void
 
 }

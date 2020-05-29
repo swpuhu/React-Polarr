@@ -24,7 +24,7 @@ export const SliderWithIndicator:React.FC<Props> = (props) => {
                 }} min={props.min} max={props.max} value={props.value} step={props.step}/> :
                 null
             }
-            <Indicator onClick={toggle} className="temperature" value={props.value} min={props.min} max={props.max} label={props.label}/>
+            {/*<Indicator onClick={toggle} className="temperature" value={props.value} min={props.min} max={props.max} label={props.label}/>*/}
         </div>
     )
 };
