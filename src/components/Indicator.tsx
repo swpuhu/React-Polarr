@@ -20,6 +20,9 @@ const Wrapper = styled.div`
     &.hue {
         background: linear-gradient(45deg, red 0, #ff0 17%, lime 33%, cyan 50%, blue 67%, #f0f 83%, red);
     }
+    &.saturation {
+        background: linear-gradient(45deg,#000000,#ff6600);
+    }
     > .flex {
         display: flex;
         width: 100%;

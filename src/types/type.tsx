@@ -38,7 +38,7 @@ export type IdentityObject<T> = {
 export type WebGLRenderer = {
     viewport: () => void;
     program: WebGLProgram | null;
-    setColor?: (temperature: number, tint: number, hue: number) => void;
+    setColor?: (temperature: number, tint: number, hue: number, saturation: number) => void;
 }
 
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
@@ -65,6 +65,7 @@ export type Color = {
     temperature: number
     tint: number
     hue: number
+    saturation: number
 }
 export type Layer = {
     editStatus: EditType;

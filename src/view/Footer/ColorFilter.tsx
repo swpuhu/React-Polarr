@@ -72,6 +72,12 @@ export const ColorFilter:React.FC = (props) => {
             min: -180,
             max: 180,
             label: "色相"
+        },
+        {
+            type: "saturation",
+            min: -100,
+            max: 100,
+            label: "饱和度"
         }
     ];
 

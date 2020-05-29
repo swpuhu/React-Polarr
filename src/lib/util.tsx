@@ -1,6 +1,4 @@
 import {ActionType, EditType, Layer, MyImage} from "../types/type";
-// @ts-ignore
-import PNGImage from 'pnglib-es6';
 export const initLayer = (source: MyImage): Layer => {
     return {
         editStatus: EditType.none,
@@ -32,7 +30,8 @@ export const initLayer = (source: MyImage): Layer => {
             editingProperty: '',
             temperature: 0,
             tint: 0,
-            hue: 0
+            hue: 0,
+            saturation: 0
         }
     }
 };

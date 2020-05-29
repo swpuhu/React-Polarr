@@ -62,7 +62,7 @@ export const ControlSlider:React.FC<Props> = (props) => {
     const barRef = useRef<HTMLDivElement>(null);
     const range = props.max - props.min;
     const value = props.value;
-    const onChange = throttle(props.onChange);
+    const onChange = throttle(props.onChange, 20);
     const setValue = (v: number) => {
         onChange(v);
     };
