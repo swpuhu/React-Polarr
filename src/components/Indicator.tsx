@@ -4,13 +4,20 @@ import styled from "styled-components";
 const Wrapper = styled.div`
     display: inline-block;
     position: relative;
+    margin: 5px;
     width: 70px;
     height: 70px;
     background: #f60;
     border-radius: 5px;
     border: 1px solid #fff;
     &.temperature {
-        background: linear-gradient(45deg, #f60, #06f);
+        background: linear-gradient(45deg, #06f, #f60);
+    }
+    &.tint {
+        background: linear-gradient(45deg, #00ff14, #ff0fdb);
+    }
+    &.hue {
+        background: linear-gradient(45deg, red 0, #ff0 17%, lime 33%, cyan 50%, blue 67%, #f0f 83%, red);
     }
     > .flex {
         display: flex;

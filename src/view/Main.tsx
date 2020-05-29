@@ -73,7 +73,6 @@ const Main: React.FC = () => {
                 analyzeImage(canvas, state.layers);
                 if (x1 !== undefined) {
                     if (state.savePicture && offCanvas) {
-                        console.log(state);
                         if (offCanvas.canvasElement.width !== state.width || offCanvas.canvasElement.height !== state.height) {
                             offCanvas.viewport(state.width, state.height);
                         }

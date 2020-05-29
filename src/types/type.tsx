@@ -19,7 +19,10 @@ export enum ActionType {
     updateCanvasSize,
     savePicture,
     finishSavePicture,
-    updateTemperature
+    updateTemperature,
+    updateTint,
+    updateColorType,
+    updateColorValue
 }
 
 export enum EditType {
@@ -35,7 +38,7 @@ export type IdentityObject<T> = {
 export type WebGLRenderer = {
     viewport: () => void;
     program: WebGLProgram | null;
-    setColor?: (temperature: number, tint?: number) => void;
+    setColor?: (temperature: number, tint: number, hue: number) => void;
 }
 
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
@@ -58,8 +61,10 @@ export type Transform = {
 }
 
 export type Color = {
+    editingProperty: Exclude<keyof Color, 'editingProperty'> | '';
     temperature: number
-    tint?: number
+    tint: number
+    hue: number
 }
 export type Layer = {
     editStatus: EditType;

@@ -72,11 +72,30 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 ...state,
                 savePicture: false
             };
-        case ActionType.updateTemperature:
+        case ActionType.updateColorValue:
             if (state.currentLayer) {
                 let index = state.layers.indexOf(state.currentLayer);
                 let newLayer = {...state.currentLayer};
-                newLayer.color.temperature = action.payload;
+                if (newLayer.color.editingProperty) {
+                    newLayer.color[newLayer.color.editingProperty] = action.payload;
+                }
+                return {
+                    ...state,
+                    currentLayer: newLayer,
+                    layers: state.layers.map((layer, i) => {
+                        if (index === i) {
+                            return newLayer;
+                        }
+                        return layer;
+                    })
+                };
+            }
+            return state;
+        case ActionType.updateColorType:
+            if (state.currentLayer) {
+                let index = state.layers.indexOf(state.currentLayer);
+                let newLayer = {...state.currentLayer};
+                newLayer.color.editingProperty = action.payload;
                 return {
                     ...state,
                     currentLayer: newLayer,

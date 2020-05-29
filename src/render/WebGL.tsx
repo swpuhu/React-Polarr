@@ -96,7 +96,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
             gl.useProgram(filters.colorFilter.program);
             gl.clear(gl.COLOR_BUFFER_BIT);
             if (filters.colorFilter && filters.colorFilter.setColor) {
-                filters.colorFilter.setColor(layer.color.temperature);
+                filters.colorFilter.setColor(layer.color.temperature, layer.color.tint, layer.color.hue);
             }
             gl.drawArrays(gl.TRIANGLES, 0, 6);
             // 第一次渲染要回复到全屏的顶点位置

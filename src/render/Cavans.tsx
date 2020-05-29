@@ -9,7 +9,7 @@ export const Canvas = (width: number, height: number, isSave: boolean = false): 
     canvas.style.height = '100%';
     const gl = canvas.getContext('webgl', {
         premultipliedAlpha: false,
-        alpha: false,
+        // alpha: false,
         antialias: true
     });
     if (!gl) return null;

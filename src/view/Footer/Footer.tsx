@@ -3,7 +3,7 @@ import {IconButton} from "../../components/IconButton";
 import styled from "styled-components";
 import {Context} from "../../Context";
 import {EditStatus} from "../../types/type";
-import {Color} from "./Color";
+import {ColorFilter} from "./ColorFilter";
 
 const Wrapper = styled.div`
     > .footer-icon {
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
         {
             id: 5,
             label: '色彩',
-            selected: false,
+            selected: true,
             iconName: 'color'
         },
         {
@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
         <Wrapper>
             <div>
                 {
-                    activeButton && activeButton.id === 5 ? <Color/> : null
+                    activeButton && activeButton.id === 5 ? <ColorFilter/> : null
                 }
             </div>
             <div className="footer-icon">

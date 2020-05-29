@@ -1,5 +1,6 @@
 import {ActionType, EditType, Layer, MyImage} from "../types/type";
-
+// @ts-ignore
+import PNGImage from 'pnglib-es6';
 export const initLayer = (source: MyImage): Layer => {
     return {
         editStatus: EditType.none,
@@ -28,8 +29,10 @@ export const initLayer = (source: MyImage): Layer => {
             rotate: 0
         },
         color: {
+            editingProperty: '',
             temperature: 0,
-            tint: 0
+            tint: 0,
+            hue: 0
         }
     }
 };
@@ -109,8 +112,7 @@ export const throttle = function (fn: (...args: any) => any, delay = 50) {
     // @ts-ignore
     let self = this;
     let timer: number;
-    return function () {
-        let args = Array.prototype.slice.call(arguments);
+    return function (...args: any) {
         if (timer) {
             return;
         }
