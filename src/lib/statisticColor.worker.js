@@ -1,3 +1,4 @@
+import {getAvg} from "./util";
 
 const statisticColors = (color, height) => {
     let R = new Array(256).fill(0);
@@ -10,11 +11,15 @@ const statisticColors = (color, height) => {
         B[color[i + 2]]++;
         max = Math.max(max, R[color[i]], G[color[i + 1]], G[color[i + 2]]);
     }
-
+    let avgR = getAvg(R);
+    let avgG = getAvg(G);
+    let avgB = getAvg(B);
+    // let avg = (avgR + avgG + avgB) / 3;
+    let avg = Math.max(avgR, avgB, avgG);
     for (let i = 0; i < 256; i++) {
-        R[i] = ~~(height / max * R[i]);
-        G[i] = ~~(height / max * G[i]);
-        B[i] = ~~(height / max * B[i]);
+        R[i] = ~~(height / avg * R[i]);
+        G[i] = ~~(height / avg * G[i]);
+        B[i] = ~~(height / avg * B[i]);
     }
     return [R, G, B];
 };

@@ -101,7 +101,7 @@ const Main: React.FC = () => {
         }
     };
     const reactCanvas = (
-        <Center ref={canvasContainer} onTouchStart={touchStart} onTouchEnd={touchEnd}>
+            <Center ref={canvasContainer} onTouchStart={touchStart} onTouchEnd={touchEnd}>
             {state.layers[0] && state.layers[0].editStatus === EditType.none ? <ResizeBox/> : null}
         </Center>
     );

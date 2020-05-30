@@ -83,7 +83,11 @@ export const ColorFilter:React.FC = (props) => {
 
     return (
         <OuterWrapper>
-            <ControlSlider onChange={onChange} min={getMinMax().min} max={getMinMax().max} value={getValue()} step={1}/>
+            {
+                state.currentLayer && state.currentLayer.color.editingProperty ?
+                    <ControlSlider onChange={onChange} min={getMinMax().min} max={getMinMax().max} value={getValue()} step={1}/> :
+                    null
+            }
             <Wrapper>
                 {indicators.map(item => {
                     return <Indicator key={item.type}

@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
         {
             id: 5,
             label: '色彩',
-            selected: true,
+            selected: false,
             iconName: 'color'
         },
         {

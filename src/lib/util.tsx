@@ -148,3 +148,10 @@ export const saveCanvasPicture = (canvas: HTMLCanvasElement, name: string) => {
         }, "image/jpeg");
     })
 };
+
+export const getAvg = (array: number[]) => {
+    return array.reduce((prev, curr) => {
+        prev += curr;
+        return prev;
+    }) / array.length;
+};
