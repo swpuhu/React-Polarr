@@ -3,11 +3,11 @@ import styled from "styled-components";
 import {useFile} from "../lib/useFile";
 import {Context} from "../Context";
 import {ActionType, EditStatus, EditType, Layer, MyCanvas} from "../types/type";
-import {Canvas} from "../render/Cavans";
+import {Canvas} from "../render/Canvas";
 // @ts-ignore
 import StatisticColorWorker from '../lib/statisticColor.worker';
 import {Histogram} from "../render/Histogram";
-import {debounce, initLayer, saveCanvasPicture} from "../lib/util";
+import {debounce, isDetachedDOM, saveCanvasPicture} from "../lib/util";
 import {ResizeBox} from "../components/ResizeBox";
 
 const worker = new StatisticColorWorker();
@@ -67,8 +67,10 @@ const Main: React.FC = () => {
         if (canvasContainer.current !== null) {
             let container = canvasContainer.current;
             if (canvas && container) {
-                container.appendChild(canvas.canvasElement);
-                container.appendChild(histogramCanvas.canvasElement);
+                if (isDetachedDOM(canvas.canvasElement)) {
+                    container.appendChild(canvas.canvasElement);
+                    container.appendChild(histogramCanvas.canvasElement);
+                }
                 let [x1, y1, x2, y2] = canvas.renderer.render(state.layers);
                 analyzeImage(canvas, state.layers);
                 if (x1 !== undefined) {
@@ -90,8 +92,9 @@ const Main: React.FC = () => {
             <Button>打开样本照片</Button>
         </div>
     );
+
     const touchStart = (e: React.TouchEvent) => {
-        if (canvas) {
+        if (canvas && state.currentLayer && state.currentLayer.editStatus !== EditType.transform) {
             canvas.renderer.render(state.layers, true);
         }
     };
@@ -102,7 +105,7 @@ const Main: React.FC = () => {
     };
     const reactCanvas = (
             <Center ref={canvasContainer} onTouchStart={touchStart} onTouchEnd={touchEnd}>
-            {state.layers[0] && state.layers[0].editStatus === EditType.none ? <ResizeBox/> : null}
+            {state.currentLayer && state.currentLayer.editStatus === EditType.transform ? <ResizeBox/> : null}
         </Center>
     );
     const content = state.editStatus === EditStatus.IDLE ? buttons : reactCanvas;

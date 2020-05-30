@@ -2,8 +2,10 @@ import React, {useContext, useState} from 'react';
 import {IconButton} from "../../components/IconButton";
 import styled from "styled-components";
 import {Context} from "../../Context";
-import {EditStatus} from "../../types/type";
+import {ActionType, EditStatus} from "../../types/type";
 import {ColorFilter} from "./ColorFilter";
+import {ResizeBox} from "../../components/ResizeBox";
+import Modal from 'react-modal';
 
 const Wrapper = styled.div`
     > .footer-icon {
@@ -14,7 +16,7 @@ const Wrapper = styled.div`
 `;
 
 const Footer: React.FC = () => {
-    const {state} = useContext(Context);
+    const {state, dispatch} = useContext(Context);
     const initButtons = [
         {
             id: 1,
@@ -57,6 +59,11 @@ const Footer: React.FC = () => {
 
     const onClick = (id: number) => {
         if (state.editStatus !== EditStatus.EDTING) return;
+        if (id === 2) {
+            dispatch({type: ActionType.startClipPath, payload: null});
+        } else {
+            dispatch({type: ActionType.finishClipPath, payload: null});
+        }
         let button = buttons.map(item => {
             item.selected = item.id === id;
             return item;
@@ -64,16 +71,30 @@ const Footer: React.FC = () => {
         setButtons(button);
     };
     const activeButton = buttons.find(item => item.selected);
+    let showController = null;
+    if (activeButton) {
+        switch (activeButton.id) {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                showController = <ColorFilter/>;
+            default:
+                break;
+        }
+    }
     return (
 
         <Wrapper>
             <div style={{position: 'relative'}}>
-                {
-                    activeButton && activeButton.id === 5 ? <ColorFilter/> : null
-                }
+                {showController}
             </div>
             <div className="footer-icon">
-
                 {buttons.map(button => <IconButton onClick={() => onClick(button.id)}
                                                    key={button.id}
                                                    label={button.label}

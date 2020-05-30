@@ -22,7 +22,10 @@ export enum ActionType {
     updateTemperature,
     updateTint,
     updateColorType,
-    updateColorValue
+    updateColorValue,
+    startClipPath,
+    finishClipPath
+
 }
 
 export enum EditType {

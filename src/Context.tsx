@@ -1,13 +1,28 @@
 import React, {createContext, useReducer} from "react";
-import {ActionType, EditStatus, Layer, ProcessStatus, StateType} from "./types/type";
+import {ActionType, EditStatus, EditType, Layer, ProcessStatus, StateType} from "./types/type";
+import {initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
+import imgSrc from './icons/example.jpg';
+
+let mode = 1;
+let image = new Image();
+image.src = imgSrc;
+let layer = initLayer(image);
+layer.position.y1 = -0.7;
+layer.position.y2 = 0.7;
+layer.position.x1 = -1;
+layer.position.x2 = 1;
+layer.originPosition.y1 = -0.7;
+layer.originPosition.y2 = 0.7;
+layer.originPosition.x1 = -1;
+layer.originPosition.x2 = 1;
 
 
 const initialState: StateType = {
-    editStatus: EditStatus.IDLE,
+    editStatus: mode === 1 ? EditStatus.EDTING : EditStatus.IDLE,
     processStatus: ProcessStatus.none,
     savePicture: false,
-    currentLayer: null,
-    layers: [
+    currentLayer: mode === 1 ? layer : null,
+    layers: mode === 1 ? [layer] : [
 
     ],
     width: window.innerWidth,
@@ -73,45 +88,31 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 savePicture: false
             };
         case ActionType.updateColorValue:
-            if (state.currentLayer) {
-                let index = state.layers.indexOf(state.currentLayer);
-                let newLayer = {...state.currentLayer};
-                if (newLayer.color.editingProperty) {
-                    newLayer.color[newLayer.color.editingProperty] = action.payload;
-                }
-                return {
-                    ...state,
-                    currentLayer: newLayer,
-                    layers: state.layers.map((layer, i) => {
-                        if (index === i) {
-                            return newLayer;
-                        }
-                        return layer;
-                    })
-                };
+            if (state.currentLayer && state.currentLayer.color.editingProperty) {
+                return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload, "color", state.currentLayer.color.editingProperty,);
             }
             return state;
         case ActionType.updateColorType:
             if (state.currentLayer) {
-                let index = state.layers.indexOf(state.currentLayer);
-                let newLayer = {...state.currentLayer};
-                newLayer.color.editingProperty = action.payload;
-                return {
-                    ...state,
-                    currentLayer: newLayer,
-                    layers: state.layers.map((layer, i) => {
-                        if (index === i) {
-                            return newLayer;
-                        }
-                        return layer;
-                    })
-                };
+                return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload, "color", "editingProperty");
+            }
+            return state;
+        case ActionType.startClipPath:
+            console.log('start');
+            if (state.currentLayer) {
+                return updateLayerProperty<"editStatus">(state.currentLayer, state, EditType.transform,"editStatus");
+            }
+            return state;
+        case ActionType.finishClipPath:
+            if (state.currentLayer) {
+                return updateLayerProperty<"editStatus">(state.currentLayer, state, EditType.none,"editStatus");
             }
             return state;
         default:
             return state;
     }
 };
+
 
 export const Context = createContext({state: initialState , dispatch: (_action: {type: ActionType, payload: any}) => {}});
 

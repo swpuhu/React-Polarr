@@ -1,4 +1,4 @@
-import {ActionType, EditType, Layer, MyImage} from "../types/type";
+import {ActionType, EditType, Layer, MyImage, StateType} from "../types/type";
 export const initLayer = (source: MyImage): Layer => {
     return {
         editStatus: EditType.none,
@@ -155,3 +155,51 @@ export const getAvg = (array: number[]) => {
         return prev;
     }) / array.length;
 };
+
+
+export function updateLayerSubProperty<T extends keyof Layer> (layer: Layer, state: StateType, payload: Layer[T][keyof Layer[T]], property: T, subProperty: keyof Layer[T],) {
+    if (state.currentLayer) {
+        let index = state.layers.indexOf(state.currentLayer);
+        let newLayer = {...state.currentLayer};
+        newLayer[property][subProperty] = payload;
+
+        return {
+            ...state,
+            currentLayer: newLayer,
+            layers: state.layers.map((layer, i) => {
+                if (index === i) {
+                    return newLayer;
+                }
+                return layer;
+            })
+        }
+    }
+    return state;
+}
+
+
+export function updateLayerProperty<T extends keyof Layer> (layer: Layer, state: StateType, payload: Layer[T], property: T) {
+    if (state.currentLayer) {
+        let index = state.layers.indexOf(state.currentLayer);
+        let newLayer = {...state.currentLayer};
+        newLayer[property] = payload;
+
+        return {
+            ...state,
+            currentLayer: newLayer,
+            layers: state.layers.map((layer, i) => {
+                if (index === i) {
+                    return newLayer;
+                }
+                return layer;
+            })
+        }
+    }
+    return state;
+}
+
+export function isDetachedDOM (dom: HTMLElement): boolean {
+    if (!dom) return true;
+    if (!dom.parentElement) return dom !== document.children[0];
+    return isDetachedDOM(dom.parentElement);
+}
