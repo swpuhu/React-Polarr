@@ -203,3 +203,33 @@ export function isDetachedDOM (dom: HTMLElement): boolean {
     if (!dom.parentElement) return dom !== document.children[0];
     return isDetachedDOM(dom.parentElement);
 }
+
+
+export function switchHandler <T>(left: number, right: number, top: number, bottom: number, x: number, y: number, handlers: T[]): T | null {
+    let width = right - left;
+    let height = bottom - top;
+    left = left + width / 3;
+    top = top + height /  3;
+    width /= 3;
+    height /= 3;
+    if (x < left && y < top) {
+        return handlers[0];
+    } else if (x > left && x < left + width && y < top) {
+        return handlers[1];
+    } else if (x > left + width && y < top) {
+        return handlers[2];
+    } else if (x < left && y > top && y < top + height) {
+        return handlers[3];
+    } else if (x > left && x < left + width && y > top && y < top + height) {
+        return handlers[4];
+    } else if (x > left + width && y > top && y < top + height) {
+        return handlers[5];
+    } else if (x < left && y > top + height) {
+        return handlers[6];
+    } else if (x > left && x < left + width && y > top + height) {
+        return handlers[7];
+    } else if (x > left + width && y > top + height) {
+        return handlers[8];
+    }
+    return null;
+}

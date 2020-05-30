@@ -8,7 +8,7 @@ import {Canvas} from "../render/Canvas";
 import StatisticColorWorker from '../lib/statisticColor.worker';
 import {Histogram} from "../render/Histogram";
 import {debounce, isDetachedDOM, saveCanvasPicture} from "../lib/util";
-import {ResizeBox} from "../components/ResizeBox";
+import {ResizeBox} from "../components/ResizeBox/ResizeBox";
 
 const worker = new StatisticColorWorker();
 const Wrapper = styled.div`
@@ -105,7 +105,16 @@ const Main: React.FC = () => {
     };
     const reactCanvas = (
             <Center ref={canvasContainer} onTouchStart={touchStart} onTouchEnd={touchEnd}>
-            {state.currentLayer && state.currentLayer.editStatus === EditType.transform ? <ResizeBox/> : null}
+            {state.currentLayer && state.currentLayer.editStatus === EditType.transform ?
+                (
+                    <div>
+                        <ResizeBox/>
+                        <div className="mask"/>
+                    </div>
+                )
+                : null
+            }
+
         </Center>
     );
     const content = state.editStatus === EditStatus.IDLE ? buttons : reactCanvas;

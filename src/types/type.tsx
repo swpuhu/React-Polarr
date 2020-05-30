@@ -24,7 +24,8 @@ export enum ActionType {
     updateColorType,
     updateColorValue,
     startClipPath,
-    finishClipPath
+    finishClipPath,
+    updateTransform
 
 }
 

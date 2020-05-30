@@ -1,6 +1,6 @@
 import {NormalFilter} from "./shader/normal";
 import {createFramebufferTexture, createTexture, deleteFramebuffer, deleteTexture} from "./GLUtil";
-import {IdentityObject, Layer, MyImage, MyWebGLRender, WebGLRenderer} from "../types/type";
+import {EditType, IdentityObject, Layer, MyImage, MyWebGLRender, WebGLRenderer} from "../types/type";
 import {ColorFilter} from "./shader/Color";
 import {ColorOffset} from "./shader/colorOffset";
 
@@ -84,14 +84,26 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
         let renderCount = 0;
         if (layer) {
             if (!isSave) {
-                vertexPoint = new Float32Array([
-                    width / 2 * layer.position.x1, height / 2 * layer.position.y1,
-                    width / 2 * layer.position.x2, height / 2 * layer.position.y1,
-                    width / 2 * layer.position.x2, height / 2 * layer.position.y2,
-                    width / 2 * layer.position.x2, height / 2 * layer.position.y2,
-                    width / 2 * layer.position.x1, height / 2 * layer.position.y2,
-                    width / 2 * layer.position.x1, height / 2 * layer.position.y1,
-                ]);
+                if (layer.editStatus === EditType.transform) {
+                    vertexPoint = new Float32Array([
+                        width / 2 * layer.originPosition.x1, height / 2 * layer.originPosition.y1,
+                        width / 2 * layer.originPosition.x2, height / 2 * layer.originPosition.y1,
+                        width / 2 * layer.originPosition.x2, height / 2 * layer.originPosition.y2,
+                        width / 2 * layer.originPosition.x2, height / 2 * layer.originPosition.y2,
+                        width / 2 * layer.originPosition.x1, height / 2 * layer.originPosition.y2,
+                        width / 2 * layer.originPosition.x1, height / 2 * layer.originPosition.y1,
+                    ]);
+
+                } else {
+                    vertexPoint = new Float32Array([
+                        width / 2 * layer.position.x1, height / 2 * layer.position.y1,
+                        width / 2 * layer.position.x2, height / 2 * layer.position.y1,
+                        width / 2 * layer.position.x2, height / 2 * layer.position.y2,
+                        width / 2 * layer.position.x2, height / 2 * layer.position.y2,
+                        width / 2 * layer.position.x1, height / 2 * layer.position.y2,
+                        width / 2 * layer.position.x1, height / 2 * layer.position.y1,
+                    ]);
+                }
                 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, vertexPoint, gl.STATIC_DRAW);
             }

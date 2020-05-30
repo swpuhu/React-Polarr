@@ -98,7 +98,6 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             }
             return state;
         case ActionType.startClipPath:
-            console.log('start');
             if (state.currentLayer) {
                 return updateLayerProperty<"editStatus">(state.currentLayer, state, EditType.transform,"editStatus");
             }

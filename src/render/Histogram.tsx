@@ -19,7 +19,7 @@ export const Histogram = (width: number, height: number) => {
             ctx.beginPath();
             ctx.moveTo(0, height - 0);
             for (let i = 0; i < r.length; i++) {
-                ctx.lineTo(i * step, height - r[i]);
+                ctx.lineTo(i * step, height - r[i] < 1 ? 1 : height - r[i]);
             }
             ctx.lineTo(width, height - 0);
             ctx.closePath();
@@ -31,7 +31,7 @@ export const Histogram = (width: number, height: number) => {
             ctx.beginPath();
             ctx.moveTo(0, height - 0);
             for (let i = 0; i < g.length; i++) {
-                ctx.lineTo(i * step, height - g[i]);
+                ctx.lineTo(i * step, height - g[i] < 1 ? 1 : height - g[i]);
             }
             ctx.lineTo(width, height - 0);
             ctx.closePath();
@@ -44,7 +44,7 @@ export const Histogram = (width: number, height: number) => {
             ctx.beginPath();
             ctx.moveTo(0, height - 0);
             for (let i = 0; i < b.length; i++) {
-                ctx.lineTo(i * step, height - b[i]);
+                ctx.lineTo(i * step, height - b[i] < 1 ? 1 : height - b[i]);
             }
             ctx.lineTo(width, height - 0);
             ctx.closePath();
