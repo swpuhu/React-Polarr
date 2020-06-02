@@ -107,6 +107,11 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 return updateLayerProperty<"editStatus">(state.currentLayer, state, EditType.none,"editStatus");
             }
             return state;
+        case ActionType.updateTransform:
+            if (state.currentLayer) {
+                return updateLayerProperty<"transform">(state.currentLayer, state, action.payload, "transform");
+            }
+            return state;
         default:
             return state;
     }
