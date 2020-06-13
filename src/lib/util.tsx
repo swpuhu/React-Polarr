@@ -1,4 +1,4 @@
-import {ActionType, EditType, Layer, MyImage, StateType} from "../types/type";
+import {EditType, Layer, MyImage, StateType} from "../types/type";
 export const initLayer = (source: MyImage): Layer => {
     return {
         editStatus: EditType.none,
@@ -32,6 +32,10 @@ export const initLayer = (source: MyImage): Layer => {
             tint: 0,
             hue: 0,
             saturation: 0
+        },
+        effect: {
+            editingProperty: '',
+            colorOffset: 0
         }
     }
 };

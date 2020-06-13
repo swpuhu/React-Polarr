@@ -1,11 +1,11 @@
-import React, {useContext, useEffect} from 'react';
+import {useContext, useEffect} from 'react';
 import {Context} from "../Context";
 import {ActionType, EditStatus} from "../types/type";
 import {initLayer} from "./util";
 
 const useFile = (onChange: (file: File) => void) => {
     const input = document.createElement('input');
-    const {state, dispatch} = useContext(Context);
+    const {dispatch} = useContext(Context);
     input.type = 'file';
     const changeHandler = () => {
         if (input.files && input.files.length) {

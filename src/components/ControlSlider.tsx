@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import styled from "styled-components";
 import {Icon} from "./Icon";
-import {clamp, debounce, dragable, throttle} from "../lib/util";
+import {clamp, throttle} from "../lib/util";
 import {roundNumber} from "../render/GLUtil";
 
 const Wrapper = styled.div`
@@ -28,16 +28,6 @@ const Bar = styled.div`
 `;
 
 
-const Shadowbar = styled.div`
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 4px;
-    background: #f60;
-    border-radius: 2px;
-`;
-
 const Point = styled.div`    
     width: 30px;
     height: 30px;
@@ -55,15 +45,18 @@ type Props = {
     value: number
     min: number
     max: number
-    step: number
+    step: number,
+    className: string
 }
 export const ControlSlider:React.FC<Props> = (props) => {
     const pointRef = useRef<HTMLDivElement>(null);
     const barRef = useRef<HTMLDivElement>(null);
     const range = props.max - props.min;
-    const value = props.value;
-    const onChange = throttle(props.onChange, 20);
+    // const value = props.value;
+    const [value, _setValue] = useState(props.value);
+    const onChange = throttle(props.onChange, 30);
     const setValue = (v: number) => {
+        _setValue(v);
         onChange(v);
     };
     const touchStart = (e: React.TouchEvent) => {
@@ -87,7 +80,7 @@ export const ControlSlider:React.FC<Props> = (props) => {
 
 
     return (
-        <Wrapper>
+        <Wrapper className={props.className}>
             <Icon name="arrowLeft" className="slider-button" onClick={() => setValue(clamp(value - props.step, props.min, props.max))}/>
             <div className="slider-bar">
                 <Bar ref={barRef}/>

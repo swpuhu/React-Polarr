@@ -170,7 +170,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
 
                 renderCount = passFramebuffer(gl, filters.colorOffsetFilter.program, renderCount, () => {
                     if (filters.colorOffsetFilter && filters.colorOffsetFilter.setIntensity) {
-                        filters.colorOffsetFilter.setIntensity(0);
+                        filters.colorOffsetFilter.setIntensity(layer.effect.colorOffset / 10000);
                     }
                 });
 

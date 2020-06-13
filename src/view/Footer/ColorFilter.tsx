@@ -17,76 +17,74 @@ const OuterWrapper = styled.div`
 
 export const ColorFilter:React.FC = (props) => {
     const {state, dispatch} = useContext(Context);
-    const onChange = (value: number) => {
-        if (state.currentLayer) {
-            dispatch({type: ActionType.updateColorValue, payload: value});
-        }
-    };
-    const getValue = () => {
-        if (state.currentLayer) {
-            if (state.currentLayer.color.editingProperty) {
-                return state.currentLayer.color[state.currentLayer.color.editingProperty];
-            }
-        }
-        return 0;
-    };
-
-    const getMinMax = () => {
-        if (state.currentLayer) {
-            if (state.currentLayer.color.editingProperty) {
-                let obj = indicators.find(item => state.currentLayer && item.type === state.currentLayer.color.editingProperty);
-                if (obj) {
-                    return {
-                        min: obj.min,
-                        max: obj.max
-                    }
-                }
-            }
-        }
-        return {
-            min: -100,
-            max: 100
-        }
-
-    };
     const indicators: {
         type: Exclude<keyof Color, 'editingProperty'>,
         min: number
         max: number
-        label: string
+        value: number,
+        label: string,
+        onChange: (value: number) => void
     }[] = [
         {
             type: "temperature",
             min: -100,
             max: 100,
+            value: state.currentLayer ? state.currentLayer.color.temperature : 0,
             label: "色温",
+            onChange: (value) => {
+                if (state.currentLayer) {
+                    dispatch({type: ActionType.updateColorValue, payload: {type: "temperature", value: value}});
+                }
+            }
         },
         {
             type: "tint",
             min: -100,
             max: 100,
+            value: state.currentLayer ? state.currentLayer.color.tint : 0,
             label: "色调",
+            onChange: (value) => {
+                if (state.currentLayer) {
+                    dispatch({type: ActionType.updateColorValue, payload: {type: "tint", value: value}});
+                }
+            }
         },
         {
             type: "hue",
             min: -180,
             max: 180,
+            value: state.currentLayer ? state.currentLayer.color.hue : 0,
             label: "色相",
+            onChange: (value) => {
+                if (state.currentLayer) {
+                    dispatch({type: ActionType.updateColorValue, payload: {type: "hue", value: value}});
+                }
+            }
         },
         {
             type: "saturation",
             min: -100,
             max: 100,
+            value: state.currentLayer ? state.currentLayer.color.saturation : 0,
             label: "饱和度",
+            onChange: (value) => {
+                if (state.currentLayer) {
+                    dispatch({type: ActionType.updateColorValue, payload: {type: "saturation", value: value}});
+                }
+            }
         }
     ];
 
     return (
         <OuterWrapper>
             {
-                state.currentLayer && state.currentLayer.color.editingProperty ?
-                    <ControlSlider onChange={onChange} min={getMinMax().min} max={getMinMax().max} value={getValue()} step={1}/> :
-                    null
+                indicators.map(item => {
+                    let isShow = false;
+                    if (state.currentLayer && state.currentLayer.color.editingProperty === item.type) {
+                        isShow = true;
+                    }
+                    return isShow ? <ControlSlider className={isShow ? '' : 'hide'} key={item.type} onChange={item.onChange} value={item.value} min={item.min} max={item.max} step={1}/> : null
+                })
             }
             <Wrapper>
                 {indicators.map(item => {

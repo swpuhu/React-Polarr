@@ -88,13 +88,23 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 savePicture: false
             };
         case ActionType.updateColorValue:
-            if (state.currentLayer && state.currentLayer.color.editingProperty) {
-                return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload, "color", state.currentLayer.color.editingProperty,);
+            if (state.currentLayer) {
+                return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload.value, "color", action.payload.type);
             }
             return state;
         case ActionType.updateColorType:
             if (state.currentLayer) {
                 return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload, "color", "editingProperty");
+            }
+            return state;
+        case ActionType.updateEffectValue:
+            if (state.currentLayer) {
+                return updateLayerSubProperty<"effect">(state.currentLayer, state, action.payload.value, "effect", action.payload.type);
+            }
+            return state;
+        case ActionType.updateEffectType:
+            if (state.currentLayer) {
+                return updateLayerSubProperty<"effect">(state.currentLayer, state, action.payload, "effect", "editingProperty");
             }
             return state;
         case ActionType.startClipPath:

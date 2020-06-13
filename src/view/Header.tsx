@@ -18,7 +18,7 @@ const Header: React.FC = (props) => {
     const {input} = useFile((file) => {
         // console.log(file);
     });
-    const {state, dispatch} = useContext(Context);
+    const {dispatch} = useContext(Context);
     const open = () => {
         input.click();
     };

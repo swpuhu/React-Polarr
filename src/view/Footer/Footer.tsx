@@ -4,8 +4,7 @@ import styled from "styled-components";
 import {Context} from "../../Context";
 import {ActionType, EditStatus} from "../../types/type";
 import {ColorFilter} from "./ColorFilter";
-import {ResizeBox} from "../../components/ResizeBox/ResizeBox";
-import Modal from 'react-modal';
+import {EffectFilter} from "./Effect";
 
 const Wrapper = styled.div`
     > .footer-icon {
@@ -84,6 +83,10 @@ const Footer: React.FC = () => {
                 break;
             case 5:
                 showController = <ColorFilter/>;
+                break;
+            case 6:
+                showController = <EffectFilter/>;
+                break;
             default:
                 break;
         }

@@ -170,8 +170,6 @@ export const ResizeBox: React.FC = () => {
         let initTop = state.currentLayer.transform.top;
         console.log(initTop);
         let initBottom = state.currentLayer.transform.bottom;
-        let height = bottomBoundary - topBoundary;
-        let width = rightBoundary - leftBoundary;
         let relativeX = e.touches[0].clientX - this.offsetLeft;
         let relativeY = e.touches[0].clientY - this.offsetTop;
         currentHandler = switchHandler<HandlerType>(leftBoundary, rightBoundary, topBoundary, bottomBoundary, relativeX, relativeY, handlers);
@@ -187,7 +185,7 @@ export const ResizeBox: React.FC = () => {
             }
         };
         const touchEnd = (e: TouchEvent) => {
-            dispatch({type: ActionType.updatePosition, payload: {}})
+            dispatch({type: ActionType.updatePosition, payload: {}});
             document.removeEventListener('touchmove', touchMove);
             document.removeEventListener('touchend', touchEnd);
         };
@@ -207,12 +205,9 @@ export const ResizeBox: React.FC = () => {
         }
     });
     let left = 0, right = 0, top = 0, bottom = 0;
-    let maskLeft = 0, maskRight = 0, maskTop = 0, maskBottom = 0;
+    let maskLeft = 0;
     if (state.currentLayer) {
         maskLeft = xMapValue(state.currentLayer.originPosition.x1);
-        maskRight = xMapValue(state.currentLayer.originPosition.x2);
-        maskTop = yMapValue(state.currentLayer.originPosition.y2);
-        maskBottom = yMapValue(state.currentLayer.originPosition.y1);
         left = xMapValue(state.currentLayer.originPosition.x1 + state.currentLayer.transform.left * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1));
         right = xMapValue(state.currentLayer.originPosition.x2 - state.currentLayer.transform.right * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1));
         top = yMapValue(state.currentLayer.originPosition.y2 - state.currentLayer.transform.top * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1));

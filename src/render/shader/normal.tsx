@@ -7,7 +7,6 @@ import {
     setUniforms
 } from "../GLUtil";
 import {WebGLRenderer} from "../../types/type";
-import {unwatchFile} from "fs";
 
 export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, vertexBuffer: WebGLBuffer | null, texCoordBuffer: WebGLBuffer | null): WebGLRenderer => {
     const vertexShader = `

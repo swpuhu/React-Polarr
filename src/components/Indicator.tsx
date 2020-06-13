@@ -28,6 +28,9 @@ const Wrapper = styled.div`
     &.saturation {
         background: linear-gradient(45deg,#000000,#ff6600);
     }
+    &.colorOffset {
+        background: linear-gradient(45deg,#929292,#0095ff);
+    }
     > .flex {
         display: flex;
         width: 100%;

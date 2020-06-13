@@ -71,7 +71,7 @@ const Main: React.FC = () => {
                     container.appendChild(canvas.canvasElement);
                     container.appendChild(histogramCanvas.canvasElement);
                 }
-                let [x1, y1, x2, y2] = canvas.renderer.render(state.layers);
+                let [x1] = canvas.renderer.render(state.layers);
                 analyzeImage(canvas, state.layers);
                 if (x1 !== undefined) {
                     if (state.savePicture && offCanvas) {

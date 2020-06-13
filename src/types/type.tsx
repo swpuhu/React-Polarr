@@ -26,7 +26,9 @@ export enum ActionType {
     startClipPath,
     finishClipPath,
     updateTransform,
-    updatePosition
+    updatePosition,
+    updateEffectType,
+    updateEffectValue
 
 }
 
@@ -74,13 +76,20 @@ export type Color = {
     hue: number
     saturation: number
 }
+
+export type Effect = {
+    editingProperty: Exclude<keyof Effect, 'editingProperty'> | '';
+    colorOffset: number
+}
+
 export type Layer = {
     editStatus: EditType;
     source: MyImage;
     position: Position;
     originPosition: Position;
     transform: Transform;
-    color: Color
+    color: Color,
+    effect: Effect
 }
 export type StateType = {
     editStatus: EditStatus;
