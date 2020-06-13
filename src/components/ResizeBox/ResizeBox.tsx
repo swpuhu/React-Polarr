@@ -218,7 +218,7 @@ export const ResizeBox: React.FC = () => {
         top = yMapValue(state.currentLayer.originPosition.y2 - state.currentLayer.transform.top * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1));
         bottom = yMapValue(state.currentLayer.originPosition.y1 + state.currentLayer.transform.bottom * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1));
         // console.log(state.currentLayer.transform.left , state.currentLayer.transform.right, state.currentLayer.transform.top, state.currentLayer.transform.bottom);
-        console.log(state.currentLayer.position);
+        // console.log(state.currentLayer.position);
     }
 
     return (
