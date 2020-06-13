@@ -31,7 +31,7 @@ export const ResizeBox: React.FC = () => {
     };
     const n = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetYPercent = offsetY / (state.height * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
             let top = initTop + offsetYPercent;
             top = clamp(top, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
