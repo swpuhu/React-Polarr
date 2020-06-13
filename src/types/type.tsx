@@ -25,7 +25,8 @@ export enum ActionType {
     updateColorValue,
     startClipPath,
     finishClipPath,
-    updateTransform
+    updateTransform,
+    updatePosition
 
 }
 
@@ -43,7 +44,8 @@ export type WebGLRenderer = {
     viewport: () => void;
     program: WebGLProgram | null;
     setColor?: (temperature: number, tint: number, hue: number, saturation: number) => void;
-    setIntensity?: (intensity: number) => void
+    setIntensity?: (intensity: number) => void,
+    setClip? :(l: number, r: number, t: number, b: number) => void;
 }
 
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;

@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef} from 'react';
 import {Context} from "../../Context";
 import {mapValue} from "../../render/GLUtil";
 import {H1, H2, InnerWrapper, LB, LT, MB, ML, MR, MT, RB, RT, V1, V2, Wrapper} from "./ResizeBoxStyle";
-import {switchHandler} from "../../lib/util";
+import {clamp, switchHandler} from "../../lib/util";
 import {ActionType} from "../../types/type";
 
 
@@ -16,29 +16,35 @@ export const ResizeBox: React.FC = () => {
 
     const nw = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (state.width * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
-            let offsetYPercent = offsetY / (state.height * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let top = initTop + offsetYPercent;
+            let left = initLeft + offsetXPercent;
+            top = clamp(top, 0, 1);
+            left = clamp(left, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
-                    top: initTop + offsetYPercent,
-                    left: initLeft + offsetXPercent
+                    top: top,
+                    left: left
                 }});
         }
     };
     const n = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
             let offsetYPercent = offsetY / (state.height * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let top = initTop + offsetYPercent;
+            top = clamp(top, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
-                    top: initTop + offsetYPercent
+                    top: top
                 }});
         }
 
     };
     const ne = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (state.width * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
-            let offsetYPercent = offsetY / (state.height * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
                     top: initTop + offsetYPercent,
@@ -48,17 +54,19 @@ export const ResizeBox: React.FC = () => {
     };
     const w = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (state.width * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let left = initLeft + offsetXPercent;
+            left = clamp(left, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
-                    left: initLeft + offsetXPercent
+                    left: left
                 }});
         }
     };
     const drag = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (state.width * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
-            let offsetYPercent = offsetY / (state.height * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
             let top = initTop + offsetYPercent;
             let right = initRight - offsetXPercent;
             let left = initLeft + offsetXPercent;
@@ -91,22 +99,28 @@ export const ResizeBox: React.FC = () => {
 
     const e = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (state.width * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let right = initRight - offsetXPercent;
+            right = clamp(right, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
-                    right: initRight - offsetXPercent
+                    right: right
                 }});
         }
     };
 
     const sw = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (state.width * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
-            let offsetYPercent = offsetY / (state.height * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let bottom = initBottom - offsetYPercent;
+            let left = initLeft + offsetXPercent;
+            bottom = clamp(bottom, 0, 1);
+            left = clamp(left, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
-                    bottom: initBottom - offsetYPercent,
-                    left: initLeft + offsetXPercent
+                    bottom: bottom,
+                    left: left
                 }});
         }
     };
@@ -114,10 +128,12 @@ export const ResizeBox: React.FC = () => {
     const s = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         // container.style.height = initHeight + offsetY + 'px';
         if (state.currentLayer) {
-            let offsetYPercent = offsetY / (state.height * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let bottom = initBottom - offsetYPercent;
+            bottom = clamp(bottom, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
-                    bottom: initBottom - offsetYPercent,
+                    bottom: bottom,
                 }});
         }
     };
@@ -126,12 +142,16 @@ export const ResizeBox: React.FC = () => {
         // container.style.width = initWidth + offsetX + 'px';
         // container.style.height = initHeight + offsetY + 'px';
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (state.width * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
-            let offsetYPercent = offsetY / (state.height * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let right = initRight - offsetXPercent;
+            let bottom = initBottom - offsetYPercent;
+            right = clamp(right, 0, 1);
+            bottom = clamp(bottom, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
-                    bottom: initBottom - offsetYPercent,
-                    right: initRight - offsetXPercent
+                    bottom: bottom,
+                    right: right
                 }});
         }
     };
@@ -167,7 +187,7 @@ export const ResizeBox: React.FC = () => {
             }
         };
         const touchEnd = (e: TouchEvent) => {
-
+            dispatch({type: ActionType.updatePosition, payload: {}})
             document.removeEventListener('touchmove', touchMove);
             document.removeEventListener('touchend', touchEnd);
         };
@@ -197,7 +217,10 @@ export const ResizeBox: React.FC = () => {
         right = xMapValue(state.currentLayer.originPosition.x2 - state.currentLayer.transform.right * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1));
         top = yMapValue(state.currentLayer.originPosition.y2 - state.currentLayer.transform.top * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1));
         bottom = yMapValue(state.currentLayer.originPosition.y1 + state.currentLayer.transform.bottom * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1));
+        // console.log(state.currentLayer.transform.left , state.currentLayer.transform.right, state.currentLayer.transform.top, state.currentLayer.transform.bottom);
+        console.log(state.currentLayer.position);
     }
+
     return (
         <div>
             <Wrapper ref={container} style={{

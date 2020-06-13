@@ -1,24 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.747de6b2.chunk.css",
-    "main.js": "/build/static/js/main.0c6b7312.chunk.js",
-    "main.js.map": "/build/static/js/main.0c6b7312.chunk.js.map",
-    "runtime-main.js": "/build/static/js/runtime-main.b70c2a92.js",
-    "runtime-main.js.map": "/build/static/js/runtime-main.b70c2a92.js.map",
-    "build/static/js/2.038b8169.chunk.js": "/build/static/js/2.038b8169.chunk.js",
-    "build/static/js/2.038b8169.chunk.js.map": "/build/static/js/2.038b8169.chunk.js.map",
-    "8b5bcab159e1c917e266.worker.js": "/8b5bcab159e1c917e266.worker.js",
-    "8b5bcab159e1c917e266.worker.js.map": "/8b5bcab159e1c917e266.worker.js.map",
-    "build/static/js/2.038b8169.chunk.js.LICENSE.txt": "/build/static/js/2.038b8169.chunk.js.LICENSE.txt",
-    "index.html": "/index.html",
-    "precache-manifest.42dcd7441848edde6f2564915ab084ac.js": "/precache-manifest.42dcd7441848edde6f2564915ab084ac.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.747de6b2.chunk.css.map": "/static/css/main.747de6b2.chunk.css.map"
+    "main.css": "/polarr/static/css/main.6ad485d1.chunk.css",
+    "main.js": "/polarr/build/static/js/main.55ff424e.chunk.js",
+    "main.js.map": "/polarr/build/static/js/main.55ff424e.chunk.js.map",
+    "runtime-main.js": "/polarr/build/static/js/runtime-main.544c5042.js",
+    "runtime-main.js.map": "/polarr/build/static/js/runtime-main.544c5042.js.map",
+    "build/static/js/2.22e9fd90.chunk.js": "/polarr/build/static/js/2.22e9fd90.chunk.js",
+    "build/static/js/2.22e9fd90.chunk.js.map": "/polarr/build/static/js/2.22e9fd90.chunk.js.map",
+    "7c2688f127cd9a511b7a.worker.js": "/polarr/7c2688f127cd9a511b7a.worker.js",
+    "7c2688f127cd9a511b7a.worker.js.map": "/polarr/7c2688f127cd9a511b7a.worker.js.map",
+    "build/static/js/2.22e9fd90.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.22e9fd90.chunk.js.LICENSE.txt",
+    "index.html": "/polarr/index.html",
+    "precache-manifest.359b8d71e3f6093d040e351179dd46b7.js": "/polarr/precache-manifest.359b8d71e3f6093d040e351179dd46b7.js",
+    "service-worker.js": "/polarr/service-worker.js",
+    "static/css/main.6ad485d1.chunk.css.map": "/polarr/static/css/main.6ad485d1.chunk.css.map",
+    "static/media/example.jpg": "/polarr/static/media/example.fa39e836.jpg"
   },
   "entrypoints": [
-    "build/static/js/runtime-main.b70c2a92.js",
-    "build/static/js/2.038b8169.chunk.js",
-    "static/css/main.747de6b2.chunk.css",
-    "build/static/js/main.0c6b7312.chunk.js"
+    "build/static/js/runtime-main.544c5042.js",
+    "build/static/js/2.22e9fd90.chunk.js",
+    "static/css/main.6ad485d1.chunk.css",
+    "build/static/js/main.55ff424e.chunk.js"
   ]
 }

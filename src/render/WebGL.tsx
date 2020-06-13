@@ -19,7 +19,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
     let fullPoint = vertexPoint;
     let cacheImage: MyImage | null = null;
 
-    const texCoordPoint = new Float32Array([
+    let texCoordPoint = new Float32Array([
         0.0, 0.0,
         1.0, 0.0,
         1.0, 1.0,
@@ -27,6 +27,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
         0.0, 1.0,
         0.0, 0.0
     ]);
+    let fullTexCoord = texCoordPoint;
 
     const vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -93,7 +94,14 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                         width / 2 * layer.originPosition.x1, height / 2 * layer.originPosition.y2,
                         width / 2 * layer.originPosition.x1, height / 2 * layer.originPosition.y1,
                     ]);
-
+                    texCoordPoint = new Float32Array([
+                        0.0, 0.0,
+                        1.0, 0.0,
+                        1.0, 1.0,
+                        1.0, 1.0,
+                        0.0, 1.0,
+                        0.0, 0.0
+                    ]);
                 } else {
                     vertexPoint = new Float32Array([
                         width / 2 * layer.position.x1, height / 2 * layer.position.y1,
@@ -103,9 +111,38 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                         width / 2 * layer.position.x1, height / 2 * layer.position.y2,
                         width / 2 * layer.position.x1, height / 2 * layer.position.y1,
                     ]);
+
+                    texCoordPoint = new Float32Array([
+                        0.0 + layer.transform.left, 0.0 + layer.transform.bottom,
+                        1.0 - layer.transform.right, 0.0 + layer.transform.bottom,
+                        1.0 - layer.transform.right, 1.0 - layer.transform.top,
+                        1.0 - layer.transform.right, 1.0 - layer.transform.top,
+                        0.0 + layer.transform.left, 1.0 - layer.transform.top,
+                        0.0 + layer.transform.left, 0.0 + layer.transform.bottom,
+                    ]);
                 }
                 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, vertexPoint, gl.STATIC_DRAW);
+                gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, texCoordPoint, gl.STATIC_DRAW);
+            } else {
+                let w = width * (1 - layer.transform.left - layer.transform.right);
+                let h = height * (1 - layer.transform.top - layer.transform.bottom)
+                debugger;
+                gl.canvas.width = w;
+                gl.canvas.height = h;
+                viewport(w, h);
+                texCoordPoint = new Float32Array([
+                    0.0 + layer.transform.left, 0.0 + layer.transform.bottom,
+                    1.0 - layer.transform.right, 0.0 + layer.transform.bottom,
+                    1.0 - layer.transform.right, 1.0 - layer.transform.top,
+                    1.0 - layer.transform.right, 1.0 - layer.transform.top,
+                    0.0 + layer.transform.left, 1.0 - layer.transform.top,
+                    0.0 + layer.transform.left, 0.0 + layer.transform.bottom,
+                ]);
+                gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, texCoordPoint, gl.STATIC_DRAW);
+
             }
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -116,7 +153,6 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
             }
 
             if (renderOrigin) {
-                // only render origin image
                 filters.normalFilter && gl.useProgram(filters.normalFilter.program);
                 gl.drawArrays(gl.TRIANGLES, 0, 6);
             } else {
@@ -128,6 +164,9 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                 // 第一次渲染要回复到全屏的顶点位置
                 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, fullPoint, gl.STATIC_DRAW);
+
+                gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, fullTexCoord, gl.STATIC_DRAW);
 
                 renderCount = passFramebuffer(gl, filters.colorOffsetFilter.program, renderCount, () => {
                     if (filters.colorOffsetFilter && filters.colorOffsetFilter.setIntensity) {

@@ -76,7 +76,7 @@ const Main: React.FC = () => {
                 if (x1 !== undefined) {
                     if (state.savePicture && offCanvas) {
                         if (offCanvas.canvasElement.width !== state.width || offCanvas.canvasElement.height !== state.height) {
-                            offCanvas.viewport(state.width, state.height);
+                            state.currentLayer && state.currentLayer.source && offCanvas.viewport(state.currentLayer.source.width, state.currentLayer.source.height);
                         }
                         offCanvas.renderer.render(state.layers);
                         saveCanvasPicture(offCanvas.canvasElement, '保存图片.jpeg').then(r => dispatch({type: ActionType.finishSavePicture, payload: null}))

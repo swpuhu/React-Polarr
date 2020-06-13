@@ -1,9 +1,9 @@
 import React, {createContext, useReducer} from "react";
-import {ActionType, EditStatus, EditType, Layer, ProcessStatus, StateType} from "./types/type";
+import {ActionType, EditStatus, EditType, Layer, ProcessStatus, StateType, Position} from "./types/type";
 import {initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
 import imgSrc from './icons/example.jpg';
 
-let mode = 1;
+let mode = 0;
 let image = new Image();
 image.src = imgSrc;
 let layer = initLayer(image);
@@ -110,6 +110,33 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
         case ActionType.updateTransform:
             if (state.currentLayer) {
                 return updateLayerProperty<"transform">(state.currentLayer, state, action.payload, "transform");
+            }
+            return state;
+        case ActionType.updatePosition:
+            if (state.currentLayer) {
+                let w = (1 - state.currentLayer.transform.left - state.currentLayer.transform.right) * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1);
+                let h = (1 - state.currentLayer.transform.top - state.currentLayer.transform.bottom) * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1);
+                let wPx = w * screenWidth;
+                let hPx = h * screenHeight;
+                let position: Position = {
+                    x1: -1,
+                    x2: 1,
+                    y1: -1,
+                    y2: 1
+                };
+                // console.log(wPx, hPx);
+                if (wPx / hPx > screenWidth / screenHeight) {
+                    // 宽适配
+                    let scale = 2 / w;
+                    position.y2 = h / 2 * scale;
+                    position.y1 = -h / 2 * scale;
+                } else {
+                    // 高适配
+                    let scale = 2 / h;
+                    position.x2 = w / 2 * scale;
+                    position.x1 = -w / 2 * scale;
+                }
+                return updateLayerProperty<"position">(state.currentLayer, state, position, "position");
             }
             return state;
         default:
