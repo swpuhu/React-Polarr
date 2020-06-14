@@ -3,6 +3,7 @@ import {createFramebufferTexture, createTexture, deleteFramebuffer, deleteTextur
 import {EditType, IdentityObject, Layer, MyImage, MyWebGLRender, WebGLRenderer} from "../types/type";
 import {ColorFilter} from "./shader/Color";
 import {ColorOffset} from "./shader/colorOffset";
+import {LutFilter} from "./shader/lutFilter";
 
 export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWebGLRender => {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
@@ -40,7 +41,8 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
     const filters: IdentityObject<WebGLRenderer> = {
         normalFilter: NormalFilter(gl, vertexBuffer, texCoordBuffer),
         colorFilter: ColorFilter(gl, vertexBuffer, texCoordBuffer),
-        colorOffsetFilter: ColorOffset(gl, vertexBuffer, texCoordBuffer)
+        colorOffsetFilter: ColorOffset(gl, vertexBuffer, texCoordBuffer),
+        lutFilter: LutFilter(gl, vertexBuffer, texCoordBuffer)
     };
     let [framebuffers, textures] = createFramebufferTexture(gl, 2, width, height);
     let texture = createTexture(gl);
@@ -171,6 +173,11 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                 renderCount = passFramebuffer(gl, filters.colorOffsetFilter.program, renderCount, () => {
                     if (filters.colorOffsetFilter && filters.colorOffsetFilter.setIntensity) {
                         filters.colorOffsetFilter.setIntensity(layer.effect.colorOffset / 10000);
+                    }
+                });
+                renderCount = passFramebuffer(gl, filters.lutFilter.program, renderCount, () => {
+                    if (filters.lutFilter.program && filters.lutFilter.setFilter) {
+                        // filters.lutFilter.setFilter('fluoriteBlue');
                     }
                 });
 
