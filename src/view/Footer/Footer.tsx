@@ -5,6 +5,7 @@ import {Context} from "../../Context";
 import {ActionType, EditStatus} from "../../types/type";
 import {ColorFilter} from "./ColorFilter";
 import {EffectFilter} from "./Effect";
+import {Filter} from "./Filter";
 
 const Wrapper = styled.div`
     > .footer-icon {
@@ -78,6 +79,7 @@ const Footer: React.FC = () => {
             case 2:
                 break;
             case 3:
+                showController = <Filter/>;
                 break;
             case 4:
                 break;

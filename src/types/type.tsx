@@ -83,6 +83,18 @@ export type Effect = {
     colorOffset: number
 }
 
+export type FilterCategoryType = 'cinema' | 'vintage'
+export type VintageFilterType = 'flowerStone' | 'fluorite' | 'fluoriteBlue' | 'fluoriteVenus'
+export type CinemaFilterType = 'cinema1' | 'cinema2'
+export type FilterSubType<T> =
+    T extends 'vintage' ? VintageFilterType:
+        null;
+
+export type Filter<T extends FilterCategoryType> = {
+    currentCategory: T
+    type: FilterSubType<T>,
+    intensity: number
+}
 export type Layer = {
     editStatus: EditType;
     source: MyImage;
@@ -90,7 +102,8 @@ export type Layer = {
     originPosition: Position;
     transform: Transform;
     color: Color,
-    effect: Effect
+    effect: Effect,
+    filter: Filter<FilterCategoryType>
 }
 export type StateType = {
     editStatus: EditStatus;
@@ -120,4 +133,4 @@ export type LutFiltersType<T> = {
     fluoriteBlue: T
 }
 
-export type LutFilterType = keyof LutFiltersType<any>
+export type LutFilterType = keyof LutFiltersType<any> | null

@@ -175,11 +175,13 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                         filters.colorOffsetFilter.setIntensity(layer.effect.colorOffset / 10000);
                     }
                 });
-                renderCount = passFramebuffer(gl, filters.lutFilter.program, renderCount, () => {
-                    if (filters.lutFilter.program && filters.lutFilter.setFilter) {
-                        // filters.lutFilter.setFilter('fluoriteBlue');
-                    }
-                });
+                if (layer.filter.type) {
+                    renderCount = passFramebuffer(gl, filters.lutFilter.program, renderCount, () => {
+                        if (filters.lutFilter.program && filters.lutFilter.setFilter) {
+                            filters.lutFilter.setFilter('fluoriteBlue');
+                        }
+                    });
+                }
 
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
                 filters.normalFilter && gl.useProgram(filters.normalFilter.program);

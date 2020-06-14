@@ -65,7 +65,7 @@ export const ResizeBox: React.FC = () => {
     };
     const drag = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1) / 2);
             let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
             let top = initTop + offsetYPercent;
             let right = initRight - offsetXPercent;
