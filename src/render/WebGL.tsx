@@ -175,10 +175,10 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                         filters.colorOffsetFilter.setIntensity(layer.effect.colorOffset / 10000);
                     }
                 });
-                if (layer.filter.type) {
+                if (layer.filter.type !== 'normal') {
                     renderCount = passFramebuffer(gl, filters.lutFilter.program, renderCount, () => {
                         if (filters.lutFilter.program && filters.lutFilter.setFilter) {
-                            filters.lutFilter.setFilter('fluoriteBlue');
+                            filters.lutFilter.setFilter(layer.filter.type);
                         }
                     });
                 }

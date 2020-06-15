@@ -1,5 +1,5 @@
 import React, {createContext, useReducer} from "react";
-import {ActionType, EditStatus, EditType, Layer, ProcessStatus, StateType, Position} from "./types/type";
+import {ActionType, EditStatus, EditType, Layer, Position, ProcessStatus, StateType} from "./types/type";
 import {initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
 import imgSrc from './icons/example.jpg';
 
@@ -105,6 +105,16 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
         case ActionType.updateEffectType:
             if (state.currentLayer) {
                 return updateLayerSubProperty<"effect">(state.currentLayer, state, action.payload, "effect", "editingProperty");
+            }
+            return state;
+        case ActionType.updateFilterSubType:
+            if (state.currentLayer) {
+                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "type");
+            }
+            return state;
+        case ActionType.updateFilterIntensity:
+            if (state.currentLayer) {
+                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "intensity");
             }
             return state;
         case ActionType.startClipPath:

@@ -28,7 +28,10 @@ export enum ActionType {
     updateTransform,
     updatePosition,
     updateEffectType,
-    updateEffectValue
+    updateEffectValue,
+    updateFilterSubType,
+    updateFilterCategory,
+    updateFilterIntensity
 
 }
 
@@ -84,11 +87,11 @@ export type Effect = {
 }
 
 export type FilterCategoryType = 'cinema' | 'vintage'
-export type VintageFilterType = 'flowerStone' | 'fluorite' | 'fluoriteBlue' | 'fluoriteVenus'
+export type VintageFilterType = 'normal' | 'flowerStone' | 'fluorite' | 'fluoriteBlue' | 'fluoriteVenus'
 export type CinemaFilterType = 'cinema1' | 'cinema2'
 export type FilterSubType<T> =
     T extends 'vintage' ? VintageFilterType:
-        null;
+        'normal';
 
 export type Filter<T extends FilterCategoryType> = {
     currentCategory: T
@@ -128,9 +131,7 @@ export type MyCanvas = {
 } | null;
 
 export type LutFiltersType<T> = {
-    flowerStone: T
-    fluorite: T
-    fluoriteBlue: T
+    [propsName in Exclude<FilterSubType<FilterCategoryType>, 'normal'>]: T
 }
 
-export type LutFilterType = keyof LutFiltersType<any> | null
+export type LutFilterType = FilterSubType<FilterCategoryType> | null

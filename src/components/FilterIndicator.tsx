@@ -15,9 +15,6 @@ const Wrapper = styled.div`
         border: 2px solid #ffffff;
         .valueWrapper {
             background: #00000011;
-            > .hide {
-                visibility: hidden;
-            }
         }
     }
     > .flex {
@@ -40,6 +37,9 @@ const Wrapper = styled.div`
             height: 100%;
             display: flex;
             flex-direction: column;
+            > .hide {
+                visibility: hidden;
+            }
             > .value {
                 flex: 1;
                 line-height: 30px;

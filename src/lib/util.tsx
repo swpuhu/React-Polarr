@@ -39,8 +39,8 @@ export const initLayer = (source: MyImage): Layer => {
         },
         filter: {
             currentCategory: 'vintage',
-            type: null,
-            intensity: 1
+            type: 'normal',
+            intensity: 100
         }
     }
 };

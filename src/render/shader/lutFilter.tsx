@@ -10,6 +10,7 @@ import {IdentityObject, LutFiltersType, LutFilterType, WebGLRenderer} from "../.
 import flowerStone from '../lutImages/Flower Stone.cube.jpeg';
 import fluorite from '../lutImages/Fluorite.cube.jpeg';
 import fluoriteBlue from '../lutImages/Fluorite Blue Sky.cube.jpeg';
+import fluoriteVenus from '../lutImages/Fluorite Venus.cube.jpeg';
 
 const loadImage = (src: string) => {
     let image = new Image();
@@ -83,7 +84,8 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
     const lutsImage: LutFiltersType<HTMLImageElement> = {
         flowerStone: loadImage(flowerStone),
         fluorite: loadImage(fluorite),
-        fluoriteBlue: loadImage(fluoriteBlue)
+        fluoriteBlue: loadImage(fluoriteBlue),
+        fluoriteVenus: loadImage(fluoriteVenus),
     };
 
     let inputImageTexture1 = gl.getUniformLocation(program, 'inputImageTexture1');
@@ -102,7 +104,7 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
 
 
     const setFilter = (type: LutFilterType) => {
-        if (type && lutsImage[type]) {
+        if (type && type !== 'normal' && lutsImage[type]) {
             gl.activeTexture(gl.TEXTURE1);
             gl.bindTexture(gl.TEXTURE_2D, lutTexture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, lutsImage[type]);
