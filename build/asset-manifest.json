@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/polarr/static/css/main.6ad485d1.chunk.css",
-    "main.js": "/polarr/build/static/js/main.b5bd0724.chunk.js",
-    "main.js.map": "/polarr/build/static/js/main.b5bd0724.chunk.js.map",
+    "main.js": "/polarr/build/static/js/main.5b49d59a.chunk.js",
+    "main.js.map": "/polarr/build/static/js/main.5b49d59a.chunk.js.map",
     "runtime-main.js": "/polarr/build/static/js/runtime-main.544c5042.js",
     "runtime-main.js.map": "/polarr/build/static/js/runtime-main.544c5042.js.map",
-    "build/static/js/2.9e061026.chunk.js": "/polarr/build/static/js/2.9e061026.chunk.js",
-    "build/static/js/2.9e061026.chunk.js.map": "/polarr/build/static/js/2.9e061026.chunk.js.map",
-    "2b25cfc8c440a506da7c.worker.js": "/polarr/2b25cfc8c440a506da7c.worker.js",
-    "2b25cfc8c440a506da7c.worker.js.map": "/polarr/2b25cfc8c440a506da7c.worker.js.map",
-    "build/static/js/2.9e061026.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.9e061026.chunk.js.LICENSE.txt",
+    "build/static/js/2.14ac3a70.chunk.js": "/polarr/build/static/js/2.14ac3a70.chunk.js",
+    "build/static/js/2.14ac3a70.chunk.js.map": "/polarr/build/static/js/2.14ac3a70.chunk.js.map",
+    "2cd15e08a02bd536db5b.worker.js": "/polarr/2cd15e08a02bd536db5b.worker.js",
+    "2cd15e08a02bd536db5b.worker.js.map": "/polarr/2cd15e08a02bd536db5b.worker.js.map",
+    "build/static/js/2.14ac3a70.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.14ac3a70.chunk.js.LICENSE.txt",
     "index.html": "/polarr/index.html",
-    "precache-manifest.f47f22726c1e684957b26b51f49fe5b1.js": "/polarr/precache-manifest.f47f22726c1e684957b26b51f49fe5b1.js",
+    "precache-manifest.61bc36a2bbf6b0812687b5306f04e0af.js": "/polarr/precache-manifest.61bc36a2bbf6b0812687b5306f04e0af.js",
     "service-worker.js": "/polarr/service-worker.js",
     "static/css/main.6ad485d1.chunk.css.map": "/polarr/static/css/main.6ad485d1.chunk.css.map",
     "static/media/Flower Stone.cube.jpeg": "/polarr/static/media/Flower Stone.cube.fa1c8cea.jpeg",
@@ -21,8 +21,8 @@
   },
   "entrypoints": [
     "build/static/js/runtime-main.544c5042.js",
-    "build/static/js/2.9e061026.chunk.js",
+    "build/static/js/2.14ac3a70.chunk.js",
     "static/css/main.6ad485d1.chunk.css",
-    "build/static/js/main.b5bd0724.chunk.js"
+    "build/static/js/main.5b49d59a.chunk.js"
   ]
 }

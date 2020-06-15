@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
 import {Icon} from "./Icon";
 import {clamp, throttle} from "../lib/util";
@@ -78,10 +78,43 @@ export const ControlSlider:React.FC<Props> = (props) => {
         document.addEventListener('touchend', touchend);
     };
 
+    let id: number;
+    let count = 1;
+    let first = true;
+    const add = () => {
+        if (first) {
+            first = false;
+            id = setTimeout(add, 300);
+        } else {
+            id = setTimeout(add, 50);
+        }
+
+        setValue(clamp(value + count * props.step, props.min, props.max));
+        count++;
+    };
+
+    const sub = () => {
+        if (first) {
+            first = false;
+            id = setTimeout(sub, 300);
+        } else {
+            id = setTimeout(sub, 50);
+        }
+        setValue(clamp(value - count * props.step, props.min, props.max));
+        count++;
+    };
+    useEffect(() => {
+        const touchEnd = () => {
+            first = true;
+            clearTimeout(id);
+        };
+        document.addEventListener('touchend', touchEnd);
+    });
+
 
     return (
         <Wrapper className={props.className}>
-            <Icon name="arrowLeft" className="slider-button" onClick={() => setValue(clamp(value - props.step, props.min, props.max))}/>
+            <Icon name="arrowLeft" className="slider-button" onTouchStart={sub}/>
             <div className="slider-bar">
                 <Bar ref={barRef}/>
                 {/*<Shadowbar ref={shadowbarRef} style={{*/}
@@ -91,7 +124,7 @@ export const ControlSlider:React.FC<Props> = (props) => {
                     left: `${(value - props.min) / (props.max - props.min) * 100}%`
                 }}/>
             </div>
-            <Icon name="arrowRight" className="slider-button" onClick={() => setValue(clamp(value + props.step, props.min, props.max))}/>
+            <Icon name="arrowRight" className="slider-button" onTouchStart={add}/>
         </Wrapper>
     )
 };
