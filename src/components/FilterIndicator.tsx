@@ -11,6 +11,7 @@ const Wrapper = styled.div`
     background: #f60;
     border-radius: 5px;
     text-shadow: 1px 1px 2px #000;
+    background-size: cover;
     &.active {
         border: 2px solid #ffffff;
         .valueWrapper {
@@ -60,7 +61,8 @@ type Props = {
     label: string
     className: string
     isActive: boolean
-    onClick?: () => void
+    onClick?: () => void,
+    background? : string
 }
 export const FilterIndicator: React.FC<Props> = (props) => {
     let mid = (props.min + props.max) / 2;
@@ -78,9 +80,9 @@ export const FilterIndicator: React.FC<Props> = (props) => {
         </div>
     );
     return (
-        <Wrapper onClick={props.onClick} className={cs(props.className, props.isActive ? 'active' : '')}>
-            <div className="flex">
-            </div>
+        <Wrapper onClick={props.onClick} className={cs(props.className, props.isActive ? 'active' : '')} style={{
+            backgroundImage: `url(${props.background})`
+        }}>
             <div className="mask">
                 {showValue}
             </div>

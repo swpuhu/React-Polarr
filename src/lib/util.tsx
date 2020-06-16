@@ -1,4 +1,5 @@
-import {EditType, Layer, MyImage, StateType} from "../types/type";
+import {AdaptionType, EditType, Layer, MyImage, Picture, StateType} from "../types/type";
+
 export const initLayer = (source: MyImage): Layer => {
     return {
         editStatus: EditType.none,
@@ -241,4 +242,12 @@ export function switchHandler <T>(left: number, right: number, top: number, bott
         return handlers[8];
     }
     return null;
+}
+
+export function findAdaption(obj: Picture, aspect: number, reverse?: boolean) {
+    if (obj.width / obj.height > aspect) {
+        return reverse ? AdaptionType.heightAdaption : AdaptionType.widthAdaption;
+    } else {
+        return reverse ? AdaptionType.widthAdaption : AdaptionType.heightAdaption ;
+    }
 }

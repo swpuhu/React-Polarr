@@ -177,7 +177,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                 });
                 if (layer.filter.type !== 'normal') {
                     renderCount = passFramebuffer(gl, filters.lutFilter.program, renderCount, () => {
-                        if (filters.lutFilter.program && filters.lutFilter.setFilter) {
+                        if (filters.lutFilter.program && filters.lutFilter.setFilter && layer.filter.type !== 'normal') {
                             filters.lutFilter.setFilter(layer.filter.type, layer.filter.intensity);
                         }
                     });

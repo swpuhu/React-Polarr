@@ -2,10 +2,12 @@ import {useContext, useEffect} from 'react';
 import {Context} from "../Context";
 import {ActionType, EditStatus} from "../types/type";
 import {initLayer} from "./util";
+import {usePreProcess} from "../render/usePreProcess";
 
 const useFile = (onChange: (file: File) => void) => {
     const input = document.createElement('input');
     const {dispatch} = useContext(Context);
+    const {preProcessAll} = usePreProcess();
     input.type = 'file';
     const changeHandler = () => {
         if (input.files && input.files.length) {
@@ -14,6 +16,7 @@ const useFile = (onChange: (file: File) => void) => {
                 let image = document.createElement('img');
                 let url = URL.createObjectURL(file);
                 image.onload = () => {
+                    dispatch({type: ActionType.updateFilterStamp, payload: preProcessAll(image)});
                     dispatch({type: ActionType.addLayer, payload: initLayer(image)});
                     dispatch({type: ActionType.updateCanvasSize, payload: {width: image.width, height: image.height}});
                     dispatch({type: ActionType.updateEditStatus, payload: EditStatus.EDTING});

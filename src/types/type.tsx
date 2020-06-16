@@ -1,3 +1,4 @@
+import {FilterTypes} from "webpack/declarations/WebpackOptions";
 
 export enum EditStatus {
     IDLE,
@@ -31,7 +32,8 @@ export enum ActionType {
     updateEffectValue,
     updateFilterSubType,
     updateFilterCategory,
-    updateFilterIntensity
+    updateFilterIntensity,
+    updateFilterStamp,
 
 }
 
@@ -48,9 +50,10 @@ export type IdentityObject<T> = {
 export type WebGLRenderer = {
     viewport: () => void;
     program: WebGLProgram | null;
-    setColor?: (temperature: number, tint: number, hue: number, saturation: number) => void;
-    setIntensity?: (intensity: number) => void,
-    setClip? :(l: number, r: number, t: number, b: number) => void;
+    setScale?: (sx: number, sy: number, centerX?: number, centerY?: number) => void
+    setColor?: (temperature: number, tint: number, hue: number, saturation: number) => void
+    setIntensity?: (intensity: number) => void
+    setClip? :(l: number, r: number, t: number, b: number) => void
     setFilter? : (type: LutFilterType, intensity: number) => void
 }
 
@@ -115,7 +118,8 @@ export type StateType = {
     layers :Array<Layer>,
     currentLayer: Layer | null,
     width: number,
-    height: number
+    height: number,
+    filterStamp: LutFiltersType<string>,
 }
 
 export type MyWebGLRender = {
@@ -131,7 +135,19 @@ export type MyCanvas = {
 } | null;
 
 export type LutFiltersType<T> = {
-    [propsName in Exclude<FilterSubType<FilterCategoryType>, 'normal'>]: T
+    [propsName in FilterSubType<FilterCategoryType>]: T
 }
 
-export type LutFilterType = FilterSubType<FilterCategoryType> | null
+export type LutFilterType = Exclude<FilterSubType<FilterCategoryType>, 'normal'>
+
+export interface Picture {
+    width: number,
+    height: number
+}
+
+
+export enum AdaptionType {
+    widthAdaption,
+    heightAdaption,
+    fill
+}

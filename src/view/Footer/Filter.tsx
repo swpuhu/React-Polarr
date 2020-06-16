@@ -22,10 +22,10 @@ const OutterWrapper = styled.div`
     > .filter-indicator {
     }
 `;
-type IndicatorsType<T extends FilterCategoryType> = {
-    type: T,
+type IndicatorsType = {
+    type: FilterCategoryType,
     children: {
-        subType: FilterSubType<T>,
+        subType: FilterSubType<FilterCategoryType>,
         intensity: number
     }[]
 }
@@ -38,7 +38,7 @@ export const Filter:React.FC = (props) => {
         'fluoriteBlue': '萤-天空',
         'fluoriteVenus': '萤-维纳斯'
     };
-    const indicators: IndicatorsType<FilterCategoryType>[] = [
+    const indicators: IndicatorsType[] = [
         {
             type: 'vintage',
             children: [
@@ -68,7 +68,6 @@ export const Filter:React.FC = (props) => {
             intensity: 100
         })
     }
-    console.log(state.currentLayer && state.currentLayer.filter.intensity);
     const changeIntensity = (value: number) => {
         dispatch({type: ActionType.updateFilterIntensity, payload: value})
     }
@@ -85,11 +84,12 @@ export const Filter:React.FC = (props) => {
                     // let value = state.currentLayer ? state.currentLayer.filter.intensity : 0;
                     return <FilterIndicator key={item.subType ? item.subType : index} value={state.currentLayer ? state.currentLayer.filter.intensity : 0}                                            min={0}
                                             max={100}
-                                            label={item.subType ? labelMap[item.subType] : 'a'}
+                                            label={item.subType ? labelMap[item.subType] : ''}
                                             className={item.subType ? item.subType : ''}
                                             onClick={() => {
                                                 dispatch({type: ActionType.updateFilterSubType, payload: item.subType});
                                             }}
+                                            background={item.subType ? state.filterStamp[item.subType] : ''}
                                             isActive={!!isActive}/>
                 })}
 

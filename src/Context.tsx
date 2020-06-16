@@ -27,6 +27,13 @@ const initialState: StateType = {
     ],
     width: window.innerWidth,
     height: window.innerHeight - 92,
+    filterStamp: {
+        'normal': '',
+        'flowerStone': '',
+        'fluorite': '',
+        'fluoriteBlue': '',
+        'fluoriteVenus': ''
+    }
 };
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight - 92;
@@ -159,6 +166,12 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 return updateLayerProperty<"position">(state.currentLayer, state, position, "position");
             }
             return state;
+        case ActionType.updateFilterStamp:
+            console.log(action.payload);
+            return {
+                ...state,
+                filterStamp: action.payload
+            };
         default:
             return state;
     }

@@ -83,6 +83,7 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
         intensity: 1
     };
     const lutsImage: LutFiltersType<HTMLImageElement> = {
+        normal: loadImage(''),
         flowerStone: loadImage(flowerStone),
         fluorite: loadImage(fluorite),
         fluoriteBlue: loadImage(fluoriteBlue),
@@ -105,7 +106,7 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
 
 
     const setFilter = (type: LutFilterType, intensity: number) => {
-        if (type && type !== 'normal' && lutsImage[type]) {
+        if (type && lutsImage[type]) {
             gl.activeTexture(gl.TEXTURE1);
             gl.bindTexture(gl.TEXTURE_2D, lutTexture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, lutsImage[type]);

@@ -4,7 +4,7 @@ import {
     createUniformSetters,
     createProjection,
     setAttributes,
-    setUniforms
+    setUniforms, createScaleMatrix
 } from "../GLUtil";
 import {WebGLRenderer} from "../../types/type";
 
@@ -14,8 +14,9 @@ export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext,
     attribute vec2 a_texCoord;
     varying vec2 v_texCoord;
     uniform mat4 u_projection;
+    uniform mat4 u_scale;
     void main () {
-        gl_Position = u_projection * a_position;
+        gl_Position = u_projection * u_scale * a_position;
         v_texCoord = a_texCoord;
     }
     `;
@@ -62,7 +63,8 @@ export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext,
     };
     const uniforms = {
         u_projection: createProjection(-gl.canvas.width / 2, gl.canvas.width / 2, gl.canvas.height / 2, -gl.canvas.height / 2, 1),
-        u_clip: [0, 1, 1, 0]
+        u_clip: [0, 1, 1, 0],
+        u_scale: createScaleMatrix(1, 1, 1, {x: 0, y: 0, z: 1})
     };
 
     const viewport = () => {
@@ -71,8 +73,9 @@ export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext,
         setAttributes(attributeSetter, attributes);
         setUniforms(uniformSetter, uniforms);
     };
-    const setColor = () => {
-        setAttributes(attributeSetter, attributes);
+
+    const setScale = (sx: number, sy: number, centerX = 0, centerY = 0) => {
+        uniforms.u_scale = createScaleMatrix(sx, sy, 1, {x: centerX, y: centerY, z: 1});
         setUniforms(uniformSetter, uniforms);
     };
 
@@ -83,6 +86,6 @@ export const NormalFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext,
     return {
         program,
         viewport,
-        setColor
+        setScale
     }
 };
