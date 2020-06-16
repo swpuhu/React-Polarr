@@ -11,7 +11,7 @@ const InnerWrapper = styled.div`
     //bottom: 0;
     white-space: nowrap;
     overflow: auto;
-    background: #00000066;
+    background: rgba(0, 0, 0, 0.4);
 `;
 
 const OutterWrapper = styled.div`

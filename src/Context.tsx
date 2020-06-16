@@ -3,7 +3,7 @@ import {ActionType, EditStatus, EditType, Layer, Position, ProcessStatus, StateT
 import {initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
 import imgSrc from './icons/example.jpg';
 
-let mode = 1;
+let mode = 0;
 let image = new Image();
 image.src = imgSrc;
 let layer = initLayer(image);

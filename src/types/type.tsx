@@ -138,7 +138,7 @@ export type LutFiltersType<T> = {
     [propsName in FilterSubType<FilterCategoryType>]: T
 }
 
-export type LutFilterType = Exclude<FilterSubType<FilterCategoryType>, 'normal'>
+export type LutFilterType = FilterSubType<FilterCategoryType>
 
 export interface Picture {
     width: number,

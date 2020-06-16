@@ -12,7 +12,7 @@ const OuterWrapper = styled.div`
     position: absolute;
     width: 100%;
     bottom: 0;
-    background: #00000066;
+    background: rgba(0, 0, 0, 0.4);
 `;
 
 export const ColorFilter:React.FC = (props) => {

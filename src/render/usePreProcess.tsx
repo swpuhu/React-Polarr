@@ -93,9 +93,11 @@ export const usePreProcess = () => {
             }, () => {
                 // normalFilter.setScale && normalFilter.setScale(1, 1);
             });
-            passFramebuffer(gl, lutFilter.program, renderCount, () => {
-                lutFilter.setFilter && lutFilter.setFilter(type, 100);
-            });
+            if (type !== 'normal') {
+                passFramebuffer(gl, lutFilter.program, renderCount, () => {
+                    lutFilter.setFilter && lutFilter.setFilter(type, 100);
+                });
+            }
 
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
             normalFilter && gl.useProgram(normalFilter.program);
