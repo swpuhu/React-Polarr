@@ -51,7 +51,7 @@ export type WebGLRenderer = {
     setColor?: (temperature: number, tint: number, hue: number, saturation: number) => void;
     setIntensity?: (intensity: number) => void,
     setClip? :(l: number, r: number, t: number, b: number) => void;
-    setFilter? : (type: LutFilterType) => void
+    setFilter? : (type: LutFilterType, intensity: number) => void
 }
 
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;

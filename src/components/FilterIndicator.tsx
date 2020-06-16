@@ -47,7 +47,7 @@ const Wrapper = styled.div`
             }
             > .label {
                 text-align: center;
-                background: #00000050;
+                background: rgba(255, 255, 255, 0.3);
             }
         
         }

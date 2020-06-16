@@ -53,7 +53,7 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
       
    
             lowp vec4 newColor3_1 = texture2D( inputImageTexture2, texPos);
-            gl_FragColor = mix( textureColor1, vec4( newColor3_1.rgb, textureColor1.w ), 1.0);
+            gl_FragColor = mix( textureColor1, vec4( newColor3_1.rgb, textureColor1.w ), intensity);
       
     }
     `;
@@ -80,6 +80,7 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
     };
     const uniforms = {
         u_projection: createProjection(-gl.canvas.width / 2, gl.canvas.width / 2, gl.canvas.height / 2, -gl.canvas.height / 2, 1),
+        intensity: 1
     };
     const lutsImage: LutFiltersType<HTMLImageElement> = {
         flowerStone: loadImage(flowerStone),
@@ -103,13 +104,15 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
     };
 
 
-    const setFilter = (type: LutFilterType) => {
+    const setFilter = (type: LutFilterType, intensity: number) => {
         if (type && type !== 'normal' && lutsImage[type]) {
             gl.activeTexture(gl.TEXTURE1);
             gl.bindTexture(gl.TEXTURE_2D, lutTexture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, lutsImage[type]);
             gl.activeTexture(gl.TEXTURE0);
         }
+        uniforms.intensity = intensity / 100;
+        setUniforms(uniformSetter, uniforms);
     };
 
     setAttributes(attributeSetter, attributes);
