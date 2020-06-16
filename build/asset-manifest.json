@@ -1,28 +1,29 @@
 {
   "files": {
-    "main.css": "/polarr/static/css/main.6ad485d1.chunk.css",
-    "main.js": "/polarr/build/static/js/main.5b49d59a.chunk.js",
-    "main.js.map": "/polarr/build/static/js/main.5b49d59a.chunk.js.map",
+    "main.css": "/polarr/static/css/main.8cad9475.chunk.css",
+    "main.js": "/polarr/build/static/js/main.9e962b7e.chunk.js",
+    "main.js.map": "/polarr/build/static/js/main.9e962b7e.chunk.js.map",
     "runtime-main.js": "/polarr/build/static/js/runtime-main.544c5042.js",
     "runtime-main.js.map": "/polarr/build/static/js/runtime-main.544c5042.js.map",
-    "build/static/js/2.14ac3a70.chunk.js": "/polarr/build/static/js/2.14ac3a70.chunk.js",
-    "build/static/js/2.14ac3a70.chunk.js.map": "/polarr/build/static/js/2.14ac3a70.chunk.js.map",
-    "2cd15e08a02bd536db5b.worker.js": "/polarr/2cd15e08a02bd536db5b.worker.js",
-    "2cd15e08a02bd536db5b.worker.js.map": "/polarr/2cd15e08a02bd536db5b.worker.js.map",
-    "build/static/js/2.14ac3a70.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.14ac3a70.chunk.js.LICENSE.txt",
+    "build/static/js/2.212ecc64.chunk.js": "/polarr/build/static/js/2.212ecc64.chunk.js",
+    "build/static/js/2.212ecc64.chunk.js.map": "/polarr/build/static/js/2.212ecc64.chunk.js.map",
+    "09a0bb029524d2695021.worker.js": "/polarr/09a0bb029524d2695021.worker.js",
+    "09a0bb029524d2695021.worker.js.map": "/polarr/09a0bb029524d2695021.worker.js.map",
+    "build/static/js/2.212ecc64.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.212ecc64.chunk.js.LICENSE.txt",
     "index.html": "/polarr/index.html",
-    "precache-manifest.61bc36a2bbf6b0812687b5306f04e0af.js": "/polarr/precache-manifest.61bc36a2bbf6b0812687b5306f04e0af.js",
+    "precache-manifest.a0da406d5663babd7f152edee29045e3.js": "/polarr/precache-manifest.a0da406d5663babd7f152edee29045e3.js",
     "service-worker.js": "/polarr/service-worker.js",
-    "static/css/main.6ad485d1.chunk.css.map": "/polarr/static/css/main.6ad485d1.chunk.css.map",
+    "static/css/main.8cad9475.chunk.css.map": "/polarr/static/css/main.8cad9475.chunk.css.map",
     "static/media/Flower Stone.cube.jpeg": "/polarr/static/media/Flower Stone.cube.fa1c8cea.jpeg",
     "static/media/Fluorite Blue Sky.cube.jpeg": "/polarr/static/media/Fluorite Blue Sky.cube.a2e34999.jpeg",
+    "static/media/Fluorite Venus.cube.jpeg": "/polarr/static/media/Fluorite Venus.cube.e52143da.jpeg",
     "static/media/Fluorite.cube.jpeg": "/polarr/static/media/Fluorite.cube.00c913ed.jpeg",
     "static/media/example.jpg": "/polarr/static/media/example.fa39e836.jpg"
   },
   "entrypoints": [
     "build/static/js/runtime-main.544c5042.js",
-    "build/static/js/2.14ac3a70.chunk.js",
-    "static/css/main.6ad485d1.chunk.css",
-    "build/static/js/main.5b49d59a.chunk.js"
+    "build/static/js/2.212ecc64.chunk.js",
+    "static/css/main.8cad9475.chunk.css",
+    "build/static/js/main.9e962b7e.chunk.js"
   ]
 }

@@ -15,6 +15,8 @@ document.addEventListener('touchmove', function (e) {
     // e.preventDefault();
 }, {passive: false});
 
+document.addEventListener('touchstart', () => false);
+document.addEventListener('selectstart', () => false);
 document.addEventListener('contextmenu', function (e) {
     e.preventDefault();
 });
