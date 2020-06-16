@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {useFile} from "../lib/useFile";
 import {Context} from "../Context";
@@ -9,6 +9,7 @@ import StatisticColorWorker from '../lib/statisticColor.worker';
 import {Histogram} from "../render/Histogram";
 import {debounce, isDetachedDOM, saveCanvasPicture} from "../lib/util";
 import {ResizeBox} from "../components/ResizeBox/ResizeBox";
+import {Modal} from "../components/Modal";
 
 const worker = new StatisticColorWorker();
 const Wrapper = styled.div`
@@ -121,6 +122,10 @@ const Main: React.FC = () => {
     return (
         <Wrapper>
             {content}
+            {state.openStatus ?
+                <Modal>
+                    <div>图片加载中</div>
+                </Modal> : null}
         </Wrapper>
     )
 };

@@ -53,7 +53,12 @@ export const usePreProcess = () => {
         'flowerStone': '',
         'fluorite': '',
         'fluoriteBlue': '',
-        'fluoriteVenus': ''
+        'fluoriteVenus': '',
+        'fuchsite': '',
+        'talc': '',
+        'tanzanite': '',
+        'tektite': '',
+        'thulite': ''
     };
 
     const passFramebuffer = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram | null, renderCount: number, fn: (...args: any) => void, _fn?: (...args: any) => void,): number => {

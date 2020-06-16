@@ -26,17 +26,24 @@ type IndicatorsType = {
     type: FilterCategoryType,
     children: {
         subType: FilterSubType<FilterCategoryType>,
-        intensity: number
     }[]
 }
 export const Filter:React.FC = (props) => {
     const {state, dispatch} = useContext(Context);
     const labelMap = {
         'normal': '原图',
-        'flowerStone': '万花',
+        'flowerStone': '万花石',
         'fluorite': '萤石',
-        'fluoriteBlue': '萤-天空',
-        'fluoriteVenus': '萤-维纳斯'
+        'fluoriteBlue': '萤石-天空',
+        'fluoriteVenus': '萤石-维纳斯',
+        'fuchsite': '铬云母',
+        'talc': '滑石',
+        'tanzanite': '坦桑石',
+        'tektite': '曜石',
+        'thulite': '锰帘石',
+        'baryte': '重晶石',
+        'benitoite': '蓝锥石',
+        'beryl': '绿柱石'
     };
     const indicators: IndicatorsType[] = [
         {
@@ -44,19 +51,30 @@ export const Filter:React.FC = (props) => {
             children: [
                 {
                     subType: 'flowerStone',
-                    intensity: 100
                 },
                 {
                     subType: 'fluorite',
-                    intensity: 100
                 },
                 {
                     subType: 'fluoriteBlue',
-                    intensity: 100
                 },
                 {
                     subType: 'fluoriteVenus',
-                    intensity: 100
+                },
+                {
+                    subType: 'fuchsite'
+                },
+                {
+                    subType: 'talc'
+                },
+                {
+                    subType: 'tanzanite'
+                },
+                {
+                    subType: 'tektite'
+                },
+                {
+                    subType: 'thulite'
                 }
             ]
         }
@@ -65,7 +83,6 @@ export const Filter:React.FC = (props) => {
     if (showIndicator) {
         showIndicator.children.unshift({
             subType: 'normal',
-            intensity: 100
         })
     }
     const changeIntensity = (value: number) => {

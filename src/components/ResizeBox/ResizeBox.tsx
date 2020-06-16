@@ -16,7 +16,7 @@ export const ResizeBox: React.FC = () => {
 
     const nw = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1) / 2);
             let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
             let top = initTop + offsetYPercent;
             let left = initLeft + offsetXPercent;
@@ -43,7 +43,7 @@ export const ResizeBox: React.FC = () => {
     };
     const ne = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1) / 2);
             let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
@@ -54,7 +54,7 @@ export const ResizeBox: React.FC = () => {
     };
     const w = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1) / 2);
             let left = initLeft + offsetXPercent;
             left = clamp(left, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
@@ -99,7 +99,7 @@ export const ResizeBox: React.FC = () => {
 
     const e = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1) / 2);
             let right = initRight - offsetXPercent;
             right = clamp(right, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
@@ -111,7 +111,7 @@ export const ResizeBox: React.FC = () => {
 
     const sw = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => {
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1) / 2);
             let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
             let bottom = initBottom - offsetYPercent;
             let left = initLeft + offsetXPercent;
@@ -142,7 +142,7 @@ export const ResizeBox: React.FC = () => {
         // container.style.width = initWidth + offsetX + 'px';
         // container.style.height = initHeight + offsetY + 'px';
         if (state.currentLayer) {
-            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1) / 2);
             let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
             let right = initRight - offsetXPercent;
             let bottom = initBottom - offsetYPercent;
@@ -215,7 +215,7 @@ export const ResizeBox: React.FC = () => {
         // console.log(state.currentLayer.transform.left , state.currentLayer.transform.right, state.currentLayer.transform.top, state.currentLayer.transform.bottom);
         // console.log(state.currentLayer.position);
     }
-
+    console.log(state.currentLayer);
     return (
         <div>
             <Wrapper ref={container} style={{
@@ -242,7 +242,7 @@ export const ResizeBox: React.FC = () => {
 
             <div className="mask" style={{
                 position: "absolute",
-                left: `${maskLeft * 100}%`,
+                left: 0,
                 width: `${100}%`,
                 top: 0,
                 height: `100%`,

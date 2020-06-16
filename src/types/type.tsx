@@ -34,6 +34,7 @@ export enum ActionType {
     updateFilterCategory,
     updateFilterIntensity,
     updateFilterStamp,
+    updateOpenStatus
 
 }
 
@@ -90,7 +91,9 @@ export type Effect = {
 }
 
 export type FilterCategoryType = 'cinema' | 'vintage'
-export type VintageFilterType = 'normal' | 'flowerStone' | 'fluorite' | 'fluoriteBlue' | 'fluoriteVenus'
+export type VintageFilterType = 'normal' | 'flowerStone' | 'fluorite' | 'fluoriteBlue' | 'fluoriteVenus' | 'fuchsite' | 'talc' | 'tanzanite' |
+                                'tektite' | 'thulite'
+
 export type CinemaFilterType = 'cinema1' | 'cinema2'
 export type FilterSubType<T> =
     T extends 'vintage' ? VintageFilterType:
@@ -113,6 +116,7 @@ export type Layer = {
 }
 export type StateType = {
     editStatus: EditStatus;
+    openStatus: boolean;
     processStatus: ProcessStatus;
     savePicture: boolean;
     layers :Array<Layer>,

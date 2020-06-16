@@ -21,6 +21,7 @@ const initialState: StateType = {
     editStatus: mode === 1 ? EditStatus.EDTING : EditStatus.IDLE,
     processStatus: ProcessStatus.none,
     savePicture: false,
+    openStatus: false,
     currentLayer: mode === 1 ? layer : null,
     layers: mode === 1 ? [layer] : [
 
@@ -32,7 +33,12 @@ const initialState: StateType = {
         'flowerStone': '',
         'fluorite': '',
         'fluoriteBlue': '',
-        'fluoriteVenus': ''
+        'fluoriteVenus': '',
+        'fuchsite': '',
+        'talc': '',
+        'tanzanite': '',
+        'tektite': '',
+        'thulite': ''
     }
 };
 const screenWidth = window.innerWidth;
@@ -167,10 +173,15 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             }
             return state;
         case ActionType.updateFilterStamp:
-            console.log(action.payload);
             return {
                 ...state,
+                openStatus: false,
                 filterStamp: action.payload
+            };
+        case ActionType.updateOpenStatus:
+            return {
+                ...state,
+                openStatus: action.payload
             };
         default:
             return state;
