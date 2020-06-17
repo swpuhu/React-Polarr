@@ -4,17 +4,20 @@ import {initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util
 import imgSrc from './icons/example.jpg';
 
 let mode = 0;
-let image = new Image();
-image.src = imgSrc;
-let layer = initLayer(image);
-layer.position.y1 = -0.7;
-layer.position.y2 = 0.7;
-layer.position.x1 = -1;
-layer.position.x2 = 1;
-layer.originPosition.y1 = -0.7;
-layer.originPosition.y2 = 0.7;
-layer.originPosition.x1 = -1;
-layer.originPosition.x2 = 1;
+let layer = null;
+if (mode) {
+    let image = new Image();
+    image.src = imgSrc;
+    let layer = initLayer(image);
+    layer.position.y1 = -0.7;
+    layer.position.y2 = 0.7;
+    layer.position.x1 = -1;
+    layer.position.x2 = 1;
+    layer.originPosition.y1 = -0.7;
+    layer.originPosition.y2 = 0.7;
+    layer.originPosition.x1 = -1;
+    layer.originPosition.x2 = 1;
+}
 
 export const filterStamp = {
     'normal': '',
@@ -45,7 +48,7 @@ const initialState: StateType = {
     savePicture: false,
     openStatus: false,
     currentLayer: mode === 1 ? layer : null,
-    layers: mode === 1 ? [layer] : [
+    layers: mode === 1 && layer ? [layer] : [
 
     ],
     width: window.innerWidth,

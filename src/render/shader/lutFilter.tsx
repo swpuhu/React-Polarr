@@ -6,32 +6,10 @@ import {
     setAttributes,
     setUniforms, createTexture
 } from "../GLUtil";
-import {IdentityObject, LutFiltersType, LutFilterType, WebGLRenderer} from "../../types/type";
-import flowerStone from '../lutImages/vintage/Flower Stone.cube.jpeg';
-import fluorite from '../lutImages/vintage/Fluorite.cube.jpeg';
-import fluoriteBlue from '../lutImages/vintage/Fluorite Blue Sky.cube.jpeg';
-import fluoriteVenus from '../lutImages/vintage/Fluorite Venus.cube.jpeg';
-import fuchsite from '../lutImages/vintage/Fuchsite.cube.jpeg';
-import talc from '../lutImages/vintage/Talc.cube.jpeg';
-import tanzanite from '../lutImages/vintage/Tanzanite.cube.jpeg';
-import tektite from '../lutImages/vintage/Tektite.cube.jpeg';
-import thulite from '../lutImages/vintage/Thulite.cube.jpeg';
-import obsidian from '../lutImages/cinema/Obsidian.cube.jpeg';
-import okenite from '../lutImages/cinema/Okenite.cube.jpeg';
-import oligoclase from '../lutImages/cinema/Oligoclase.cube.jpeg';
-import onyx from '../lutImages/cinema/Onyx.cube.jpeg';
-import opal from '../lutImages/cinema/Opal.cube.jpeg';
-import opalite from '../lutImages/cinema/Opalite.cube.jpeg';
-import orpiment from '../lutImages/cinema/Orpiment.cube.jpeg';
-import pearl from '../lutImages/cinema/Pearl.cube.jpeg';
-import peridot from '../lutImages/cinema/Peridot.cube.jpeg';
-import petalite from '../lutImages/cinema/Petalite.cube.jpeg';
+import {useLut} from "../useLut";
+import {LutFiltersType, LutFilterType, WebGLRenderer} from "../../types/type";
+import {globalEvents} from "../../lib/globalEvents";
 
-const loadImage = (src: string) => {
-    let image = new Image();
-    image.src = src;
-    return image;
-};
 export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, vertexBuffer: WebGLBuffer | null, texCoordBuffer: WebGLBuffer | null): WebGLRenderer => {
     const vertexShader = `
     attribute vec4 a_position;
@@ -64,7 +42,6 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
             highp vec2 texPos;
             texPos.x = ( quad.x * 0.125 ) + 0.5 / 512.0 + ( ( 0.125 - 1.0 / 512.0 ) * textureColor1.r);
             texPos.y = ( quad.y * 0.125 ) + 0.5 / 512.0 + ( ( 0.125 - 1.0 / 512.0 ) * textureColor1.g);
-            texPos.y = 1.0 - texPos.y;
       
    
             lowp vec4 newColor3_1 = texture2D( inputImageTexture2, texPos);
@@ -72,6 +49,7 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
       
     }
     `;
+    const {getLuts} = useLut();
     const program = initWebGL(gl, vertexShader, fragmentShader);
     if (!program) {
         return {
@@ -97,28 +75,10 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
         u_projection: createProjection(-gl.canvas.width / 2, gl.canvas.width / 2, gl.canvas.height / 2, -gl.canvas.height / 2, 1),
         intensity: 1
     };
-    const lutsImage: Partial<LutFiltersType<HTMLImageElement>> = {
-        normal: loadImage(''),
-        flowerStone: loadImage(flowerStone),
-        fluorite: loadImage(fluorite),
-        fluoriteBlue: loadImage(fluoriteBlue),
-        fluoriteVenus: loadImage(fluoriteVenus),
-        fuchsite: loadImage(fuchsite),
-        talc: loadImage(talc),
-        tanzanite: loadImage(tanzanite),
-        tektite: loadImage(tektite),
-        thulite: loadImage(thulite),
-        obsidian: loadImage(obsidian),
-        okenite: loadImage(okenite),
-        oligoclase: loadImage(oligoclase),
-        onyx: loadImage(onyx),
-        opal: loadImage(opal),
-        opalite: loadImage(opalite),
-        orpiment: loadImage(orpiment),
-        pearl: loadImage(pearl),
-        peridot: loadImage(peridot),
-        petalite: loadImage(petalite),
-    };
+    let lutsImage = getLuts();
+    globalEvents.on('manifestLoaded', (luts: Partial<LutFiltersType<ImageBitmap>>) => {
+        lutsImage = luts;
+    });
 
     let inputImageTexture1 = gl.getUniformLocation(program, 'inputImageTexture1');
     let inputImageTexture2 = gl.getUniformLocation(program, 'inputImageTexture2');

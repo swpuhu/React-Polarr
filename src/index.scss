@@ -68,6 +68,13 @@ input , textarea{
     }
 }
 
+#welcome {
+    transition: opacity 1s ease-out;
+    opacity: 1;
+    &.hide {
+        opacity: 0;
+    }
+}
 @keyframes scale {
     0% {
         transform: translate(-50%, -50%) scale(1, 1);

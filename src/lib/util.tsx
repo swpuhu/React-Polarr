@@ -1,4 +1,4 @@
-import {AdaptionType, EditType, Layer, MyImage, Picture, StateType} from "../types/type";
+import {AdaptionType, EditType, Layer, LutFiltersType, MyImage, Picture, StateType} from "../types/type";
 
 export const initLayer = (source: MyImage): Layer => {
     return {
@@ -250,4 +250,25 @@ export function findAdaption(obj: Picture, aspect: number, reverse?: boolean) {
     } else {
         return reverse ? AdaptionType.widthAdaption : AdaptionType.heightAdaption ;
     }
+}
+
+export function loadImage (src: string) {
+    return new Promise(resolve => {
+        let image = new Image();
+        image.onload = () => {
+            createImageBitmap(image).then((bitmap) => {
+                resolve(bitmap);
+            });
+        };
+        image.src = src;
+    });
+}
+
+export async function loadImages (srcObject: Partial<LutFiltersType<string>>) {
+    let obj: Partial<LutFiltersType<ImageBitmap>> = {};
+    for (let key in srcObject) {
+        // @ts-ignore
+        (obj[key] as ImageBitmap) = await loadImage(srcObject[key]);
+    }
+    return obj;
 }
