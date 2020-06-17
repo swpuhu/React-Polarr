@@ -48,6 +48,7 @@ if (gl) {
 
 export const usePreProcess = () => {
     const images: LutFiltersType<string> = filterStamp;
+    console.log('branch test');
 
     const passFramebuffer = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram | null, renderCount: number, fn: (...args: any) => void, _fn?: (...args: any) => void,): number => {
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[renderCount % 2]);
