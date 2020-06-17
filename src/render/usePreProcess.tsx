@@ -1,9 +1,8 @@
 import {createFramebufferTexture, createTexture} from "./GLUtil";
 import {NormalFilter} from "./shader/normal";
-import {AdaptionType, LutFiltersType, LutFilterType, WebGLRenderer} from "../types/type";
+import {LutFiltersType, LutFilterType, WebGLRenderer} from "../types/type";
 import {LutFilter} from "./shader/lutFilter";
-import {useState} from "react";
-import {findAdaption} from "../lib/util";
+import {filterStamp} from "../Context";
 
 const width = 70 * window.devicePixelRatio;
 const height = 70 * window.devicePixelRatio;
@@ -48,18 +47,7 @@ if (gl) {
 }
 
 export const usePreProcess = () => {
-    const images: LutFiltersType<string> = {
-        'normal': '',
-        'flowerStone': '',
-        'fluorite': '',
-        'fluoriteBlue': '',
-        'fluoriteVenus': '',
-        'fuchsite': '',
-        'talc': '',
-        'tanzanite': '',
-        'tektite': '',
-        'thulite': ''
-    };
+    const images: LutFiltersType<string> = filterStamp;
 
     const passFramebuffer = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram | null, renderCount: number, fn: (...args: any) => void, _fn?: (...args: any) => void,): number => {
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[renderCount % 2]);
@@ -79,20 +67,19 @@ export const usePreProcess = () => {
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, originTexture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-            const aspect = gl.canvas.width / gl.canvas.height;
-            const imgAspect = img.width / img.height;
-            const adaption = findAdaption(img, aspect);
-            let scaleX = 1, scaleY = 1;
-            if (adaption === AdaptionType.widthAdaption) {
-                let _height = width / imgAspect;
-                console.log(_height);
-                scaleY = _height / gl.canvas.height;
-            } else {
-                let _width = height * imgAspect;
-                console.log(_width);
-
-                scaleX = _width / gl.canvas.width;
-            }
+            // const aspect = gl.canvas.width / gl.canvas.height;
+            // const imgAspect = img.width / img.height;
+            // const adaption = findAdaption(img, aspect);
+            // let scaleX = 1, scaleY = 1;
+            // if (adaption === AdaptionType.widthAdaption) {
+            //     let _height = width / imgAspect;
+            //     console.log(_height);
+            //     scaleY = _height / gl.canvas.height;
+            // } else {
+            //     let _width = height * imgAspect;
+            //     console.log(_width);
+            //     scaleX = _width / gl.canvas.width;
+            // }
             renderCount = passFramebuffer(gl, normalFilter.program, renderCount, () => {
                 // normalFilter.setScale && normalFilter.setScale(scaleX, scaleY);
             }, () => {
@@ -107,10 +94,9 @@ export const usePreProcess = () => {
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
             normalFilter && gl.useProgram(normalFilter.program);
             gl.drawArrays(gl.TRIANGLES, 0, 6);
-            let url = canvas.toDataURL("image/jpeg");
             // let image = new Image();
             // image.src = url;
-            return url;
+            return canvas.toDataURL("image/jpeg");
         }
     };
 

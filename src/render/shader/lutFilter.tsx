@@ -16,6 +16,17 @@ import talc from '../lutImages/vintage/Talc.cube.jpeg';
 import tanzanite from '../lutImages/vintage/Tanzanite.cube.jpeg';
 import tektite from '../lutImages/vintage/Tektite.cube.jpeg';
 import thulite from '../lutImages/vintage/Thulite.cube.jpeg';
+import obsidian from '../lutImages/cinema/Obsidian.cube.jpeg';
+import okenite from '../lutImages/cinema/Okenite.cube.jpeg';
+import oligoclase from '../lutImages/cinema/Oligoclase.cube.jpeg';
+import onyx from '../lutImages/cinema/Onyx.cube.jpeg';
+import opal from '../lutImages/cinema/Opal.cube.jpeg';
+import opalite from '../lutImages/cinema/Opalite.cube.jpeg';
+import orpiment from '../lutImages/cinema/Orpiment.cube.jpeg';
+import pearl from '../lutImages/cinema/Pearl.cube.jpeg';
+import peridot from '../lutImages/cinema/Peridot.cube.jpeg';
+import petalite from '../lutImages/cinema/Petalite.cube.jpeg';
+
 const loadImage = (src: string) => {
     let image = new Image();
     image.src = src;
@@ -96,7 +107,17 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
         talc: loadImage(talc),
         tanzanite: loadImage(tanzanite),
         tektite: loadImage(tektite),
-        thulite: loadImage(thulite)
+        thulite: loadImage(thulite),
+        obsidian: loadImage(obsidian),
+        okenite: loadImage(okenite),
+        oligoclase: loadImage(oligoclase),
+        onyx: loadImage(onyx),
+        opal: loadImage(opal),
+        opalite: loadImage(opalite),
+        orpiment: loadImage(orpiment),
+        pearl: loadImage(pearl),
+        peridot: loadImage(peridot),
+        petalite: loadImage(petalite),
     };
 
     let inputImageTexture1 = gl.getUniformLocation(program, 'inputImageTexture1');

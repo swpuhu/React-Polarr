@@ -94,9 +94,10 @@ export type FilterCategoryType = 'cinema' | 'vintage'
 export type VintageFilterType = 'normal' | 'flowerStone' | 'fluorite' | 'fluoriteBlue' | 'fluoriteVenus' | 'fuchsite' | 'talc' | 'tanzanite' |
                                 'tektite' | 'thulite'
 
-export type CinemaFilterType = 'cinema1' | 'cinema2'
+export type CinemaFilterType = 'obsidian' | 'okenite' | 'oligoclase' | 'onyx' | 'opal' | 'opalite' | 'orpiment' | 'pearl' | 'peridot' | 'petalite'
 export type FilterSubType<T> =
     T extends 'vintage' ? VintageFilterType:
+    T extends 'cinema' ? CinemaFilterType:
         'normal';
 
 export type Filter<T extends FilterCategoryType> = {

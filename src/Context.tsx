@@ -16,6 +16,28 @@ layer.originPosition.y2 = 0.7;
 layer.originPosition.x1 = -1;
 layer.originPosition.x2 = 1;
 
+export const filterStamp = {
+    'normal': '',
+    'flowerStone': '',
+    'fluorite': '',
+    'fluoriteBlue': '',
+    'fluoriteVenus': '',
+    'fuchsite': '',
+    'talc': '',
+    'tanzanite': '',
+    'tektite': '',
+    'thulite': '',
+    'obsidian': '',
+    'okenite': '',
+    'oligoclase': '',
+    'onyx': '',
+    'opal': '',
+    'opalite': '',
+    'orpiment': '',
+    'pearl': '',
+    'peridot': '',
+    'petalite': '',
+}
 
 const initialState: StateType = {
     editStatus: mode === 1 ? EditStatus.EDTING : EditStatus.IDLE,
@@ -28,18 +50,7 @@ const initialState: StateType = {
     ],
     width: window.innerWidth,
     height: window.innerHeight - 92,
-    filterStamp: {
-        'normal': '',
-        'flowerStone': '',
-        'fluorite': '',
-        'fluoriteBlue': '',
-        'fluoriteVenus': '',
-        'fuchsite': '',
-        'talc': '',
-        'tanzanite': '',
-        'tektite': '',
-        'thulite': ''
-    }
+    filterStamp: filterStamp
 };
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight - 92;
