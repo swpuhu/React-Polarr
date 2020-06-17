@@ -45,10 +45,12 @@ export const ResizeBox: React.FC = () => {
         if (state.currentLayer) {
             let offsetXPercent = offsetX / (window.innerWidth * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1) / 2);
             let offsetYPercent = offsetY / (window.innerHeight * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1) / 2);
+            let top = initTop + offsetYPercent;
+            let right = initRight - offsetXPercent;
             dispatch({type: ActionType.updateTransform, payload: {
                     ...state.currentLayer.transform,
-                    top: initTop + offsetYPercent,
-                    right: initRight - offsetXPercent
+                    top: top,
+                    right: right
                 }});
         }
     };

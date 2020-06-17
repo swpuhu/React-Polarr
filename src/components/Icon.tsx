@@ -10,6 +10,7 @@ require('../icons/filter.svg');
 require('../icons/light.svg');
 require('../icons/arrowLeft.svg');
 require('../icons/arrowRight.svg');
+require('../icons/page.svg');
 type Props = {
     name?: string
 } & React.SVGAttributes<SVGElement>

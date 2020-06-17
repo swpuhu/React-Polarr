@@ -42,7 +42,7 @@ export const LutFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, ve
             highp vec2 texPos;
             texPos.x = ( quad.x * 0.125 ) + 0.5 / 512.0 + ( ( 0.125 - 1.0 / 512.0 ) * textureColor1.r);
             texPos.y = ( quad.y * 0.125 ) + 0.5 / 512.0 + ( ( 0.125 - 1.0 / 512.0 ) * textureColor1.g);
-      
+            // texPos.y = 1.0 - texPos.y;
    
             lowp vec4 newColor3_1 = texture2D( inputImageTexture2, texPos);
             gl_FragColor = mix( textureColor1, vec4( newColor3_1.rgb, textureColor1.w ), intensity);
