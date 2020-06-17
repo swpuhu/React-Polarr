@@ -48,7 +48,9 @@ const Wrapper = styled.div`
             }
             > .label {
                 text-align: center;
-                background: rgba(255, 255, 255, 0.3);
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+                background: rgba(0, 0, 0, 0.6);
             }
         
         }
@@ -61,7 +63,7 @@ type Props = {
     label: string
     className: string
     isActive: boolean
-    onClick?: () => void,
+    onClick?: (e: React.MouseEvent) => void,
     background? : string
 }
 export const FilterIndicator: React.FC<Props> = (props) => {

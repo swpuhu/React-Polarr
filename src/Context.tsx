@@ -53,7 +53,8 @@ const initialState: StateType = {
     ],
     width: window.innerWidth,
     height: window.innerHeight - 92,
-    filterStamp: filterStamp
+    filterStamp: filterStamp,
+    showAllFilter: false
 };
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight - 92;
@@ -139,6 +140,11 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "type");
             }
             return state;
+        case ActionType.updateFilterCategory:
+            if (state.currentLayer) {
+                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "currentCategory");
+            }
+            return state;
         case ActionType.updateFilterIntensity:
             if (state.currentLayer) {
                 return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "intensity");
@@ -196,6 +202,11 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             return {
                 ...state,
                 openStatus: action.payload
+            };
+        case ActionType.updateShowAllFilter:
+            return {
+                ...state,
+                showAllFilter: action.payload
             };
         default:
             return state;

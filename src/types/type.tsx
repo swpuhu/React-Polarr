@@ -34,8 +34,8 @@ export enum ActionType {
     updateFilterCategory,
     updateFilterIntensity,
     updateFilterStamp,
-    updateOpenStatus
-
+    updateOpenStatus,
+    updateShowAllFilter
 }
 
 export enum EditType {
@@ -125,6 +125,7 @@ export type StateType = {
     width: number,
     height: number,
     filterStamp: LutFiltersType<string>,
+    showAllFilter: boolean
 }
 
 export type MyWebGLRender = {

@@ -170,13 +170,11 @@ export const ResizeBox: React.FC = () => {
         let initLeft = state.currentLayer.transform.left;
         let initRight = state.currentLayer.transform.right;
         let initTop = state.currentLayer.transform.top;
-        console.log(initTop);
         let initBottom = state.currentLayer.transform.bottom;
         let relativeX = e.touches[0].clientX - this.offsetLeft;
         let relativeY = e.touches[0].clientY - this.offsetTop;
         currentHandler = switchHandler<HandlerType>(leftBoundary, rightBoundary, topBoundary, bottomBoundary, relativeX, relativeY, handlers);
         if (currentHandler) {
-            console.log(currentHandler.name);
         }
         const touchMove = (ev: TouchEvent) => {
             ev.preventDefault();
@@ -214,10 +212,7 @@ export const ResizeBox: React.FC = () => {
         right = xMapValue(state.currentLayer.originPosition.x2 - state.currentLayer.transform.right * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1));
         top = yMapValue(state.currentLayer.originPosition.y2 - state.currentLayer.transform.top * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1));
         bottom = yMapValue(state.currentLayer.originPosition.y1 + state.currentLayer.transform.bottom * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1));
-        // console.log(state.currentLayer.transform.left , state.currentLayer.transform.right, state.currentLayer.transform.top, state.currentLayer.transform.bottom);
-        // console.log(state.currentLayer.position);
     }
-    console.log(state.currentLayer);
     return (
         <div>
             <Wrapper ref={container} style={{

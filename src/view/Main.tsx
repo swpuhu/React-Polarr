@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef} from "react";
 import styled from "styled-components";
 import {useFile} from "../lib/useFile";
 import {Context} from "../Context";
@@ -120,7 +120,12 @@ const Main: React.FC = () => {
     );
     const content = state.editStatus === EditStatus.IDLE ? buttons : reactCanvas;
     return (
-        <Wrapper>
+        <Wrapper onClick={(e) => {
+            e.stopPropagation();
+            if (state.editStatus === EditStatus.EDTING) {
+                dispatch({type: ActionType.updateShowAllFilter, payload: false});
+            }
+        }}>
             {content}
             {state.openStatus ?
                 <Modal>

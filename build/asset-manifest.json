@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/polarr/static/css/main.2d2439ff.chunk.css",
-    "main.js": "/polarr/build/static/js/main.a1c4c8d0.chunk.js",
-    "main.js.map": "/polarr/build/static/js/main.a1c4c8d0.chunk.js.map",
+    "main.css": "/polarr/static/css/main.c83c2f6c.chunk.css",
+    "main.js": "/polarr/build/static/js/main.f52875f1.chunk.js",
+    "main.js.map": "/polarr/build/static/js/main.f52875f1.chunk.js.map",
     "runtime-main.js": "/polarr/build/static/js/runtime-main.544c5042.js",
     "runtime-main.js.map": "/polarr/build/static/js/runtime-main.544c5042.js.map",
     "build/static/js/2.aa374962.chunk.js": "/polarr/build/static/js/2.aa374962.chunk.js",
     "build/static/js/2.aa374962.chunk.js.map": "/polarr/build/static/js/2.aa374962.chunk.js.map",
-    "941ee586b8570f696477.worker.js": "/polarr/941ee586b8570f696477.worker.js",
-    "941ee586b8570f696477.worker.js.map": "/polarr/941ee586b8570f696477.worker.js.map",
+    "1e49b928261567571e0e.worker.js": "/polarr/1e49b928261567571e0e.worker.js",
+    "1e49b928261567571e0e.worker.js.map": "/polarr/1e49b928261567571e0e.worker.js.map",
     "build/static/js/2.aa374962.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.aa374962.chunk.js.LICENSE.txt",
     "index.html": "/polarr/index.html",
-    "precache-manifest.9a79eddfb46f494157c7ed31ce86bec8.js": "/polarr/precache-manifest.9a79eddfb46f494157c7ed31ce86bec8.js",
+    "precache-manifest.ed6b3588a9eb56cace8fa686477e2838.js": "/polarr/precache-manifest.ed6b3588a9eb56cace8fa686477e2838.js",
     "service-worker.js": "/polarr/service-worker.js",
-    "static/css/main.2d2439ff.chunk.css.map": "/polarr/static/css/main.2d2439ff.chunk.css.map",
+    "static/css/main.c83c2f6c.chunk.css.map": "/polarr/static/css/main.c83c2f6c.chunk.css.map",
     "static/media/Flower Stone.cube.jpeg": "/polarr/static/media/Flower Stone.cube.fa1c8cea.jpeg",
     "static/media/Fluorite Blue Sky.cube.jpeg": "/polarr/static/media/Fluorite Blue Sky.cube.a2e34999.jpeg",
     "static/media/Fluorite Venus.cube.jpeg": "/polarr/static/media/Fluorite Venus.cube.e52143da.jpeg",
@@ -38,7 +38,7 @@
   "entrypoints": [
     "build/static/js/runtime-main.544c5042.js",
     "build/static/js/2.aa374962.chunk.js",
-    "static/css/main.2d2439ff.chunk.css",
-    "build/static/js/main.a1c4c8d0.chunk.js"
+    "static/css/main.c83c2f6c.chunk.css",
+    "build/static/js/main.f52875f1.chunk.js"
   ]
 }

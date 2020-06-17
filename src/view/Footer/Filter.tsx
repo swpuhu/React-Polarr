@@ -5,8 +5,6 @@ import styled from "styled-components";
 import {FilterIndicator} from "../../components/FilterIndicator";
 import {ControlSlider} from "../../components/ControlSlider";
 import {Icon} from "../../components/Icon";
-import {Animated} from "react-native";
-import divide = Animated.divide;
 
 const InnerWrapper = styled.div`
     //position: absolute;
@@ -40,6 +38,13 @@ const OutterWrapper = styled.div`
             > .text {
                 margin-top: 5px;
             }
+        }
+    }
+    > .all-filter {
+        max-height: 200px;
+        overflow: auto;
+        > .title {
+            background-color: rgb(103, 103, 103);
         }
     }
 `;
@@ -147,7 +152,7 @@ export const Filter:React.FC = (props) => {
         }
     ];
     let showIndicator = indicators.find(item => state.currentLayer && item.type === state.currentLayer.filter.currentCategory);
-    if (showIndicator) {
+    if (showIndicator && !state.showAllFilter) {
         showIndicator.children.unshift({
             subType: 'normal',
         })
@@ -157,7 +162,7 @@ export const Filter:React.FC = (props) => {
     };
     const allFilters = indicators.map(firstClass => {
         return (
-            <div>
+            <div key={firstClass.type}>
                 <div className="title">{firstClass.type}</div>
                 <div className="body">
                     {firstClass.children.map((item, index) => {
@@ -168,6 +173,7 @@ export const Filter:React.FC = (props) => {
                                          label={item.subType ? labelMap[item.subType] : ''}
                                          className={item.subType ? item.subType : ''}
                                          onClick={() => {
+                                             dispatch({type: ActionType.updateFilterCategory, payload: firstClass.type});
                                              dispatch({type: ActionType.updateFilterSubType, payload: item.subType});
                                          }}
                                          background={item.subType ? state.filterStamp[item.subType] : ''}
@@ -176,7 +182,25 @@ export const Filter:React.FC = (props) => {
                 </div>
             </div>
         );
-    })
+    });
+    const currentFilter = <InnerWrapper>
+            {showIndicator && showIndicator.children.map((item, index) => {
+                let isActive = state.currentLayer && state.currentLayer.filter.type === item.subType;
+                // let value = state.currentLayer ? state.currentLayer.filter.intensity : 0;
+                return <FilterIndicator key={item.subType ? item.subType : index} value={state.currentLayer ? state.currentLayer.filter.intensity : 0}                                            min={0}
+                                        max={100}
+                                        label={item.subType ? labelMap[item.subType] : ''}
+                                        className={item.subType ? item.subType : ''}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            dispatch({type: ActionType.updateFilterSubType, payload: item.subType});
+                                        }}
+                                        background={item.subType ? state.filterStamp[item.subType] : ''}
+                                        isActive={!!isActive}/>
+            })}
+
+        </InnerWrapper>;
+    console.log(state.currentLayer);
     return (
         <OutterWrapper>
             {state.currentLayer && state.currentLayer.filter.type !== 'normal'
@@ -184,28 +208,20 @@ export const Filter:React.FC = (props) => {
                                  min={0} max={100} step={1}
                                  className={'filter-indicator'}/>
                 : null}
-            <div className="flex">
+            {state.showAllFilter ?
                 <div className="all-filter">
-                    <Icon className="icon" name="page"/>
-                    <div className="text">所有滤镜</div>
-                </div>
-                <InnerWrapper>
-                    {showIndicator && showIndicator.children.map((item, index) => {
-                        let isActive = state.currentLayer && state.currentLayer.filter.type === item.subType;
-                        // let value = state.currentLayer ? state.currentLayer.filter.intensity : 0;
-                        return <FilterIndicator key={item.subType ? item.subType : index} value={state.currentLayer ? state.currentLayer.filter.intensity : 0}                                            min={0}
-                                                max={100}
-                                                label={item.subType ? labelMap[item.subType] : ''}
-                                                className={item.subType ? item.subType : ''}
-                                                onClick={() => {
-                                                    dispatch({type: ActionType.updateFilterSubType, payload: item.subType});
-                                                }}
-                                                background={item.subType ? state.filterStamp[item.subType] : ''}
-                                                isActive={!!isActive}/>
-                    })}
-
-                </InnerWrapper>
-            </div>
+                    {allFilters}
+                </div>:
+                <div className="flex">
+                    <div className="all-filter" onClick={(e) => {
+                        e.stopPropagation();
+                        dispatch({type: ActionType.updateShowAllFilter, payload: true});
+                    }}>
+                        <Icon className="icon" name="page"/>
+                        <div className="text">所有滤镜</div>
+                    </div>
+                    {currentFilter}
+                </div>}
         </OutterWrapper>
     )
 };
