@@ -42,33 +42,30 @@ export const filterStamp = {
     'petalite': '',
 }
 
-const initialState: StateType = {
+const initialState: StateType[] = [{
     editStatus: mode === 1 ? EditStatus.EDTING : EditStatus.IDLE,
     processStatus: ProcessStatus.none,
     savePicture: false,
     openStatus: false,
     currentLayer: mode === 1 ? layer : null,
-    layers: mode === 1 && layer ? [layer] : [
-
-    ],
     width: window.innerWidth,
     height: window.innerHeight - 92,
     filterStamp: filterStamp,
     showAllFilter: false
-};
+}];
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight - 92;
 
 const reducer = (state: typeof initialState, action: {type: ActionType, payload: any}) => {
     let layer: Layer;
+    let lastState;
     switch (action.type) {
         case ActionType.updateEditStatus:
-            return {
-                ...state,
-                editStatus: action.payload
-            };
+            lastState = state[state.length - 1];
+            lastState.editStatus = action.payload;
+            return [...state];
         case ActionType.addLayer:
-            layer = action.payload as Layer;
+                layer = action.payload as Layer;
             if (layer.source.width / layer.source.height > screenWidth / screenHeight) {
                 // 宽适配
                 let height = screenWidth / (layer.source.width / layer.source.height);
@@ -92,83 +89,114 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 layer.originPosition.y1 = layer.position.y1;
                 layer.originPosition.y2 = layer.position.y2;
             }
-            return {
-                ...state,
-                currentLayer: layer,
-                layers: [
-                    layer
-                ]
-            };
+            lastState = state[state.length - 1];
+            lastState.currentLayer = layer;
+            return [...state];
         case ActionType.updateCanvasSize:
-            return {
-                ...state,
-                width: action.payload.width,
-                height: action.payload.height
-            };
+            lastState = state[state.length - 1];
+            lastState.width = action.payload.width;
+            lastState.height = action.payload.height;
+            return [...state];
         case ActionType.savePicture:
-            return {
-                ...state,
-                savePicture: true
-            };
+            lastState = state[state.length - 1];
+            lastState.savePicture = true;
+            return [...state];
         case ActionType.finishSavePicture:
-            return {
-                ...state,
-                savePicture: false
-            };
+            lastState = state[state.length - 1];
+            lastState.savePicture = false;
+            return [...state];
         case ActionType.updateColorValue:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload.value, "color", action.payload.type);
+            if (state[state.length - 1]) {
+                const lastState =  updateLayerSubProperty<"color">(state[state.length - 1], action.payload.value, "color", action.payload.type);
+
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updateColorType:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload, "color", "editingProperty");
+            if (state[state.length - 1]) {
+                const lastState = updateLayerSubProperty<"color">(state[state.length - 1], action.payload, "color", "editingProperty");
+
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updateEffectValue:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"effect">(state.currentLayer, state, action.payload.value, "effect", action.payload.type);
+            if (state[state.length - 1]) {
+                const lastState = updateLayerSubProperty<"effect">(state[state.length - 1], action.payload.value, "effect", action.payload.type);
+
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updateEffectType:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"effect">(state.currentLayer, state, action.payload, "effect", "editingProperty");
+            if (state[state.length - 1]) {
+                const lastState = updateLayerSubProperty<"effect">(state[state.length - 1], action.payload, "effect", "editingProperty");
+
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updateFilterSubType:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "type");
+            if (state[state.length - 1]) {
+                const lastState = updateLayerSubProperty<"filter">(state[state.length - 1], action.payload, "filter", "type");
+
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updateFilterCategory:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "currentCategory");
+            if (state[state.length - 1]) {
+                const lastState = updateLayerSubProperty<"filter">(state[state.length - 1], action.payload, "filter", "currentCategory");
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updateFilterIntensity:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "intensity");
+            if (state[state.length - 1]) {
+                const lastState = updateLayerSubProperty<"filter">(state[state.length - 1], action.payload, "filter", "intensity");
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.startClipPath:
-            if (state.currentLayer) {
-                return updateLayerProperty<"editStatus">(state.currentLayer, state, EditType.transform,"editStatus");
+            if (state[state.length - 1]) {
+                const lastState = updateLayerProperty<"editStatus">(state[state.length - 1], EditType.transform,"editStatus");
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.finishClipPath:
-            if (state.currentLayer) {
-                return updateLayerProperty<"editStatus">(state.currentLayer, state, EditType.none,"editStatus");
+            if (state[state.length - 1]) {
+                const lastState = updateLayerProperty<"editStatus">(state[state.length - 1], EditType.none,"editStatus");
+
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updateTransform:
-            if (state.currentLayer) {
-                return updateLayerProperty<"transform">(state.currentLayer, state, action.payload, "transform");
+            if (state[state.length - 1]) {
+                const lastState = updateLayerProperty<"transform">(state[state.length - 1], action.payload, "transform");
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updatePosition:
-            if (state.currentLayer) {
-                let w = (1 - state.currentLayer.transform.left - state.currentLayer.transform.right) * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1);
-                let h = (1 - state.currentLayer.transform.top - state.currentLayer.transform.bottom) * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1);
+            if (state[state.length - 1]) {
+                const prev = state[state.length - 1];
+                if (!prev.currentLayer) return;
+                let w = (1 - prev.currentLayer.transform.left - prev.currentLayer.transform.right) * (prev.currentLayer.originPosition.x2 - prev.currentLayer.originPosition.x1);
+                let h = (1 - prev.currentLayer.transform.top - prev.currentLayer.transform.bottom) * (prev.currentLayer.originPosition.y2 - prev.currentLayer.originPosition.y1);
                 let wPx = w * screenWidth;
                 let hPx = h * screenHeight;
                 let position: Position = {
@@ -189,25 +217,26 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                     position.x2 = w / 2 * scale;
                     position.x1 = -w / 2 * scale;
                 }
-                return updateLayerProperty<"position">(state.currentLayer, state, position, "position");
+                const lastState =  updateLayerProperty<"position">(state[state.length - 1], position, "position");
+
+
+                state.slice(state.length - 1).push(lastState);
+                return state;
             }
             return state;
         case ActionType.updateFilterStamp:
-            return {
-                ...state,
-                openStatus: false,
-                filterStamp: action.payload
-            };
+            lastState = state[state.length - 1];
+            lastState.openStatus = false;
+            lastState.filterStamp = action.payload;
+            return [...state];
         case ActionType.updateOpenStatus:
-            return {
-                ...state,
-                openStatus: action.payload
-            };
+            lastState = state[state.length - 1];
+            lastState.openStatus = action.payload;
+            return [...state];
         case ActionType.updateShowAllFilter:
-            return {
-                ...state,
-                showAllFilter: action.payload
-            };
+            lastState = state[state.length - 1];
+            lastState.showAllFilter = action.payload;
+            return [...state];
         default:
             return state;
     }
@@ -217,6 +246,7 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
 export const Context = createContext({state: initialState , dispatch: (_action: {type: ActionType, payload: any}) => {}});
 
 export const Provider:React.FC = (props) => {
+    // @ts-ignore
     const [state, dispatch] = useReducer(reducer, initialState);
     return (
         <Context.Provider value={{state: state, dispatch}}>

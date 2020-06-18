@@ -45,9 +45,9 @@ worker.onmessage = (e: any) => {
 const histogramCanvas = Histogram(360, 150);
 const canvas = Canvas(window.devicePixelRatio * window.innerWidth, window.devicePixelRatio * (window.innerHeight - 92));
 const offCanvas = Canvas(300, 200, true);
-const analyzeImage = debounce((canvas: MyCanvas, layers: Layer[]) => {
+const analyzeImage = debounce((canvas: MyCanvas, layer: Layer) => {
     if (canvas) {
-        let [x1, y1, x2, y2] = canvas.renderer.render(layers);
+        let [x1, y1, x2, y2] = canvas.renderer.render(layer);
         let data = new Uint8ClampedArray((x2 - x1) * (y2 - y1) * 4);
         canvas.gl.readPixels(x1, y1, x2 - x1, y2 - y1, canvas.gl.RGBA, canvas.gl.UNSIGNED_BYTE, data);
         worker.postMessage([data, histogramCanvas.canvasElement.height], [data.buffer]);
@@ -56,7 +56,9 @@ const analyzeImage = debounce((canvas: MyCanvas, layers: Layer[]) => {
 
 
 const Main: React.FC = () => {
-    const {state, dispatch} = useContext(Context);
+    const {state: states, dispatch} = useContext(Context);
+    const state = states[states.length - 1];
+    console.log(state);
     const {input} = useFile((file) => {
     });
 
@@ -72,14 +74,14 @@ const Main: React.FC = () => {
                     container.appendChild(canvas.canvasElement);
                     container.appendChild(histogramCanvas.canvasElement);
                 }
-                let [x1] = canvas.renderer.render(state.layers);
-                analyzeImage(canvas, state.layers);
+                let [x1] = canvas.renderer.render(state.currentLayer);
+                analyzeImage(canvas, state.currentLayer);
                 if (x1 !== undefined) {
                     if (state.savePicture && offCanvas) {
                         if (offCanvas.canvasElement.width !== state.width || offCanvas.canvasElement.height !== state.height) {
                             state.currentLayer && state.currentLayer.source && offCanvas.viewport(state.currentLayer.source.width, state.currentLayer.source.height);
                         }
-                        offCanvas.renderer.render(state.layers);
+                        offCanvas.renderer.render(state.currentLayer);
                         saveCanvasPicture(offCanvas.canvasElement, '保存图片.jpeg').then(r => dispatch({type: ActionType.finishSavePicture, payload: null}))
 
                     }
@@ -96,14 +98,15 @@ const Main: React.FC = () => {
 
     const touchStart = (e: React.TouchEvent) => {
         if (canvas && state.currentLayer && state.currentLayer.editStatus !== EditType.transform) {
-            canvas.renderer.render(state.layers, true);
+            canvas.renderer.render(state.currentLayer, true);
         }
     };
     const touchEnd = () => {
         if (canvas) {
-            canvas.renderer.render(state.layers);
+            canvas.renderer.render(state.currentLayer);
         }
     };
+    if (!state) debugger;
     const reactCanvas = (
             <Center ref={canvasContainer} onTouchStart={touchStart} onTouchEnd={touchEnd}>
             {state.currentLayer && state.currentLayer.editStatus === EditType.transform ?

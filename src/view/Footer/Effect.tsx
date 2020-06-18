@@ -16,7 +16,8 @@ const OuterWrapper = styled.div`
 `;
 
 export const EffectFilter:React.FC = (props) => {
-    const {state, dispatch} = useContext(Context);
+    const {state: states, dispatch} = useContext(Context);
+    const state = states[states.length - 1];
     const indicators: {
         type: 'colorOffset'
         min: number

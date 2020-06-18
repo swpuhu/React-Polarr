@@ -167,42 +167,28 @@ export const getAvg = (array: number[]) => {
 };
 
 
-export function updateLayerSubProperty<T extends keyof Layer> (layer: Layer, state: StateType, payload: Layer[T][keyof Layer[T]], property: T, subProperty: keyof Layer[T],) {
+export function updateLayerSubProperty<T extends keyof Layer> (state: StateType, payload: Layer[T][keyof Layer[T]], property: T, subProperty: keyof Layer[T],) {
     if (state.currentLayer) {
-        let index = state.layers.indexOf(state.currentLayer);
         let newLayer = {...state.currentLayer};
         newLayer[property][subProperty] = payload;
 
         return {
             ...state,
             currentLayer: newLayer,
-            layers: state.layers.map((layer, i) => {
-                if (index === i) {
-                    return newLayer;
-                }
-                return layer;
-            })
         }
     }
     return state;
 }
 
 
-export function updateLayerProperty<T extends keyof Layer> (layer: Layer, state: StateType, payload: Layer[T], property: T) {
+export function updateLayerProperty<T extends keyof Layer> (state: StateType, payload: Layer[T], property: T) {
     if (state.currentLayer) {
-        let index = state.layers.indexOf(state.currentLayer);
         let newLayer = {...state.currentLayer};
         newLayer[property] = payload;
 
         return {
             ...state,
             currentLayer: newLayer,
-            layers: state.layers.map((layer, i) => {
-                if (index === i) {
-                    return newLayer;
-                }
-                return layer;
-            })
         }
     }
     return state;

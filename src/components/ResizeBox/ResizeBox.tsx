@@ -10,7 +10,8 @@ const xMapValue = mapValue(-1, 1, 0, 1);
 const yMapValue = mapValue(-1, 1, 1, 0);
 type HandlerType = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => void;
 export const ResizeBox: React.FC = () => {
-    const {state, dispatch} = useContext(Context);
+    const {state: states, dispatch} = useContext(Context);
+    const state = states[states.length - 1];
     const container = useRef<HTMLDivElement>(null);
 
 

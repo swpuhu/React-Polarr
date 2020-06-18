@@ -120,7 +120,6 @@ export type StateType = {
     openStatus: boolean;
     processStatus: ProcessStatus;
     savePicture: boolean;
-    layers :Array<Layer>,
     currentLayer: Layer | null,
     width: number,
     height: number,
@@ -129,7 +128,7 @@ export type StateType = {
 }
 
 export type MyWebGLRender = {
-    render: (layer: Layer[], onlyRenderOrigin?: boolean) => number[];
+    render: (layer: Layer | null, onlyRenderOrigin?: boolean) => number[];
     viewport: (width: number, height: number) =>  void
 
 }

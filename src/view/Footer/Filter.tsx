@@ -55,7 +55,8 @@ type IndicatorsType = {
     }[]
 }
 export const Filter:React.FC = (props) => {
-    const {state, dispatch} = useContext(Context);
+    const {state: states, dispatch} = useContext(Context);
+    const state = states[states.length - 1];
     const labelMap = {
         'normal': '原图',
         'flowerStone': '万花石',

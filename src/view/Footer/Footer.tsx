@@ -16,7 +16,8 @@ const Wrapper = styled.div`
 `;
 
 const Footer: React.FC = () => {
-    const {state, dispatch} = useContext(Context);
+    const {state: states, dispatch} = useContext(Context);
+    const state = states[states.length - 1];
     const initButtons = [
         {
             id: 1,

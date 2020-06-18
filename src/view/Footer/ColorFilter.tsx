@@ -16,7 +16,8 @@ const OuterWrapper = styled.div`
 `;
 
 export const ColorFilter:React.FC = (props) => {
-    const {state, dispatch} = useContext(Context);
+    const {state: states, dispatch} = useContext(Context);
+    const state = states[states.length - 1];
     const indicators: {
         type: Exclude<keyof Color, 'editingProperty'>,
         min: number

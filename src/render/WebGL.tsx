@@ -82,8 +82,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
         return ++renderCount;
     };
 
-    const render = (layers: Layer[], renderOrigin?: boolean): Array<number> => {
-        let layer = layers[0];
+    const render = (layer: Layer | null, renderOrigin?: boolean): Array<number> => {
         let renderCount = 0;
         if (layer) {
             if (!isSave) {
