@@ -2,10 +2,12 @@ import React, {useContext, useState} from 'react';
 import {IconButton} from "../../components/IconButton";
 import styled from "styled-components";
 import {Context} from "../../Context";
-import {ActionType, EditStatus} from "../../types/type";
+import {ActionType, EditStatus, EditType} from "../../types/type";
 import {ColorFilter} from "./ColorFilter";
 import {EffectFilter} from "./Effect";
 import {Filter} from "./Filter";
+import {HistoryList} from './HistoryList';
+import {getLastState} from "../../lib/util";
 
 const Wrapper = styled.div`
     > .footer-icon {
@@ -16,7 +18,8 @@ const Wrapper = styled.div`
 `;
 
 const Footer: React.FC = () => {
-    const {state, dispatch} = useContext(Context);
+    const {state: states, dispatch} = useContext(Context);
+    const layer = getLastState(states.historyLayers);
     const initButtons = [
         {
             id: 1,
@@ -58,23 +61,33 @@ const Footer: React.FC = () => {
     const [buttons, setButtons] = useState(initButtons);
 
     const onClick = (id: number) => {
-        if (state.editStatus !== EditStatus.EDTING) return;
+        if (states.editStatus !== EditStatus.EDTING) return;
         if (id === 2) {
-            dispatch({type: ActionType.startClipPath, payload: null});
+            if (states.transformStatus === EditType.transform) {
+                dispatch({type: ActionType.finishClipPath, payload: null});
+            } else {
+                dispatch({type: ActionType.startClipPath, payload: null});
+            }
         } else {
             dispatch({type: ActionType.finishClipPath, payload: null});
         }
+        let selectedItem = buttons.find(item => item.selected);
         let button = buttons.map(item => {
             item.selected = item.id === id;
             return item;
         });
-        setButtons(button);
+        if (selectedItem && selectedItem.id === id) {
+            setButtons(initButtons);
+        } else {
+            setButtons(button);
+        }
     };
     const activeButton = buttons.find(item => item.selected);
     let showController = null;
     if (activeButton) {
         switch (activeButton.id) {
             case 1:
+                showController = <HistoryList/>;
                 break;
             case 2:
                 break;
@@ -104,7 +117,7 @@ const Footer: React.FC = () => {
                                                    key={button.id}
                                                    label={button.label}
                                                    iconName={button.iconName}
-                                                   isActive={state.editStatus === EditStatus.EDTING}
+                                                   isActive={states.editStatus === EditStatus.EDTING}
                                                    isSelected={button.selected}/>)}
             </div>
         </Wrapper>

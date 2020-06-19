@@ -1,8 +1,10 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import styled from "styled-components";
 import {Icon} from "./Icon";
 import {clamp, throttle} from "../lib/util";
 import {roundNumber} from "../render/GLUtil";
+import {Context} from "../Context";
+import {ActionType} from "../types/type";
 
 const Wrapper = styled.div`
     display: flex;
@@ -46,7 +48,8 @@ type Props = {
     min: number
     max: number
     step: number,
-    className: string
+    className: string,
+    label: string
 }
 export const ControlSlider:React.FC<Props> = (props) => {
     const pointRef = useRef<HTMLDivElement>(null);
@@ -54,6 +57,7 @@ export const ControlSlider:React.FC<Props> = (props) => {
     const range = props.max - props.min;
     // const value = props.value;
     const [value, _setValue] = useState(props.value);
+    const {dispatch} = useContext(Context);
     const onChange = throttle(props.onChange, 30);
     const setValue = (v: number) => {
         _setValue(v);
@@ -62,6 +66,7 @@ export const ControlSlider:React.FC<Props> = (props) => {
     const touchStart = (e: React.TouchEvent) => {
         e.persist();
         let bar = barRef.current;
+        dispatch({type: ActionType.addHistory, payload: props.label});
         const touchmove = (ev: TouchEvent) => {
             ev.preventDefault();
             if (bar) {

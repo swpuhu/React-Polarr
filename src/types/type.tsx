@@ -35,7 +35,9 @@ export enum ActionType {
     updateFilterIntensity,
     updateFilterStamp,
     updateOpenStatus,
-    updateShowAllFilter
+    updateShowAllFilter,
+    addHistory,
+    backTrackHistory
 }
 
 export enum EditType {
@@ -105,8 +107,10 @@ export type Filter<T extends FilterCategoryType> = {
     type: FilterSubType<T>,
     intensity: number
 }
+type HistoryType = 'openFile' | 'updateProperty' | null
 export type Layer = {
-    editStatus: EditType;
+    trackable: boolean,
+    historyType: HistoryType,
     source: MyImage;
     position: Position;
     originPosition: Position;
@@ -116,12 +120,13 @@ export type Layer = {
     filter: Filter<FilterCategoryType>
 }
 export type StateType = {
+    historyType: HistoryType
     editStatus: EditStatus;
+    transformStatus: EditType;
     openStatus: boolean;
     processStatus: ProcessStatus;
     savePicture: boolean;
-    layers :Array<Layer>,
-    currentLayer: Layer | null,
+    historyLayers: Layer[]
     width: number,
     height: number,
     filterStamp: LutFiltersType<string>,
@@ -129,7 +134,7 @@ export type StateType = {
 }
 
 export type MyWebGLRender = {
-    render: (layer: Layer[], onlyRenderOrigin?: boolean) => number[];
+    render: (state: StateType, layer: Layer | null, onlyRenderOrigin?: boolean) => number[];
     viewport: (width: number, height: number) =>  void
 
 }

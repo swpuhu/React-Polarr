@@ -1,6 +1,6 @@
 import React, {createContext, useReducer} from "react";
 import {ActionType, EditStatus, EditType, Layer, Position, ProcessStatus, StateType} from "./types/type";
-import {initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
+import {clone, getLastStateIndex, initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
 import imgSrc from './icons/example.jpg';
 
 let mode = 0;
@@ -40,17 +40,16 @@ export const filterStamp = {
     'pearl': '',
     'peridot': '',
     'petalite': '',
-}
+};
 
 const initialState: StateType = {
-    editStatus: mode === 1 ? EditStatus.EDTING : EditStatus.IDLE,
+    historyType: null,
+    editStatus: EditStatus.IDLE,
+    transformStatus: EditType.none,
     processStatus: ProcessStatus.none,
     savePicture: false,
     openStatus: false,
-    currentLayer: mode === 1 ? layer : null,
-    layers: mode === 1 && layer ? [layer] : [
-
-    ],
+    historyLayers: [],
     width: window.innerWidth,
     height: window.innerHeight - 92,
     filterStamp: filterStamp,
@@ -61,6 +60,7 @@ const screenHeight = window.innerHeight - 92;
 
 const reducer = (state: typeof initialState, action: {type: ActionType, payload: any}) => {
     let layer: Layer;
+    let lastState;
     switch (action.type) {
         case ActionType.updateEditStatus:
             return {
@@ -68,7 +68,7 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 editStatus: action.payload
             };
         case ActionType.addLayer:
-            layer = action.payload as Layer;
+                layer = action.payload as Layer;
             if (layer.source.width / layer.source.height > screenWidth / screenHeight) {
                 // 宽适配
                 let height = screenWidth / (layer.source.width / layer.source.height);
@@ -92,12 +92,11 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 layer.originPosition.y1 = layer.position.y1;
                 layer.originPosition.y2 = layer.position.y2;
             }
+            
+            layer.historyType = 'openFile';
             return {
                 ...state,
-                currentLayer: layer,
-                layers: [
-                    layer
-                ]
+                historyLayers: [...state.historyLayers, layer],
             };
         case ActionType.updateCanvasSize:
             return {
@@ -113,62 +112,82 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
         case ActionType.finishSavePicture:
             return {
                 ...state,
-                savePicture: false
+                savePicture: false,
             };
         case ActionType.updateColorValue:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload.value, "color", action.payload.type);
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"color">(state.historyLayers[index], action.payload.value, "color", action.payload.type);
+                return {
+                    ...state
+                };
             }
             return state;
         case ActionType.updateColorType:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"color">(state.currentLayer, state, action.payload, "color", "editingProperty");
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"color">(state.historyLayers[index], action.payload, "color", "editingProperty");
+                return {...state};
             }
             return state;
         case ActionType.updateEffectValue:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"effect">(state.currentLayer, state, action.payload.value, "effect", action.payload.type);
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"effect">(state.historyLayers[index], action.payload.value, "effect", action.payload.type);
+                return {...state};
             }
             return state;
         case ActionType.updateEffectType:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"effect">(state.currentLayer, state, action.payload, "effect", "editingProperty");
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"effect">(state.historyLayers[index], action.payload, "effect", "editingProperty");
+                return {...state};
             }
             return state;
         case ActionType.updateFilterSubType:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "type");
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"filter">(state.historyLayers[index], action.payload, "filter", "type");
+                return {...state};
             }
             return state;
         case ActionType.updateFilterCategory:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "currentCategory");
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"filter">(state.historyLayers[index], action.payload, "filter", "currentCategory");
+                return {...state};
             }
             return state;
         case ActionType.updateFilterIntensity:
-            if (state.currentLayer) {
-                return updateLayerSubProperty<"filter">(state.currentLayer, state, action.payload, "filter", "intensity");
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"filter">(state.historyLayers[index], action.payload, "filter", "intensity");
+                return {...state};
             }
             return state;
         case ActionType.startClipPath:
-            if (state.currentLayer) {
-                return updateLayerProperty<"editStatus">(state.currentLayer, state, EditType.transform,"editStatus");
-            }
-            return state;
+            return {
+                ...state,
+                transformStatus: EditType.transform
+            };
         case ActionType.finishClipPath:
-            if (state.currentLayer) {
-                return updateLayerProperty<"editStatus">(state.currentLayer, state, EditType.none,"editStatus");
-            }
-            return state;
+            return {
+                ...state,
+                transformStatus: EditType.none
+            };
         case ActionType.updateTransform:
-            if (state.currentLayer) {
-                return updateLayerProperty<"transform">(state.currentLayer, state, action.payload, "transform");
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerProperty<"transform">(state.historyLayers[index], action.payload, "transform");
+                return {...state};
             }
             return state;
         case ActionType.updatePosition:
-            if (state.currentLayer) {
-                let w = (1 - state.currentLayer.transform.left - state.currentLayer.transform.right) * (state.currentLayer.originPosition.x2 - state.currentLayer.originPosition.x1);
-                let h = (1 - state.currentLayer.transform.top - state.currentLayer.transform.bottom) * (state.currentLayer.originPosition.y2 - state.currentLayer.originPosition.y1);
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                const prev = state.historyLayers[state.historyLayers.length - 1];
+                if (!prev) return;
+                let w = (1 - prev.transform.left - prev.transform.right) * (prev.originPosition.x2 - prev.originPosition.x1);
+                let h = (1 - prev.transform.top - prev.transform.bottom) * (prev.originPosition.y2 - prev.originPosition.y1);
                 let wPx = w * screenWidth;
                 let hPx = h * screenHeight;
                 let position: Position = {
@@ -189,24 +208,47 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                     position.x2 = w / 2 * scale;
                     position.x1 = -w / 2 * scale;
                 }
-                return updateLayerProperty<"position">(state.currentLayer, state, position, "position");
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerProperty<"position">(state.historyLayers[index], position, "position");
+                return {...state};
             }
             return state;
         case ActionType.updateFilterStamp:
             return {
                 ...state,
-                openStatus: false,
                 filterStamp: action.payload
             };
         case ActionType.updateOpenStatus:
             return {
                 ...state,
                 openStatus: action.payload
-            };
+            }
         case ActionType.updateShowAllFilter:
             return {
                 ...state,
                 showAllFilter: action.payload
+            };
+        case ActionType.addHistory:
+            lastState = clone(state.historyLayers[getLastStateIndex(state.historyLayers)]);
+            lastState.historyType = action.payload;
+            let newState = {
+                ...state,
+                historyLayers: [
+                    ...state.historyLayers,
+                    lastState
+                ].filter(item => item.trackable)
+            };
+            while (newState.historyLayers.length > 50) {
+                newState.historyLayers.shift();
+            }
+            return newState;
+        case ActionType.backTrackHistory:
+            return {
+                ...state,
+                historyLayers: state.historyLayers.map((item, ix)=> {
+                    item.trackable = ix <= (action.payload as number);
+                    return item;
+                })
             };
         default:
             return state;
@@ -217,7 +259,9 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
 export const Context = createContext({state: initialState , dispatch: (_action: {type: ActionType, payload: any}) => {}});
 
 export const Provider:React.FC = (props) => {
+    // @ts-ignore
     const [state, dispatch] = useReducer(reducer, initialState);
+
     return (
         <Context.Provider value={{state: state, dispatch}}>
             {props.children}

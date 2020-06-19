@@ -2,7 +2,8 @@ import {AdaptionType, EditType, Layer, LutFiltersType, MyImage, Picture, StateTy
 
 export const initLayer = (source: MyImage): Layer => {
     return {
-        editStatus: EditType.none,
+        historyType: 'openFile',
+        trackable: true,
         source: source,
         position: {
             x1: 0,
@@ -167,45 +168,25 @@ export const getAvg = (array: number[]) => {
 };
 
 
-export function updateLayerSubProperty<T extends keyof Layer> (layer: Layer, state: StateType, payload: Layer[T][keyof Layer[T]], property: T, subProperty: keyof Layer[T],) {
-    if (state.currentLayer) {
-        let index = state.layers.indexOf(state.currentLayer);
-        let newLayer = {...state.currentLayer};
+export function updateLayerSubProperty<T extends keyof Layer> (layer: Layer, payload: Layer[T][keyof Layer[T]], property: T, subProperty: keyof Layer[T],) {
+    if (layer) {
+        let newLayer = {...layer};
         newLayer[property][subProperty] = payload;
 
-        return {
-            ...state,
-            currentLayer: newLayer,
-            layers: state.layers.map((layer, i) => {
-                if (index === i) {
-                    return newLayer;
-                }
-                return layer;
-            })
-        }
+        return newLayer;
     }
-    return state;
+    return layer;
 }
 
 
-export function updateLayerProperty<T extends keyof Layer> (layer: Layer, state: StateType, payload: Layer[T], property: T) {
-    if (state.currentLayer) {
-        let index = state.layers.indexOf(state.currentLayer);
-        let newLayer = {...state.currentLayer};
+export function updateLayerProperty<T extends keyof Layer> (layer: Layer, payload: Layer[T], property: T) {
+    if (layer) {
+        let newLayer = {...layer};
         newLayer[property] = payload;
 
-        return {
-            ...state,
-            currentLayer: newLayer,
-            layers: state.layers.map((layer, i) => {
-                if (index === i) {
-                    return newLayer;
-                }
-                return layer;
-            })
-        }
+        return newLayer;
     }
-    return state;
+    return layer;
 }
 
 export function isDetachedDOM (dom: HTMLElement): boolean {
@@ -272,3 +253,58 @@ export async function loadImages (srcObject: Partial<LutFiltersType<string>>) {
     }
     return obj;
 }
+
+function getObjectName (obj: any): string {
+    return Object.prototype.toString.call(obj);
+}
+export function clone (obj: any[] | Object): any {
+    let res;
+    if (Array.isArray(obj)) {
+        res = [];
+        for (let item of obj) {
+            if (getObjectName(obj) === '[object Object]' || Array.isArray(item)) {
+                res.push(clone(item));
+            } else {
+                res.push(item);
+            }
+        }
+    } else if (typeof obj === 'object') {
+        res = {};
+        for (let key in obj) {
+            // @ts-ignore
+            if (getObjectName(obj[key]) === '[object Object]' || Array.isArray(obj[key])) {
+                // @ts-ignore
+                res[key] = clone(obj[key]);
+            } else {
+                // @ts-ignore
+                res[key] = obj[key];
+            }
+        }
+    }
+    return res
+}
+
+
+export const getLastState = (layers: Layer[]) => {
+    let current, next;
+    for (let i = 0; i < layers.length; i++) {
+        current = layers[i];
+        next = layers[i + 1];
+        if (next && !next.trackable) {
+            return current;
+        }
+    }
+    return layers[layers.length - 1];
+};
+
+export const getLastStateIndex = (layers: Layer[]) => {
+    let current, next;
+    for (let i = 0; i < layers.length; i++) {
+        current = layers[i];
+        next = layers[i + 1];
+        if (next && !next.trackable) {
+            return i;
+        }
+    }
+    return layers.length - 1;
+};

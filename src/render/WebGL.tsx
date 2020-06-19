@@ -1,6 +1,6 @@
 import {NormalFilter} from "./shader/normal";
 import {createFramebufferTexture, createTexture, deleteFramebuffer, deleteTexture, mapValue} from "./GLUtil";
-import {EditType, IdentityObject, Layer, MyImage, MyWebGLRender, WebGLRenderer} from "../types/type";
+import {EditType, IdentityObject, Layer, MyImage, MyWebGLRender, StateType, WebGLRenderer} from "../types/type";
 import {ColorFilter} from "./shader/Color";
 import {ColorOffset} from "./shader/colorOffset";
 import {LutFilter} from "./shader/lutFilter";
@@ -86,12 +86,11 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
         return ++renderCount;
     };
 
-    const render = (layers: Layer[], renderOrigin?: boolean): Array<number> => {
-        let layer = layers[0];
+    const render = (state: StateType, layer: Layer | null, renderOrigin?: boolean): Array<number> => {
         let renderCount = 0;
         if (layer) {
             if (!isSave) {
-                if (layer.editStatus === EditType.transform) {
+                if (state.transformStatus === EditType.transform) {
                     vertexPoint = new Float32Array([
                         width / 2 * layer.originPosition.x1, height / 2 * layer.originPosition.y1,
                         width / 2 * layer.originPosition.x2, height / 2 * layer.originPosition.y1,
@@ -186,7 +185,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                         }
                     });
                 }
-                if (layer.editStatus === EditType.transform) {
+                if (state.transformStatus === EditType.transform) {
                     renderCount = passFramebuffer(gl, filters.alphaMaskFilter.program, renderCount, () => {
                         if (filters.alphaMaskFilter.setClip) {
                             let w = (layer.originPosition.x2 - layer.originPosition.x1);

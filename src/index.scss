@@ -28,6 +28,7 @@ button {
 
 .histogram {
     position: absolute;
+    z-index: 9;
     top: 0;
     left: 0;
     min-width: 180px;

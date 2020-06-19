@@ -2,12 +2,12 @@ import React, {useContext, useEffect, useRef} from "react";
 import styled from "styled-components";
 import {useFile} from "../lib/useFile";
 import {Context} from "../Context";
-import {ActionType, EditStatus, EditType, Layer, MyCanvas} from "../types/type";
+import {ActionType, EditStatus, EditType, Layer, MyCanvas, StateType} from "../types/type";
 import {Canvas} from "../render/Canvas";
 // @ts-ignore
 import StatisticColorWorker from '../lib/statisticColor.worker';
 import {Histogram} from "../render/Histogram";
-import {debounce, isDetachedDOM, saveCanvasPicture} from "../lib/util";
+import {debounce, getLastState, isDetachedDOM, saveCanvasPicture} from "../lib/util";
 import {ResizeBox} from "../components/ResizeBox/ResizeBox";
 import {Modal} from "../components/Modal";
 
@@ -45,9 +45,9 @@ worker.onmessage = (e: any) => {
 const histogramCanvas = Histogram(360, 150);
 const canvas = Canvas(window.devicePixelRatio * window.innerWidth, window.devicePixelRatio * (window.innerHeight - 92));
 const offCanvas = Canvas(300, 200, true);
-const analyzeImage = debounce((canvas: MyCanvas, layers: Layer[]) => {
-    if (canvas) {
-        let [x1, y1, x2, y2] = canvas.renderer.render(layers);
+const analyzeImage = debounce((state: StateType, canvas: MyCanvas, layer: Layer) => {
+    if (canvas && layer && state.transformStatus !== EditType.transform) {
+        let [x1, y1, x2, y2] = canvas.renderer.render(state, layer);
         let data = new Uint8ClampedArray((x2 - x1) * (y2 - y1) * 4);
         canvas.gl.readPixels(x1, y1, x2 - x1, y2 - y1, canvas.gl.RGBA, canvas.gl.UNSIGNED_BYTE, data);
         worker.postMessage([data, histogramCanvas.canvasElement.height], [data.buffer]);
@@ -56,7 +56,8 @@ const analyzeImage = debounce((canvas: MyCanvas, layers: Layer[]) => {
 
 
 const Main: React.FC = () => {
-    const {state, dispatch} = useContext(Context);
+    const {state: states, dispatch} = useContext(Context);
+    const layer = getLastState(states.historyLayers);
     const {input} = useFile((file) => {
     });
 
@@ -72,14 +73,14 @@ const Main: React.FC = () => {
                     container.appendChild(canvas.canvasElement);
                     container.appendChild(histogramCanvas.canvasElement);
                 }
-                let [x1] = canvas.renderer.render(state.layers);
-                analyzeImage(canvas, state.layers);
+                let [x1] = canvas.renderer.render(states, layer);
+                analyzeImage(canvas, layer);
                 if (x1 !== undefined) {
-                    if (state.savePicture && offCanvas) {
-                        if (offCanvas.canvasElement.width !== state.width || offCanvas.canvasElement.height !== state.height) {
-                            state.currentLayer && state.currentLayer.source && offCanvas.viewport(state.currentLayer.source.width, state.currentLayer.source.height);
+                    if (states.savePicture && offCanvas) {
+                        if (offCanvas.canvasElement.width !== states.width || offCanvas.canvasElement.height !== states.height) {
+                            layer && layer.source && offCanvas.viewport(layer.source.width, layer.source.height);
                         }
-                        offCanvas.renderer.render(state.layers);
+                        offCanvas.renderer.render(states, layer);
                         saveCanvasPicture(offCanvas.canvasElement, '保存图片.jpeg').then(r => dispatch({type: ActionType.finishSavePicture, payload: null}))
 
                     }
@@ -95,18 +96,18 @@ const Main: React.FC = () => {
     );
 
     const touchStart = (e: React.TouchEvent) => {
-        if (canvas && state.currentLayer && state.currentLayer.editStatus !== EditType.transform) {
-            canvas.renderer.render(state.layers, true);
+        if (canvas && layer && states.transformStatus !== EditType.transform) {
+            canvas.renderer.render(states, layer, true);
         }
     };
     const touchEnd = () => {
         if (canvas) {
-            canvas.renderer.render(state.layers);
+            canvas.renderer.render(states, layer);
         }
     };
     const reactCanvas = (
             <Center ref={canvasContainer} onTouchStart={touchStart} onTouchEnd={touchEnd}>
-            {state.currentLayer && state.currentLayer.editStatus === EditType.transform ?
+            {layer && states.transformStatus === EditType.transform ?
                 (
                     <div>
                         <ResizeBox/>
@@ -118,16 +119,16 @@ const Main: React.FC = () => {
 
         </Center>
     );
-    const content = state.editStatus === EditStatus.IDLE ? buttons : reactCanvas;
+    const content = states.editStatus === EditStatus.IDLE ? buttons : reactCanvas;
     return (
         <Wrapper onClick={(e) => {
             e.stopPropagation();
-            if (state.editStatus === EditStatus.EDTING) {
+            if (states.editStatus === EditStatus.EDTING) {
                 dispatch({type: ActionType.updateShowAllFilter, payload: false});
             }
         }}>
             {content}
-            {state.openStatus ?
+            {states.openStatus ?
                 <Modal>
                     <div>图片加载中</div>
                 </Modal> : null}
