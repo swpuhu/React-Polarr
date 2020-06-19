@@ -5,6 +5,7 @@ import styled from "styled-components";
 import {FilterIndicator} from "../../components/FilterIndicator";
 import {ControlSlider} from "../../components/ControlSlider";
 import {Icon} from "../../components/Icon";
+import {getLastState} from "../../lib/util";
 
 const InnerWrapper = styled.div`
     //position: absolute;
@@ -56,7 +57,7 @@ type IndicatorsType = {
 }
 export const Filter:React.FC = (props) => {
     const {state: states, dispatch} = useContext(Context);
-    const state = states[states.length - 1];
+    const state = getLastState(states);
     const labelMap = {
         'normal': '原图',
         'flowerStone': '万花石',

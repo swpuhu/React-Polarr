@@ -43,6 +43,7 @@ export const filterStamp = {
 };
 
 const initialState: StateType[] = [{
+    trackable: true,
     historyType: null,
     editStatus: mode === 1 ? EditStatus.EDTING : EditStatus.IDLE,
     processStatus: ProcessStatus.none,
@@ -213,7 +214,16 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
         case ActionType.addHistory:
             lastState = clone(state[state.length - 1]);
             lastState.historyType = action.payload;
-            return [...state, lastState];
+            return [...state, lastState].filter(item => item.trackable);
+        case ActionType.backTrackHistory:
+            return state.map((item, index)=> {
+                if (index > (action.payload as number)) {
+                    item.trackable = false;
+                } else {
+                    item.trackable = true;
+                }
+                return item;
+            });
         default:
             return state;
     }
@@ -225,6 +235,7 @@ export const Context = createContext({state: initialState , dispatch: (_action: 
 export const Provider:React.FC = (props) => {
     // @ts-ignore
     const [state, dispatch] = useReducer(reducer, initialState);
+
     return (
         <Context.Provider value={{state: state, dispatch}}>
             {props.children}

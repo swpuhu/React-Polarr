@@ -7,6 +7,7 @@ import {ColorFilter} from "./ColorFilter";
 import {EffectFilter} from "./Effect";
 import {Filter} from "./Filter";
 import {HistoryList} from './HistoryList';
+import {getLastState} from "../../lib/util";
 
 const Wrapper = styled.div`
     > .footer-icon {
@@ -18,7 +19,7 @@ const Wrapper = styled.div`
 
 const Footer: React.FC = () => {
     const {state: states, dispatch} = useContext(Context);
-    const state = states[states.length - 1];
+    const state = getLastState(states);
     const initButtons = [
         {
             id: 1,

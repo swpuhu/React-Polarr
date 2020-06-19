@@ -7,7 +7,7 @@ import {Canvas} from "../render/Canvas";
 // @ts-ignore
 import StatisticColorWorker from '../lib/statisticColor.worker';
 import {Histogram} from "../render/Histogram";
-import {debounce, isDetachedDOM, saveCanvasPicture} from "../lib/util";
+import {debounce, getLastState, isDetachedDOM, saveCanvasPicture} from "../lib/util";
 import {ResizeBox} from "../components/ResizeBox/ResizeBox";
 import {Modal} from "../components/Modal";
 
@@ -57,7 +57,7 @@ const analyzeImage = debounce((canvas: MyCanvas, layer: Layer) => {
 
 const Main: React.FC = () => {
     const {state: states, dispatch} = useContext(Context);
-    const state = states[states.length - 1];
+    const state = getLastState(states);
     console.log(states);
     const {input} = useFile((file) => {
     });

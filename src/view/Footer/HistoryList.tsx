@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import {Context} from "../../Context";
 import styled from "styled-components";
+import {ActionType} from "../../types/type";
 
 const Wrapper = styled.div`
         position: absolute;
@@ -16,10 +17,13 @@ const Wrapper = styled.div`
 
 export const HistoryList: React.FC = (props) => {
     const {state: states, dispatch} = useContext(Context);
+    const backTrack = (index: number) => {
+        dispatch({type: ActionType.backTrackHistory, payload: index});
+    };
     return (
         <Wrapper>
-            {states.map(state => state.historyType ?
-                <div className="item">{state.historyType}</div>
+            {states.map((state, index) => state.historyType ?
+                <div className="item" key={index} onClick={() => backTrack(index)}>{state.historyType}</div>
                 : null)}
         </Wrapper>
     )

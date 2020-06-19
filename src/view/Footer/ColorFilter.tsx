@@ -4,6 +4,7 @@ import {ActionType, Color} from "../../types/type";
 import styled from "styled-components";
 import {ControlSlider} from "../../components/ControlSlider";
 import {Indicator} from "../../components/Indicator";
+import {getLastState} from "../../lib/util";
 
 const Wrapper = styled.div`
     display: flex;
@@ -17,7 +18,7 @@ const OuterWrapper = styled.div`
 
 export const ColorFilter:React.FC = (props) => {
     const {state: states, dispatch} = useContext(Context);
-    const state = states[states.length - 1];
+    const state = getLastState(states);
     const indicators: {
         type: Exclude<keyof Color, 'editingProperty'>,
         min: number

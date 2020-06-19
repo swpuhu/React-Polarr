@@ -36,7 +36,8 @@ export enum ActionType {
     updateFilterStamp,
     updateOpenStatus,
     updateShowAllFilter,
-    addHistory
+    addHistory,
+    backTrackHistory
 }
 
 export enum EditType {
@@ -118,6 +119,7 @@ export type Layer = {
     filter: Filter<FilterCategoryType>
 }
 export type StateType = {
+    trackable: boolean,
     historyType: HistoryType
     editStatus: EditStatus;
     openStatus: boolean;

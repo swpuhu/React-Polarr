@@ -288,3 +288,16 @@ export function clone (obj: any[] | Object): any {
     }
     return res
 }
+
+
+export const getLastState = (state: StateType[]) => {
+    let current, next;
+    for (let i = 0; i < state.length; i++) {
+        current = state[i];
+        next = state[i + 1];
+        if (next && !next.trackable) {
+            return current;
+        }
+    }
+    return state[state.length - 1];
+};

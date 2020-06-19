@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef} from 'react';
 import {Context} from "../../Context";
 import {mapValue} from "../../render/GLUtil";
 import {H1, H2, InnerWrapper, LB, LT, MB, ML, MR, MT, RB, RT, V1, V2, Wrapper} from "./ResizeBoxStyle";
-import {clamp, switchHandler} from "../../lib/util";
+import {clamp, getLastState, switchHandler} from "../../lib/util";
 import {ActionType} from "../../types/type";
 
 
@@ -11,7 +11,7 @@ const yMapValue = mapValue(-1, 1, 1, 0);
 type HandlerType = (initLeft: number, initRight: number, initTop: number, initBottom: number, offsetX: number, offsetY: number) => void;
 export const ResizeBox: React.FC = () => {
     const {state: states, dispatch} = useContext(Context);
-    const state = states[states.length - 1];
+    const state = getLastState(states);
     const container = useRef<HTMLDivElement>(null);
 
 
