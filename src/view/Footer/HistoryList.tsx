@@ -7,11 +7,17 @@ const Wrapper = styled.div`
         position: absolute;
         bottom: 0;
         width: 100px;
-        background: rgba(255, 255, 255, 0.5);
+        max-height: 150px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background: rgba(0, 0, 0, 0.5);
         text-align: center;
         border-radius: 5px;
         .item {
-            padding: 3px 0;
+            padding: 5px 0;
+            &.disappear {
+                color: #8d8d8d;
+            }
         }
 `;
 
@@ -22,8 +28,10 @@ export const HistoryList: React.FC = (props) => {
     };
     return (
         <Wrapper>
-            {states.map((state, index) => state.historyType ?
-                <div className="item" key={index} onClick={() => backTrack(index)}>{state.historyType}</div>
+            {states.slice().reverse().map((state, index) => state.historyType ?
+                <div className={"item" + (state.trackable ? '' : ' disappear')}
+                     key={index} 
+                     onClick={() => backTrack(states.length - index - 1)}>{state.historyType}</div>
                 : null)}
         </Wrapper>
     )

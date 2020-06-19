@@ -301,3 +301,15 @@ export const getLastState = (state: StateType[]) => {
     }
     return state[state.length - 1];
 };
+
+export const getLastStateIndex = (state: StateType[]) => {
+    let current, next;
+    for (let i = 0; i < state.length; i++) {
+        current = state[i];
+        next = state[i + 1];
+        if (next && !next.trackable) {
+            return i;
+        }
+    }
+    return state.length - 1;
+};

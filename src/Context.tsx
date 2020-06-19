@@ -1,6 +1,13 @@
 import React, {createContext, useReducer} from "react";
 import {ActionType, EditStatus, EditType, Layer, Position, ProcessStatus, StateType} from "./types/type";
-import {clone, initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
+import {
+    clone,
+    getLastState,
+    getLastStateIndex,
+    initLayer,
+    updateLayerProperty,
+    updateLayerSubProperty
+} from "./lib/util";
 import imgSrc from './icons/example.jpg';
 
 let mode = 0;
@@ -110,61 +117,71 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             return [...state];
         case ActionType.updateColorValue:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerSubProperty<"color">(state[state.length - 1], action.payload.value, "color", action.payload.type);
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerSubProperty<"color">(state[index], action.payload.value, "color", action.payload.type);
                 return [...state];
             }
             return state;
         case ActionType.updateColorType:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerSubProperty<"color">(state[state.length - 1], action.payload, "color", "editingProperty");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerSubProperty<"color">(state[index], action.payload, "color", "editingProperty");
                 return [...state];
             }
             return state;
         case ActionType.updateEffectValue:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerSubProperty<"effect">(state[state.length - 1], action.payload.value, "effect", action.payload.type);
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerSubProperty<"effect">(state[index], action.payload.value, "effect", action.payload.type);
                 return [...state];
             }
             return state;
         case ActionType.updateEffectType:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerSubProperty<"effect">(state[state.length - 1], action.payload, "effect", "editingProperty");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerSubProperty<"effect">(state[index], action.payload, "effect", "editingProperty");
                 return [...state];
             }
             return state;
         case ActionType.updateFilterSubType:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerSubProperty<"filter">(state[state.length - 1], action.payload, "filter", "type");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerSubProperty<"filter">(state[index], action.payload, "filter", "type");
                 return [...state];
             }
             return state;
         case ActionType.updateFilterCategory:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerSubProperty<"filter">(state[state.length - 1], action.payload, "filter", "currentCategory");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerSubProperty<"filter">(state[index], action.payload, "filter", "currentCategory");
                 return [...state];
             }
             return state;
         case ActionType.updateFilterIntensity:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerSubProperty<"filter">(state[state.length - 1], action.payload, "filter", "intensity");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerSubProperty<"filter">(state[index], action.payload, "filter", "intensity");
                 return [...state];
             }
             return state;
         case ActionType.startClipPath:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerProperty<"editStatus">(state[state.length - 1], EditType.transform,"editStatus");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerProperty<"editStatus">(state[index], EditType.transform,"editStatus");
                 return [...state];
             }
             return state;
         case ActionType.finishClipPath:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerProperty<"editStatus">(state[state.length - 1], EditType.none,"editStatus");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerProperty<"editStatus">(state[index], EditType.none,"editStatus");
                 return [...state];
             }
             return state;
         case ActionType.updateTransform:
             if (state[state.length - 1]) {
-                state[state.length - 1] = updateLayerProperty<"transform">(state[state.length - 1], action.payload, "transform");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerProperty<"transform">(state[index], action.payload, "transform");
                 return [...state];
             }
             return state;
@@ -194,34 +211,31 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                     position.x2 = w / 2 * scale;
                     position.x1 = -w / 2 * scale;
                 }
-                state[state.length - 1] = updateLayerProperty<"position">(state[state.length - 1], position, "position");
+                let index = getLastStateIndex(state);
+                state[index] = updateLayerProperty<"position">(state[index], position, "position");
                 return [...state];
             }
             return state;
         case ActionType.updateFilterStamp:
-            lastState = state[state.length - 1];
+            lastState = getLastState(state);
             lastState.openStatus = false;
             lastState.filterStamp = action.payload;
             return [...state];
         case ActionType.updateOpenStatus:
-            lastState = state[state.length - 1];
+            lastState = getLastState(state);
             lastState.openStatus = action.payload;
             return [...state];
         case ActionType.updateShowAllFilter:
-            lastState = state[state.length - 1];
+            lastState = getLastState(state);
             lastState.showAllFilter = action.payload;
             return [...state];
         case ActionType.addHistory:
-            lastState = clone(state[state.length - 1]);
+            lastState = clone(state[getLastStateIndex(state)]);
             lastState.historyType = action.payload;
             return [...state, lastState].filter(item => item.trackable);
         case ActionType.backTrackHistory:
-            return state.map((item, index)=> {
-                if (index > (action.payload as number)) {
-                    item.trackable = false;
-                } else {
-                    item.trackable = true;
-                }
+            return state.map((item, ix)=> {
+                item.trackable = ix <= (action.payload as number);
                 return item;
             });
         default:
