@@ -106,6 +106,7 @@ export type Filter<T extends FilterCategoryType> = {
     type: FilterSubType<T>,
     intensity: number
 }
+type HistoryType = 'openFile' | 'updateProperty' | null
 export type Layer = {
     editStatus: EditType;
     source: MyImage;
@@ -117,6 +118,7 @@ export type Layer = {
     filter: Filter<FilterCategoryType>
 }
 export type StateType = {
+    historyType: HistoryType
     editStatus: EditStatus;
     openStatus: boolean;
     processStatus: ProcessStatus;

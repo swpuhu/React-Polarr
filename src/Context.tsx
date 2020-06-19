@@ -43,6 +43,7 @@ export const filterStamp = {
 };
 
 const initialState: StateType[] = [{
+    historyType: null,
     editStatus: mode === 1 ? EditStatus.EDTING : EditStatus.IDLE,
     processStatus: ProcessStatus.none,
     savePicture: false,
@@ -91,6 +92,7 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             }
             lastState = state[state.length - 1];
             lastState.currentLayer = layer;
+            lastState.historyType = 'openFile';
             return [...state];
         case ActionType.updateCanvasSize:
             lastState = state[state.length - 1];
@@ -210,6 +212,7 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             return [...state];
         case ActionType.addHistory:
             lastState = clone(state[state.length - 1]);
+            lastState.historyType = action.payload;
             return [...state, lastState];
         default:
             return state;

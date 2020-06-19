@@ -65,7 +65,7 @@ export const ControlSlider:React.FC<Props> = (props) => {
     const touchStart = (e: React.TouchEvent) => {
         e.persist();
         let bar = barRef.current;
-        dispatch({type: ActionType.addHistory, payload: null});
+        dispatch({type: ActionType.addHistory, payload: 'updateProperty'});
         const touchmove = (ev: TouchEvent) => {
             ev.preventDefault();
             if (bar) {

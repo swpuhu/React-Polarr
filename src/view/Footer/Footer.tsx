@@ -6,6 +6,7 @@ import {ActionType, EditStatus} from "../../types/type";
 import {ColorFilter} from "./ColorFilter";
 import {EffectFilter} from "./Effect";
 import {Filter} from "./Filter";
+import {HistoryList} from './HistoryList';
 
 const Wrapper = styled.div`
     > .footer-icon {
@@ -76,6 +77,7 @@ const Footer: React.FC = () => {
     if (activeButton) {
         switch (activeButton.id) {
             case 1:
+                showController = <HistoryList/>;
                 break;
             case 2:
                 break;
