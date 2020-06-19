@@ -48,7 +48,7 @@ if (gl) {
 
 export const usePreProcess = () => {
     const images: LutFiltersType<string> = filterStamp;
-
+    let cacheImage: HTMLImageElement | null = null;
     const passFramebuffer = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram | null, renderCount: number, fn: (...args: any) => void, _fn?: (...args: any) => void,): number => {
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[renderCount % 2]);
         gl.useProgram(program);
@@ -66,7 +66,11 @@ export const usePreProcess = () => {
             gl.useProgram(normalFilter.program);
             gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_2D, originTexture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+            if (cacheImage !== img) {
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+                cacheImage = img;
+            }
+
             renderCount = passFramebuffer(gl, normalFilter.program, renderCount, () => {
                 // normalFilter.setScale && normalFilter.setScale(scaleX, scaleY);
             }, () => {
