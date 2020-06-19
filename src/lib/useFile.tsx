@@ -10,18 +10,12 @@ const useFile = (onChange: (file: File) => void) => {
     const {preProcessAll} = usePreProcess();
     input.type = 'file';
     const changeHandler = () => {
-        console.error('open file');
         if (input.files && input.files.length) {
             let file = input.files[0];
-            console.error(file.name);
             if (/\.png$/.test(file.name) || /\.jpe?g$/.test(file.name) || /\.bmp$/.test(file.name)) {
-                console.error('finish valid');
                 let image = document.createElement('img');
                 let url = URL.createObjectURL(file);
-                console.error(url);
                 image.onload = () => {
-                    console.error('onload');
-                    console.error(image.src);
                     dispatch({type: ActionType.updateOpenStatus, payload: true});
                     setTimeout(() => {
                         dispatch({type: ActionType.updateFilterStamp, payload: preProcessAll(image)});

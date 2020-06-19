@@ -238,18 +238,18 @@ export const ResizeBox: React.FC = () => {
                 </InnerWrapper>
             </Wrapper>
 
-            <div className="mask" style={{
-                position: "absolute",
-                left: 0,
-                width: `${100}%`,
-                top: 0,
-                height: `100%`,
-                clipPath: `polygon(
-                0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%,
-                ${left * 100}% ${top * 100}%, ${left * 100}% ${bottom * 100}%, ${right * 100}% ${bottom * 100}%, ${right * 100}% ${top * 100}%, ${left * 100}% ${top * 100}%
-                )`,
-                backgroundColor: '#000000aa'
-            }}/>
+            {/*<div className="mask" style={{*/}
+            {/*    position: "absolute",*/}
+            {/*    left: 0,*/}
+            {/*    width: `${100}%`,*/}
+            {/*    top: 0,*/}
+            {/*    height: `100%`,*/}
+            {/*    clipPath: `polygon(*/}
+            {/*    0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%,*/}
+            {/*    ${left * 100}% ${top * 100}%, ${left * 100}% ${bottom * 100}%, ${right * 100}% ${bottom * 100}%, ${right * 100}% ${top * 100}%, ${left * 100}% ${top * 100}%*/}
+            {/*    )`,*/}
+            {/*    backgroundColor: '#000000aa'*/}
+            {/*}}/>*/}
 
         </div>
     )
