@@ -1,10 +1,13 @@
 import {NormalFilter} from "./shader/normal";
-import {createFramebufferTexture, createTexture, deleteFramebuffer, deleteTexture} from "./GLUtil";
+import {createFramebufferTexture, createTexture, deleteFramebuffer, deleteTexture, mapValue} from "./GLUtil";
 import {EditType, IdentityObject, Layer, MyImage, MyWebGLRender, WebGLRenderer} from "../types/type";
 import {ColorFilter} from "./shader/Color";
 import {ColorOffset} from "./shader/colorOffset";
 import {LutFilter} from "./shader/lutFilter";
+import {AlphaMaskFilter} from "./shader/alphaMaskFilter";
 
+const vertexCoord2TexCoordX = mapValue(-1, 1, 0, 1);
+const vertexCoord2TexCoordY = mapValue(-1, 1, 1, 0);
 export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWebGLRender => {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
     let width = gl.canvas.width;
@@ -42,7 +45,8 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
         normalFilter: NormalFilter(gl, vertexBuffer, texCoordBuffer),
         colorFilter: ColorFilter(gl, vertexBuffer, texCoordBuffer),
         colorOffsetFilter: ColorOffset(gl, vertexBuffer, texCoordBuffer),
-        lutFilter: LutFilter(gl, vertexBuffer, texCoordBuffer)
+        lutFilter: LutFilter(gl, vertexBuffer, texCoordBuffer),
+        alphaMaskFilter: AlphaMaskFilter(gl, vertexBuffer, texCoordBuffer)
     };
     let [framebuffers, textures] = createFramebufferTexture(gl, 2, width, height);
     let texture = createTexture(gl);
@@ -179,6 +183,19 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                     renderCount = passFramebuffer(gl, filters.lutFilter.program, renderCount, () => {
                         if (filters.lutFilter.program && filters.lutFilter.setFilter && layer.filter.type !== 'normal') {
                             filters.lutFilter.setFilter(layer.filter.type, layer.filter.intensity);
+                        }
+                    });
+                }
+                if (layer.editStatus === EditType.transform) {
+                    renderCount = passFramebuffer(gl, filters.alphaMaskFilter.program, renderCount, () => {
+                        if (filters.alphaMaskFilter.setClip) {
+                            let w = (layer.originPosition.x2 - layer.originPosition.x1);
+                            let h = (layer.originPosition.y2 - layer.originPosition.y1);
+                            let l = vertexCoord2TexCoordX(layer.originPosition.x1 + w * layer.transform.left);
+                            let r = vertexCoord2TexCoordX(layer.originPosition.x2 - w * layer.transform.right);
+                            let t = vertexCoord2TexCoordY(layer.originPosition.y1 + h * layer.transform.top);
+                            let b = vertexCoord2TexCoordY(layer.originPosition.y2 - h * layer.transform.bottom);
+                            filters.alphaMaskFilter.setClip(l, r, t, b);
                         }
                     });
                 }
