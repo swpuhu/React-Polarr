@@ -85,7 +85,7 @@ export const ColorFilter:React.FC = (props) => {
                     if (layer && layer.color.editingProperty === item.type) {
                         isShow = true;
                     }
-                    return isShow ? <ControlSlider className={isShow ? '' : 'hide'} key={item.type} onChange={item.onChange} value={item.value} min={item.min} max={item.max} step={1}/> : null
+                    return isShow ? <ControlSlider className={isShow ? '' : 'hide'} key={item.type} onChange={item.onChange} value={item.value} min={item.min} max={item.max} step={1} label={item.label}/> : null
                 })
             }
             <Wrapper>

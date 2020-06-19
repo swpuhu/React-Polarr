@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef} from "react";
 import styled from "styled-components";
 import {useFile} from "../lib/useFile";
 import {Context} from "../Context";
-import {ActionType, EditStatus, EditType, Layer, MyCanvas} from "../types/type";
+import {ActionType, EditStatus, EditType, Layer, MyCanvas, StateType} from "../types/type";
 import {Canvas} from "../render/Canvas";
 // @ts-ignore
 import StatisticColorWorker from '../lib/statisticColor.worker';
@@ -45,9 +45,9 @@ worker.onmessage = (e: any) => {
 const histogramCanvas = Histogram(360, 150);
 const canvas = Canvas(window.devicePixelRatio * window.innerWidth, window.devicePixelRatio * (window.innerHeight - 92));
 const offCanvas = Canvas(300, 200, true);
-const analyzeImage = debounce((canvas: MyCanvas, layer: Layer) => {
-    if (canvas) {
-        let [x1, y1, x2, y2] = canvas.renderer.render(layer);
+const analyzeImage = debounce((state: StateType, canvas: MyCanvas, layer: Layer) => {
+    if (canvas && layer && state.transformStatus !== EditType.transform) {
+        let [x1, y1, x2, y2] = canvas.renderer.render(state, layer);
         let data = new Uint8ClampedArray((x2 - x1) * (y2 - y1) * 4);
         canvas.gl.readPixels(x1, y1, x2 - x1, y2 - y1, canvas.gl.RGBA, canvas.gl.UNSIGNED_BYTE, data);
         worker.postMessage([data, histogramCanvas.canvasElement.height], [data.buffer]);
@@ -58,7 +58,6 @@ const analyzeImage = debounce((canvas: MyCanvas, layer: Layer) => {
 const Main: React.FC = () => {
     const {state: states, dispatch} = useContext(Context);
     const layer = getLastState(states.historyLayers);
-    console.log(states);
     const {input} = useFile((file) => {
     });
 
@@ -74,14 +73,14 @@ const Main: React.FC = () => {
                     container.appendChild(canvas.canvasElement);
                     container.appendChild(histogramCanvas.canvasElement);
                 }
-                let [x1] = canvas.renderer.render(layer);
+                let [x1] = canvas.renderer.render(states, layer);
                 analyzeImage(canvas, layer);
                 if (x1 !== undefined) {
                     if (states.savePicture && offCanvas) {
                         if (offCanvas.canvasElement.width !== states.width || offCanvas.canvasElement.height !== states.height) {
                             layer && layer.source && offCanvas.viewport(layer.source.width, layer.source.height);
                         }
-                        offCanvas.renderer.render(layer);
+                        offCanvas.renderer.render(states, layer);
                         saveCanvasPicture(offCanvas.canvasElement, '保存图片.jpeg').then(r => dispatch({type: ActionType.finishSavePicture, payload: null}))
 
                     }
@@ -97,18 +96,18 @@ const Main: React.FC = () => {
     );
 
     const touchStart = (e: React.TouchEvent) => {
-        if (canvas && layer && layer.editStatus !== EditType.transform) {
-            canvas.renderer.render(layer, true);
+        if (canvas && layer && states.transformStatus !== EditType.transform) {
+            canvas.renderer.render(states, layer, true);
         }
     };
     const touchEnd = () => {
         if (canvas) {
-            canvas.renderer.render(layer);
+            canvas.renderer.render(states, layer);
         }
     };
     const reactCanvas = (
             <Center ref={canvasContainer} onTouchStart={touchStart} onTouchEnd={touchEnd}>
-            {layer && layer.editStatus === EditType.transform ?
+            {layer && states.transformStatus === EditType.transform ?
                 (
                     <div>
                         <ResizeBox/>

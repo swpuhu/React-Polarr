@@ -48,7 +48,8 @@ type Props = {
     min: number
     max: number
     step: number,
-    className: string
+    className: string,
+    label: string
 }
 export const ControlSlider:React.FC<Props> = (props) => {
     const pointRef = useRef<HTMLDivElement>(null);
@@ -65,7 +66,7 @@ export const ControlSlider:React.FC<Props> = (props) => {
     const touchStart = (e: React.TouchEvent) => {
         e.persist();
         let bar = barRef.current;
-        dispatch({type: ActionType.addHistory, payload: 'updateProperty'});
+        dispatch({type: ActionType.addHistory, payload: props.label});
         const touchmove = (ev: TouchEvent) => {
             ev.preventDefault();
             if (bar) {

@@ -4,7 +4,6 @@ export const initLayer = (source: MyImage): Layer => {
     return {
         historyType: 'openFile',
         trackable: true,
-        editStatus: EditType.none,
         source: source,
         position: {
             x1: 0,

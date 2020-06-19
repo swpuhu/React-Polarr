@@ -1,13 +1,6 @@
 import React, {createContext, useReducer} from "react";
 import {ActionType, EditStatus, EditType, Layer, Position, ProcessStatus, StateType} from "./types/type";
-import {
-    clone,
-    getLastState,
-    getLastStateIndex,
-    initLayer,
-    updateLayerProperty,
-    updateLayerSubProperty
-} from "./lib/util";
+import {clone, getLastStateIndex, initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
 import imgSrc from './icons/example.jpg';
 
 let mode = 0;
@@ -52,6 +45,7 @@ export const filterStamp = {
 const initialState: StateType = {
     historyType: null,
     editStatus: EditStatus.IDLE,
+    transformStatus: EditType.none,
     processStatus: ProcessStatus.none,
     savePicture: false,
     openStatus: false,
@@ -172,19 +166,15 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
             }
             return state;
         case ActionType.startClipPath:
-            if (state.historyLayers[state.historyLayers.length - 1]) {
-                let index = getLastStateIndex(state.historyLayers);
-                state.historyLayers[index] = updateLayerProperty<"editStatus">(state.historyLayers[index], EditType.transform,"editStatus");
-                return {...state};
-            }
-            return state;
+            return {
+                ...state,
+                transformStatus: EditType.transform
+            };
         case ActionType.finishClipPath:
-            if (state.historyLayers[state.historyLayers.length - 1]) {
-                let index = getLastStateIndex(state.historyLayers);
-                state.historyLayers[index] = updateLayerProperty<"editStatus">(state.historyLayers[index], EditType.none,"editStatus");
-                return {...state};
-            }
-            return state;
+            return {
+                ...state,
+                transformStatus: EditType.none
+            };
         case ActionType.updateTransform:
             if (state.historyLayers[state.historyLayers.length - 1]) {
                 let index = getLastStateIndex(state.historyLayers);
@@ -241,13 +231,17 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
         case ActionType.addHistory:
             lastState = clone(state.historyLayers[getLastStateIndex(state.historyLayers)]);
             lastState.historyType = action.payload;
-            return {
+            let newState = {
                 ...state,
                 historyLayers: [
                     ...state.historyLayers,
                     lastState
                 ].filter(item => item.trackable)
             };
+            while (newState.historyLayers.length > 50) {
+                newState.historyLayers.shift();
+            }
+            return newState;
         case ActionType.backTrackHistory:
             return {
                 ...state,

@@ -175,8 +175,7 @@ export const ResizeBox: React.FC = () => {
         let relativeX = e.touches[0].clientX - this.offsetLeft;
         let relativeY = e.touches[0].clientY - this.offsetTop;
         currentHandler = switchHandler<HandlerType>(leftBoundary, rightBoundary, topBoundary, bottomBoundary, relativeX, relativeY, handlers);
-        if (currentHandler) {
-        }
+        dispatch({type: ActionType.addHistory, payload: "变换"});
         const touchMove = (ev: TouchEvent) => {
             ev.preventDefault();
             let offsetX = ev.touches[0].clientX - e.touches[0].clientX;

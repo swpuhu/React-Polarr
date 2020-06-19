@@ -111,7 +111,6 @@ type HistoryType = 'openFile' | 'updateProperty' | null
 export type Layer = {
     trackable: boolean,
     historyType: HistoryType,
-    editStatus: EditType;
     source: MyImage;
     position: Position;
     originPosition: Position;
@@ -123,6 +122,7 @@ export type Layer = {
 export type StateType = {
     historyType: HistoryType
     editStatus: EditStatus;
+    transformStatus: EditType;
     openStatus: boolean;
     processStatus: ProcessStatus;
     savePicture: boolean;
@@ -134,7 +134,7 @@ export type StateType = {
 }
 
 export type MyWebGLRender = {
-    render: (layer: Layer | null, onlyRenderOrigin?: boolean) => number[];
+    render: (state: StateType, layer: Layer | null, onlyRenderOrigin?: boolean) => number[];
     viewport: (width: number, height: number) =>  void
 
 }

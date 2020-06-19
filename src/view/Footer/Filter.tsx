@@ -189,12 +189,14 @@ export const Filter:React.FC = (props) => {
             {showIndicator && showIndicator.children.map((item, index) => {
                 let isActive = layer && layer.filter.type === item.subType;
                 // let value = layer ? layer.filter.intensity : 0;
-                return <FilterIndicator key={item.subType ? item.subType : index} value={layer ? layer.filter.intensity : 0}                                            min={0}
+                return <FilterIndicator key={item.subType ? item.subType : index} value={layer ? layer.filter.intensity : 0}
+                                        min={0}
                                         max={100}
                                         label={item.subType ? labelMap[item.subType] : ''}
                                         className={item.subType ? item.subType : ''}
                                         onClick={(e) => {
                                             e.stopPropagation();
+                                            dispatch({type: ActionType.addHistory, payload: labelMap[item.subType]});
                                             dispatch({type: ActionType.updateFilterSubType, payload: item.subType});
                                         }}
                                         background={item.subType ? states.filterStamp[item.subType] : ''}
@@ -208,7 +210,9 @@ export const Filter:React.FC = (props) => {
             {layer && layer.filter.type !== 'normal'
                 ? <ControlSlider onChange={changeIntensity} value={layer ? layer.filter.intensity : 0}
                                  min={0} max={100} step={1}
-                                 className={'filter-indicator'}/>
+                                 className={'filter-indicator'}
+                                 label={"滤镜强度"}
+                                />
                 : null}
             {states.showAllFilter ?
                 <div className="all-filter">
