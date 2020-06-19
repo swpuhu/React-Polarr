@@ -35,7 +35,8 @@ export enum ActionType {
     updateFilterIntensity,
     updateFilterStamp,
     updateOpenStatus,
-    updateShowAllFilter
+    updateShowAllFilter,
+    addHistory
 }
 
 export enum EditType {

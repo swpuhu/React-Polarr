@@ -58,7 +58,7 @@ const analyzeImage = debounce((canvas: MyCanvas, layer: Layer) => {
 const Main: React.FC = () => {
     const {state: states, dispatch} = useContext(Context);
     const state = states[states.length - 1];
-    console.log(state);
+    console.log(states);
     const {input} = useFile((file) => {
     });
 

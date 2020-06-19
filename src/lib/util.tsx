@@ -258,3 +258,33 @@ export async function loadImages (srcObject: Partial<LutFiltersType<string>>) {
     }
     return obj;
 }
+
+function getObjectName (obj: any): string {
+    return Object.prototype.toString.call(obj);
+}
+export function clone (obj: any[] | Object): any {
+    let res;
+    if (Array.isArray(obj)) {
+        res = [];
+        for (let item of obj) {
+            if (getObjectName(obj) === '[object Object]' || Array.isArray(item)) {
+                res.push(clone(item));
+            } else {
+                res.push(item);
+            }
+        }
+    } else if (typeof obj === 'object') {
+        res = {};
+        for (let key in obj) {
+            // @ts-ignore
+            if (getObjectName(obj[key]) === '[object Object]' || Array.isArray(obj[key])) {
+                // @ts-ignore
+                res[key] = clone(obj[key]);
+            } else {
+                // @ts-ignore
+                res[key] = obj[key];
+            }
+        }
+    }
+    return res
+}
