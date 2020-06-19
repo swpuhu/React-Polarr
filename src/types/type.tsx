@@ -109,6 +109,8 @@ export type Filter<T extends FilterCategoryType> = {
 }
 type HistoryType = 'openFile' | 'updateProperty' | null
 export type Layer = {
+    trackable: boolean,
+    historyType: HistoryType,
     editStatus: EditType;
     source: MyImage;
     position: Position;
@@ -119,13 +121,12 @@ export type Layer = {
     filter: Filter<FilterCategoryType>
 }
 export type StateType = {
-    trackable: boolean,
     historyType: HistoryType
     editStatus: EditStatus;
     openStatus: boolean;
     processStatus: ProcessStatus;
     savePicture: boolean;
-    currentLayer: Layer | null,
+    historyLayers: Layer[]
     width: number,
     height: number,
     filterStamp: LutFiltersType<string>,

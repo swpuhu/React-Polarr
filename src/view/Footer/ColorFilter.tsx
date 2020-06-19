@@ -18,7 +18,7 @@ const OuterWrapper = styled.div`
 
 export const ColorFilter:React.FC = (props) => {
     const {state: states, dispatch} = useContext(Context);
-    const state = getLastState(states);
+    const layer = getLastState(states.historyLayers);
     const indicators: {
         type: Exclude<keyof Color, 'editingProperty'>,
         min: number
@@ -31,10 +31,10 @@ export const ColorFilter:React.FC = (props) => {
             type: "temperature",
             min: -100,
             max: 100,
-            value: state.currentLayer ? state.currentLayer.color.temperature : 0,
+            value: layer ? layer.color.temperature : 0,
             label: "色温",
             onChange: (value) => {
-                if (state.currentLayer) {
+                if (layer) {
                     dispatch({type: ActionType.updateColorValue, payload: {type: "temperature", value: value}});
                 }
             }
@@ -43,10 +43,10 @@ export const ColorFilter:React.FC = (props) => {
             type: "tint",
             min: -100,
             max: 100,
-            value: state.currentLayer ? state.currentLayer.color.tint : 0,
+            value: layer ? layer.color.tint : 0,
             label: "色调",
             onChange: (value) => {
-                if (state.currentLayer) {
+                if (layer) {
                     dispatch({type: ActionType.updateColorValue, payload: {type: "tint", value: value}});
                 }
             }
@@ -55,10 +55,10 @@ export const ColorFilter:React.FC = (props) => {
             type: "hue",
             min: -180,
             max: 180,
-            value: state.currentLayer ? state.currentLayer.color.hue : 0,
+            value: layer ? layer.color.hue : 0,
             label: "色相",
             onChange: (value) => {
-                if (state.currentLayer) {
+                if (layer) {
                     dispatch({type: ActionType.updateColorValue, payload: {type: "hue", value: value}});
                 }
             }
@@ -67,10 +67,10 @@ export const ColorFilter:React.FC = (props) => {
             type: "saturation",
             min: -100,
             max: 100,
-            value: state.currentLayer ? state.currentLayer.color.saturation : 0,
+            value: layer ? layer.color.saturation : 0,
             label: "饱和度",
             onChange: (value) => {
-                if (state.currentLayer) {
+                if (layer) {
                     dispatch({type: ActionType.updateColorValue, payload: {type: "saturation", value: value}});
                 }
             }
@@ -82,7 +82,7 @@ export const ColorFilter:React.FC = (props) => {
             {
                 indicators.map(item => {
                     let isShow = false;
-                    if (state.currentLayer && state.currentLayer.color.editingProperty === item.type) {
+                    if (layer && layer.color.editingProperty === item.type) {
                         isShow = true;
                     }
                     return isShow ? <ControlSlider className={isShow ? '' : 'hide'} key={item.type} onChange={item.onChange} value={item.value} min={item.min} max={item.max} step={1}/> : null
@@ -91,12 +91,12 @@ export const ColorFilter:React.FC = (props) => {
             <Wrapper>
                 {indicators.map(item => {
                     return <Indicator key={item.type}
-                                      value={state.currentLayer ? state.currentLayer.color[item.type] : 0}
+                                      value={layer ? layer.color[item.type] : 0}
                                       onClick={() => dispatch({type: ActionType.updateColorType, payload: item.type})}
                                       min={item.min}
                                       max={item.max}
                                       label={item.label}
-                                      isActive={state.currentLayer ? state.currentLayer.color.editingProperty === item.type : false}
+                                      isActive={layer ? layer.color.editingProperty === item.type : false}
                                       className={item.type}/>
                 })}
             </Wrapper>

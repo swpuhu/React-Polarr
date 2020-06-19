@@ -28,6 +28,7 @@ const useFile = (onChange: (file: File) => void) => {
                         dispatch({type: ActionType.addLayer, payload: initLayer(image)});
                         dispatch({type: ActionType.updateCanvasSize, payload: {width: image.width, height: image.height}});
                         dispatch({type: ActionType.updateEditStatus, payload: EditStatus.EDTING});
+                        dispatch({type: ActionType.updateOpenStatus, payload: false});
                         URL.revokeObjectURL(url);
                     }, 50);
                 };

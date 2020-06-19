@@ -49,19 +49,18 @@ export const filterStamp = {
     'petalite': '',
 };
 
-const initialState: StateType[] = [{
-    trackable: true,
+const initialState: StateType = {
     historyType: null,
-    editStatus: mode === 1 ? EditStatus.EDTING : EditStatus.IDLE,
+    editStatus: EditStatus.IDLE,
     processStatus: ProcessStatus.none,
     savePicture: false,
     openStatus: false,
-    currentLayer: mode === 1 ? layer : null,
+    historyLayers: [],
     width: window.innerWidth,
     height: window.innerHeight - 92,
     filterStamp: filterStamp,
     showAllFilter: false
-}];
+};
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight - 92;
 
@@ -70,9 +69,10 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
     let lastState;
     switch (action.type) {
         case ActionType.updateEditStatus:
-            lastState = state[state.length - 1];
-            lastState.editStatus = action.payload;
-            return [...state];
+            return {
+                ...state,
+                editStatus: action.payload
+            };
         case ActionType.addLayer:
                 layer = action.payload as Layer;
             if (layer.source.width / layer.source.height > screenWidth / screenHeight) {
@@ -98,99 +98,106 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 layer.originPosition.y1 = layer.position.y1;
                 layer.originPosition.y2 = layer.position.y2;
             }
-            lastState = state[state.length - 1];
-            lastState.currentLayer = layer;
-            lastState.historyType = 'openFile';
-            return [...state];
+            
+            layer.historyType = 'openFile';
+            return {
+                ...state,
+                historyLayers: [...state.historyLayers, layer],
+            };
         case ActionType.updateCanvasSize:
-            lastState = state[state.length - 1];
-            lastState.width = action.payload.width;
-            lastState.height = action.payload.height;
-            return [...state];
+            return {
+                ...state,
+                width: action.payload.width,
+                height: action.payload.height
+            };
         case ActionType.savePicture:
-            lastState = state[state.length - 1];
-            lastState.savePicture = true;
-            return [...state];
+            return {
+                ...state,
+                savePicture: true
+            };
         case ActionType.finishSavePicture:
-            lastState = state[state.length - 1];
-            lastState.savePicture = false;
-            return [...state];
+            return {
+                ...state,
+                savePicture: false,
+            };
         case ActionType.updateColorValue:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerSubProperty<"color">(state[index], action.payload.value, "color", action.payload.type);
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"color">(state.historyLayers[index], action.payload.value, "color", action.payload.type);
+                return {
+                    ...state
+                };
             }
             return state;
         case ActionType.updateColorType:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerSubProperty<"color">(state[index], action.payload, "color", "editingProperty");
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"color">(state.historyLayers[index], action.payload, "color", "editingProperty");
+                return {...state};
             }
             return state;
         case ActionType.updateEffectValue:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerSubProperty<"effect">(state[index], action.payload.value, "effect", action.payload.type);
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"effect">(state.historyLayers[index], action.payload.value, "effect", action.payload.type);
+                return {...state};
             }
             return state;
         case ActionType.updateEffectType:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerSubProperty<"effect">(state[index], action.payload, "effect", "editingProperty");
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"effect">(state.historyLayers[index], action.payload, "effect", "editingProperty");
+                return {...state};
             }
             return state;
         case ActionType.updateFilterSubType:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerSubProperty<"filter">(state[index], action.payload, "filter", "type");
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"filter">(state.historyLayers[index], action.payload, "filter", "type");
+                return {...state};
             }
             return state;
         case ActionType.updateFilterCategory:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerSubProperty<"filter">(state[index], action.payload, "filter", "currentCategory");
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"filter">(state.historyLayers[index], action.payload, "filter", "currentCategory");
+                return {...state};
             }
             return state;
         case ActionType.updateFilterIntensity:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerSubProperty<"filter">(state[index], action.payload, "filter", "intensity");
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"filter">(state.historyLayers[index], action.payload, "filter", "intensity");
+                return {...state};
             }
             return state;
         case ActionType.startClipPath:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerProperty<"editStatus">(state[index], EditType.transform,"editStatus");
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerProperty<"editStatus">(state.historyLayers[index], EditType.transform,"editStatus");
+                return {...state};
             }
             return state;
         case ActionType.finishClipPath:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerProperty<"editStatus">(state[index], EditType.none,"editStatus");
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerProperty<"editStatus">(state.historyLayers[index], EditType.none,"editStatus");
+                return {...state};
             }
             return state;
         case ActionType.updateTransform:
-            if (state[state.length - 1]) {
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerProperty<"transform">(state[index], action.payload, "transform");
-                return [...state];
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerProperty<"transform">(state.historyLayers[index], action.payload, "transform");
+                return {...state};
             }
             return state;
         case ActionType.updatePosition:
-            if (state[state.length - 1]) {
-                const prev = state[state.length - 1];
-                if (!prev.currentLayer) return;
-                let w = (1 - prev.currentLayer.transform.left - prev.currentLayer.transform.right) * (prev.currentLayer.originPosition.x2 - prev.currentLayer.originPosition.x1);
-                let h = (1 - prev.currentLayer.transform.top - prev.currentLayer.transform.bottom) * (prev.currentLayer.originPosition.y2 - prev.currentLayer.originPosition.y1);
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                const prev = state.historyLayers[state.historyLayers.length - 1];
+                if (!prev) return;
+                let w = (1 - prev.transform.left - prev.transform.right) * (prev.originPosition.x2 - prev.originPosition.x1);
+                let h = (1 - prev.transform.top - prev.transform.bottom) * (prev.originPosition.y2 - prev.originPosition.y1);
                 let wPx = w * screenWidth;
                 let hPx = h * screenHeight;
                 let position: Position = {
@@ -211,33 +218,44 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                     position.x2 = w / 2 * scale;
                     position.x1 = -w / 2 * scale;
                 }
-                let index = getLastStateIndex(state);
-                state[index] = updateLayerProperty<"position">(state[index], position, "position");
-                return [...state];
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerProperty<"position">(state.historyLayers[index], position, "position");
+                return {...state};
             }
             return state;
         case ActionType.updateFilterStamp:
-            lastState = getLastState(state);
-            lastState.openStatus = false;
-            lastState.filterStamp = action.payload;
-            return [...state];
+            return {
+                ...state,
+                filterStamp: action.payload
+            };
         case ActionType.updateOpenStatus:
-            lastState = getLastState(state);
-            lastState.openStatus = action.payload;
-            return [...state];
+            return {
+                ...state,
+                openStatus: action.payload
+            }
         case ActionType.updateShowAllFilter:
-            lastState = getLastState(state);
-            lastState.showAllFilter = action.payload;
-            return [...state];
+            return {
+                ...state,
+                showAllFilter: action.payload
+            };
         case ActionType.addHistory:
-            lastState = clone(state[getLastStateIndex(state)]);
+            lastState = clone(state.historyLayers[getLastStateIndex(state.historyLayers)]);
             lastState.historyType = action.payload;
-            return [...state, lastState].filter(item => item.trackable);
+            return {
+                ...state,
+                historyLayers: [
+                    ...state.historyLayers,
+                    lastState
+                ].filter(item => item.trackable)
+            };
         case ActionType.backTrackHistory:
-            return state.map((item, ix)=> {
-                item.trackable = ix <= (action.payload as number);
-                return item;
-            });
+            return {
+                ...state,
+                historyLayers: state.historyLayers.map((item, ix)=> {
+                    item.trackable = ix <= (action.payload as number);
+                    return item;
+                })
+            };
         default:
             return state;
     }

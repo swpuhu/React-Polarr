@@ -57,7 +57,7 @@ type IndicatorsType = {
 }
 export const Filter:React.FC = (props) => {
     const {state: states, dispatch} = useContext(Context);
-    const state = getLastState(states);
+    const layer = getLastState(states.historyLayers);
     const labelMap = {
         'normal': '原图',
         'flowerStone': '万花石',
@@ -153,8 +153,8 @@ export const Filter:React.FC = (props) => {
             ]
         }
     ];
-    let showIndicator = indicators.find(item => state.currentLayer && item.type === state.currentLayer.filter.currentCategory);
-    if (showIndicator && !state.showAllFilter) {
+    let showIndicator = indicators.find(item => layer && item.type === layer.filter.currentCategory);
+    if (showIndicator && !states.showAllFilter) {
         showIndicator.children.unshift({
             subType: 'normal',
         })
@@ -168,8 +168,8 @@ export const Filter:React.FC = (props) => {
                 <div className="title">{firstClass.type}</div>
                 <div className="body">
                     {firstClass.children.map((item, index) => {
-                        let isActive = state.currentLayer && state.currentLayer.filter.type === item.subType;
-                        return <FilterIndicator key={item.subType ? item.subType : index} value={state.currentLayer ? state.currentLayer.filter.intensity : 0}
+                        let isActive = layer && layer.filter.type === item.subType;
+                        return <FilterIndicator key={item.subType ? item.subType : index} value={layer ? layer.filter.intensity : 0}
                                          min={0}
                                          max={100}
                                          label={item.subType ? labelMap[item.subType] : ''}
@@ -178,7 +178,7 @@ export const Filter:React.FC = (props) => {
                                              dispatch({type: ActionType.updateFilterCategory, payload: firstClass.type});
                                              dispatch({type: ActionType.updateFilterSubType, payload: item.subType});
                                          }}
-                                         background={item.subType ? state.filterStamp[item.subType] : ''}
+                                         background={item.subType ? states.filterStamp[item.subType] : ''}
                                          isActive={!!isActive}/>
                     })}
                 </div>
@@ -187,9 +187,9 @@ export const Filter:React.FC = (props) => {
     });
     const currentFilter = <InnerWrapper>
             {showIndicator && showIndicator.children.map((item, index) => {
-                let isActive = state.currentLayer && state.currentLayer.filter.type === item.subType;
-                // let value = state.currentLayer ? state.currentLayer.filter.intensity : 0;
-                return <FilterIndicator key={item.subType ? item.subType : index} value={state.currentLayer ? state.currentLayer.filter.intensity : 0}                                            min={0}
+                let isActive = layer && layer.filter.type === item.subType;
+                // let value = layer ? layer.filter.intensity : 0;
+                return <FilterIndicator key={item.subType ? item.subType : index} value={layer ? layer.filter.intensity : 0}                                            min={0}
                                         max={100}
                                         label={item.subType ? labelMap[item.subType] : ''}
                                         className={item.subType ? item.subType : ''}
@@ -197,20 +197,20 @@ export const Filter:React.FC = (props) => {
                                             e.stopPropagation();
                                             dispatch({type: ActionType.updateFilterSubType, payload: item.subType});
                                         }}
-                                        background={item.subType ? state.filterStamp[item.subType] : ''}
+                                        background={item.subType ? states.filterStamp[item.subType] : ''}
                                         isActive={!!isActive}/>
             })}
 
         </InnerWrapper>;
-    console.log(state.currentLayer);
+    console.log(layer);
     return (
         <OutterWrapper>
-            {state.currentLayer && state.currentLayer.filter.type !== 'normal'
-                ? <ControlSlider onChange={changeIntensity} value={state.currentLayer ? state.currentLayer.filter.intensity : 0}
+            {layer && layer.filter.type !== 'normal'
+                ? <ControlSlider onChange={changeIntensity} value={layer ? layer.filter.intensity : 0}
                                  min={0} max={100} step={1}
                                  className={'filter-indicator'}/>
                 : null}
-            {state.showAllFilter ?
+            {states.showAllFilter ?
                 <div className="all-filter">
                     {allFilters}
                 </div>:

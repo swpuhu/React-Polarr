@@ -2,6 +2,8 @@ import {AdaptionType, EditType, Layer, LutFiltersType, MyImage, Picture, StateTy
 
 export const initLayer = (source: MyImage): Layer => {
     return {
+        historyType: 'openFile',
+        trackable: true,
         editStatus: EditType.none,
         source: source,
         position: {
@@ -167,31 +169,25 @@ export const getAvg = (array: number[]) => {
 };
 
 
-export function updateLayerSubProperty<T extends keyof Layer> (state: StateType, payload: Layer[T][keyof Layer[T]], property: T, subProperty: keyof Layer[T],) {
-    if (state.currentLayer) {
-        let newLayer = {...state.currentLayer};
+export function updateLayerSubProperty<T extends keyof Layer> (layer: Layer, payload: Layer[T][keyof Layer[T]], property: T, subProperty: keyof Layer[T],) {
+    if (layer) {
+        let newLayer = {...layer};
         newLayer[property][subProperty] = payload;
 
-        return {
-            ...state,
-            currentLayer: newLayer,
-        }
+        return newLayer;
     }
-    return state;
+    return layer;
 }
 
 
-export function updateLayerProperty<T extends keyof Layer> (state: StateType, payload: Layer[T], property: T) {
-    if (state.currentLayer) {
-        let newLayer = {...state.currentLayer};
+export function updateLayerProperty<T extends keyof Layer> (layer: Layer, payload: Layer[T], property: T) {
+    if (layer) {
+        let newLayer = {...layer};
         newLayer[property] = payload;
 
-        return {
-            ...state,
-            currentLayer: newLayer,
-        }
+        return newLayer;
     }
-    return state;
+    return layer;
 }
 
 export function isDetachedDOM (dom: HTMLElement): boolean {
@@ -290,26 +286,26 @@ export function clone (obj: any[] | Object): any {
 }
 
 
-export const getLastState = (state: StateType[]) => {
+export const getLastState = (layers: Layer[]) => {
     let current, next;
-    for (let i = 0; i < state.length; i++) {
-        current = state[i];
-        next = state[i + 1];
+    for (let i = 0; i < layers.length; i++) {
+        current = layers[i];
+        next = layers[i + 1];
         if (next && !next.trackable) {
             return current;
         }
     }
-    return state[state.length - 1];
+    return layers[layers.length - 1];
 };
 
-export const getLastStateIndex = (state: StateType[]) => {
+export const getLastStateIndex = (layers: Layer[]) => {
     let current, next;
-    for (let i = 0; i < state.length; i++) {
-        current = state[i];
-        next = state[i + 1];
+    for (let i = 0; i < layers.length; i++) {
+        current = layers[i];
+        next = layers[i + 1];
         if (next && !next.trackable) {
             return i;
         }
     }
-    return state.length - 1;
+    return layers.length - 1;
 };

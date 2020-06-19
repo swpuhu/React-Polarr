@@ -28,10 +28,10 @@ export const HistoryList: React.FC = (props) => {
     };
     return (
         <Wrapper>
-            {states.slice().reverse().map((state, index) => state.historyType ?
+            {states.historyLayers.slice().reverse().map((state, index) => state.historyType ?
                 <div className={"item" + (state.trackable ? '' : ' disappear')}
                      key={index} 
-                     onClick={() => backTrack(states.length - index - 1)}>{state.historyType}</div>
+                     onClick={() => backTrack(states.historyLayers.length - index - 1)}>{state.historyType}</div>
                 : null)}
         </Wrapper>
     )

@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 
 const Footer: React.FC = () => {
     const {state: states, dispatch} = useContext(Context);
-    const state = getLastState(states);
+    const layer = getLastState(states.historyLayers);
     const initButtons = [
         {
             id: 1,
@@ -61,7 +61,7 @@ const Footer: React.FC = () => {
     const [buttons, setButtons] = useState(initButtons);
 
     const onClick = (id: number) => {
-        if (state.editStatus !== EditStatus.EDTING) return;
+        if (states.editStatus !== EditStatus.EDTING) return;
         if (id === 2) {
             dispatch({type: ActionType.startClipPath, payload: null});
         } else {
@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
                                                    key={button.id}
                                                    label={button.label}
                                                    iconName={button.iconName}
-                                                   isActive={state.editStatus === EditStatus.EDTING}
+                                                   isActive={states.editStatus === EditStatus.EDTING}
                                                    isSelected={button.selected}/>)}
             </div>
         </Wrapper>
