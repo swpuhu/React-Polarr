@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {Context} from "../../Context";
 import {mapValue} from "../../render/GLUtil";
 import {H1, H2, InnerWrapper, LB, LT, MB, ML, MR, MT, RB, RT, V1, V2, Wrapper} from "./ResizeBoxStyle";
@@ -48,6 +48,8 @@ export const ResizeBox: React.FC = () => {
             let offsetYPercent = offsetY / (window.innerHeight * (layer.originPosition.y2 - layer.originPosition.y1) / 2);
             let top = initTop + offsetYPercent;
             let right = initRight - offsetXPercent;
+            top = clamp(top, 0, 1);
+            right = clamp(right, 0, 1);
             dispatch({type: ActionType.updateTransform, payload: {
                     ...layer.transform,
                     top: top,
@@ -161,6 +163,7 @@ export const ResizeBox: React.FC = () => {
     const handlers: HandlerType[] = [nw, n, ne, w, drag, e, sw, s, se];
     let currentHandler: HandlerType | null = null;
     let leftBoundary, rightBoundary, topBoundary, bottomBoundary;
+    const [isFirst, setIsFirst] = useState(true);
     const touchStart = function (this: HTMLElement, e: TouchEvent) {
         e.preventDefault();
         if (!container.current || !layer) return;
@@ -174,8 +177,12 @@ export const ResizeBox: React.FC = () => {
         let initBottom = layer.transform.bottom;
         let relativeX = e.touches[0].clientX - this.offsetLeft;
         let relativeY = e.touches[0].clientY - this.offsetTop;
+        if (isFirst) {
+            dispatch({type: ActionType.addHistory, payload: '变换'});
+            setIsFirst(false);
+        }
+
         currentHandler = switchHandler<HandlerType>(leftBoundary, rightBoundary, topBoundary, bottomBoundary, relativeX, relativeY, handlers);
-        dispatch({type: ActionType.addHistory, payload: "变换"});
         const touchMove = (ev: TouchEvent) => {
             ev.preventDefault();
             let offsetX = ev.touches[0].clientX - e.touches[0].clientX;

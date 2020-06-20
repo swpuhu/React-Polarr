@@ -110,7 +110,7 @@ export type Filter<T extends FilterCategoryType> = {
 type HistoryType = 'openFile' | 'updateProperty' | null
 export type Layer = {
     trackable: boolean,
-    historyType: HistoryType,
+    historyType: string,
     source: MyImage;
     position: Position;
     originPosition: Position;

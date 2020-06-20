@@ -60,7 +60,7 @@ const Main: React.FC = () => {
     const layer = getLastState(states.historyLayers);
     const {input} = useFile((file) => {
     });
-
+    console.log(states.historyLayers);
     const open = () => {
         input.click();
     };
@@ -74,7 +74,7 @@ const Main: React.FC = () => {
                     container.appendChild(histogramCanvas.canvasElement);
                 }
                 let [x1] = canvas.renderer.render(states, layer);
-                analyzeImage(canvas, layer);
+                analyzeImage(states, canvas, layer);
                 if (x1 !== undefined) {
                     if (states.savePicture && offCanvas) {
                         if (offCanvas.canvasElement.width !== states.width || offCanvas.canvasElement.height !== states.height) {

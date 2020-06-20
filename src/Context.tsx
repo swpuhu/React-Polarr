@@ -1,6 +1,6 @@
 import React, {createContext, useReducer} from "react";
 import {ActionType, EditStatus, EditType, Layer, Position, ProcessStatus, StateType} from "./types/type";
-import {clone, getLastStateIndex, initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
+import {clone, getLastStateIndex, initLayer, objIsEqual, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
 import imgSrc from './icons/example.jpg';
 
 let mode = 0;
@@ -60,7 +60,7 @@ const screenHeight = window.innerHeight - 92;
 
 const reducer = (state: typeof initialState, action: {type: ActionType, payload: any}) => {
     let layer: Layer;
-    let lastState;
+    let lastState, newState;
     switch (action.type) {
         case ActionType.updateEditStatus:
             return {
@@ -93,10 +93,10 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 layer.originPosition.y2 = layer.position.y2;
             }
             
-            layer.historyType = 'openFile';
+            layer.historyType = '打开文件';
             return {
                 ...state,
-                historyLayers: [...state.historyLayers, layer],
+                historyLayers: [layer],
             };
         case ActionType.updateCanvasSize:
             return {
@@ -231,7 +231,8 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
         case ActionType.addHistory:
             lastState = clone(state.historyLayers[getLastStateIndex(state.historyLayers)]);
             lastState.historyType = action.payload;
-            let newState = {
+            lastState.trackable = true;
+            newState = {
                 ...state,
                 historyLayers: [
                     ...state.historyLayers,

@@ -204,7 +204,6 @@ export const Filter:React.FC = (props) => {
             })}
 
         </InnerWrapper>;
-    console.log(layer);
     return (
         <OutterWrapper>
             {layer && layer.filter.type !== 'normal'
