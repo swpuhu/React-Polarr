@@ -8,8 +8,12 @@ const useFile = (onChange: (file: File) => void) => {
     const input = document.createElement('input');
     const {dispatch} = useContext(Context);
     const {preProcessAll} = usePreProcess();
+    // <input type="file" id="xFile2" capture="camera" multiple="multiple" accept="image/*" class="imgInp1" @change='onUpload2($event)'  style="position:absolute;clip:rect(0 0 0 0); width: 100%; height: 105px; top:0px;" v-if="judgeFan">
     input.type = 'file';
+    input.setAttribute('capture', 'camera');
+    input.setAttribute('accept', 'image/*')
     const changeHandler = () => {
+
         if (input.files && input.files.length) {
             let file = input.files[0];
             if (/\.png$/.test(file.name) || /\.jpe?g$/.test(file.name) || /\.bmp$/.test(file.name)) {

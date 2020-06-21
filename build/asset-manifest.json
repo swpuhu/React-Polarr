@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/polarr/static/css/main.27810728.chunk.css",
-    "main.js": "/polarr/build/static/js/main.573240cf.chunk.js",
-    "main.js.map": "/polarr/build/static/js/main.573240cf.chunk.js.map",
+    "main.js": "/polarr/build/static/js/main.33e77d64.chunk.js",
+    "main.js.map": "/polarr/build/static/js/main.33e77d64.chunk.js.map",
     "runtime-main.js": "/polarr/build/static/js/runtime-main.544c5042.js",
     "runtime-main.js.map": "/polarr/build/static/js/runtime-main.544c5042.js.map",
-    "build/static/js/2.214508ce.chunk.js": "/polarr/build/static/js/2.214508ce.chunk.js",
-    "build/static/js/2.214508ce.chunk.js.map": "/polarr/build/static/js/2.214508ce.chunk.js.map",
-    "build/static/js/2.214508ce.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.214508ce.chunk.js.LICENSE.txt",
+    "build/static/js/2.159a00b3.chunk.js": "/polarr/build/static/js/2.159a00b3.chunk.js",
+    "build/static/js/2.159a00b3.chunk.js.map": "/polarr/build/static/js/2.159a00b3.chunk.js.map",
+    "build/static/js/2.159a00b3.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.159a00b3.chunk.js.LICENSE.txt",
     "e37bde1c74be17663942.worker.js": "/polarr/e37bde1c74be17663942.worker.js",
     "e37bde1c74be17663942.worker.js.map": "/polarr/e37bde1c74be17663942.worker.js.map",
     "index.html": "/polarr/index.html",
-    "precache-manifest.81761e9e5cee55c72311c90de376b809.js": "/polarr/precache-manifest.81761e9e5cee55c72311c90de376b809.js",
+    "precache-manifest.229b1c2dc151db5a65abe6997f210c52.js": "/polarr/precache-manifest.229b1c2dc151db5a65abe6997f210c52.js",
     "service-worker.js": "/polarr/service-worker.js",
     "static/css/main.27810728.chunk.css.map": "/polarr/static/css/main.27810728.chunk.css.map",
     "static/media/Flower Stone.cube.jpeg": "/polarr/static/media/Flower Stone.cube.fa1c8cea.jpeg",
@@ -37,8 +37,8 @@
   },
   "entrypoints": [
     "build/static/js/runtime-main.544c5042.js",
-    "build/static/js/2.214508ce.chunk.js",
+    "build/static/js/2.159a00b3.chunk.js",
     "static/css/main.27810728.chunk.css",
-    "build/static/js/main.573240cf.chunk.js"
+    "build/static/js/main.33e77d64.chunk.js"
   ]
 }

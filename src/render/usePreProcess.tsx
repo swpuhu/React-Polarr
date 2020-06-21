@@ -1,8 +1,9 @@
 import {createFramebufferTexture, createTexture} from "./GLUtil";
 import {NormalFilter} from "./shader/normal";
-import {LutFiltersType, LutFilterType, WebGLRenderer} from "../types/type";
+import {AdaptionType, LutFiltersType, LutFilterType, WebGLRenderer} from "../types/type";
 import {LutFilter} from "./shader/lutFilter";
 import {filterStamp} from "../Context";
+import {findAdaption} from "../lib/util";
 
 const width = 70 * window.devicePixelRatio;
 const height = 70 * window.devicePixelRatio;
@@ -70,11 +71,22 @@ export const usePreProcess = () => {
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
                 cacheImage = img;
             }
+            const aspect = gl.canvas.width / gl.canvas.height;
+            const imgAspect = img.width / img.height;
+            const adaption = findAdaption(img, aspect, true);
+            let scaleX = 1, scaleY = 1;
+            if (adaption === AdaptionType.widthAdaption) {
+                let _height = width / imgAspect;
+                scaleY = _height / gl.canvas.height;
+            } else {
+                let _width = height * imgAspect;
+                scaleX = _width / gl.canvas.width;
+            }
 
             renderCount = passFramebuffer(gl, normalFilter.program, renderCount, () => {
-                // normalFilter.setScale && normalFilter.setScale(scaleX, scaleY);
+                normalFilter.setScale && normalFilter.setScale(scaleX, scaleY, 0, 0);
             }, () => {
-                // normalFilter.setScale && normalFilter.setScale(1, 1);
+                normalFilter.setScale && normalFilter.setScale(1, 1);
             });
             if (type !== 'normal') {
                 passFramebuffer(gl, lutFilter.program, renderCount, () => {
