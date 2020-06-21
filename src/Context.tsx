@@ -130,6 +130,23 @@ const reducer = (state: typeof initialState, action: {type: ActionType, payload:
                 return {...state};
             }
             return state;
+
+        case ActionType.updateLightValue:
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"light">(state.historyLayers[index], action.payload.value, "light", action.payload.type);
+                return {
+                    ...state
+                };
+            }
+            return state;
+        case ActionType.updateLightType:
+            if (state.historyLayers[state.historyLayers.length - 1]) {
+                let index = getLastStateIndex(state.historyLayers);
+                state.historyLayers[index] = updateLayerSubProperty<"light">(state.historyLayers[index], action.payload, "light", "editingProperty");
+                return {...state};
+            }
+            return state;
         case ActionType.updateEffectValue:
             if (state.historyLayers[state.historyLayers.length - 1]) {
                 let index = getLastStateIndex(state.historyLayers);

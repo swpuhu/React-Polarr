@@ -117,6 +117,15 @@ export function createContrastMatrix (value = 0) {
     ]);
 }
 
+export function createLightnessMatrix (value = 1) {
+    return new Float32Array([
+        value, 0.0, 0.0, 0.0,
+        0.0, value, 0.0, 0.0,
+        0.0, 0.0, value, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    ]);
+}
+
 export function createHueRotateMatrix (value = 0) {
     let sin = Math.sin(value * Math.PI / 180);
     let cos = Math.cos(value * Math.PI / 180);

@@ -43,6 +43,13 @@ export const initLayer = (source: MyImage): Layer => {
             currentCategory: 'vintage',
             type: 'normal',
             intensity: 100
+        },
+        light: {
+            editingProperty: '',
+            contrast: 0,
+            lightness: 0,
+            lightPartial: 0,
+            darkPartial: 0,
         }
     }
 };

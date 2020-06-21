@@ -8,6 +8,7 @@ import {EffectFilter} from "./Effect";
 import {Filter} from "./Filter";
 import {HistoryList} from './HistoryList';
 import {getLastState} from "../../lib/util";
+import {LightFilter} from "./LightFilter";
 
 const Wrapper = styled.div`
     > .footer-icon {
@@ -95,6 +96,7 @@ const Footer: React.FC = () => {
                 showController = <Filter/>;
                 break;
             case 4:
+                showController = <LightFilter/>;
                 break;
             case 5:
                 showController = <ColorFilter/>;

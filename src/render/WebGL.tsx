@@ -8,6 +8,8 @@ import {AlphaMaskFilter} from "./shader/alphaMaskFilter";
 
 const vertexCoord2TexCoordX = mapValue(-1, 1, 0, 1);
 const vertexCoord2TexCoordY = mapValue(-1, 1, 1, 0);
+const lightMap = mapValue(-100, 100, 0, 2);
+const contrastMap = mapValue(-100, 100, 0, 2);
 export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWebGLRender => {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
     let width = gl.canvas.width;
@@ -162,8 +164,9 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                 gl.drawArrays(gl.TRIANGLES, 0, 6);
             } else {
                 renderCount = passFramebuffer(gl, filters.colorFilter.program, renderCount, () => {
-                    if (filters.colorFilter && filters.colorFilter.setColor) {
+                    if (filters.colorFilter && filters.colorFilter.setColor && filters.colorFilter.setLight) {
                         filters.colorFilter.setColor(layer.color.temperature, layer.color.tint, layer.color.hue, layer.color.saturation);
+                        filters.colorFilter.setLight(contrastMap(layer.light.contrast), lightMap(layer.light.lightness), lightMap(layer.light.lightPartial), lightMap(layer.light.darkPartial));
                     }
                 });
                 // 第一次渲染要回复到全屏的顶点位置

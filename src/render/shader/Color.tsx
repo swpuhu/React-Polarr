@@ -4,7 +4,7 @@ import {
     createUniformSetters,
     createProjection,
     setAttributes,
-    setUniforms, mapValue, createHueRotateMatrix, createSaturateMatrix
+    setUniforms, mapValue, createHueRotateMatrix, createSaturateMatrix, createContrastMatrix, createLightnessMatrix
 } from "../GLUtil";
 import {WebGLRenderer} from "../../types/type";
 
@@ -26,14 +26,28 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
     uniform float u_tint;
     uniform mat4 u_hue;
     uniform mat4 u_saturation;
+    uniform mat4 u_contrast;
+    uniform mat4 u_lightness;
+    uniform float u_lightPartial;
+    uniform float u_darkPartial;   
     varying vec2 v_texCoord;
-    
+    float getY(vec3 rgb) {
+        return 0.299 * rgb.x + 0.587 * rgb.y + 0.114 * rgb.z;
+    }
     const lowp vec3 warmFilter = vec3(0.93, 0.54, 0.0);
     const mediump mat3 RGBtoYIQ = mat3(0.299, 0.587, 0.114, 0.596, -0.274, -0.322, 0.212, -0.523, 0.311);
     const mediump mat3 YIQtoRGB = mat3(1.0, 0.956, 0.621, 1.0, -0.272, -0.647, 1.0, -1.105, 1.702);
     void main () {
         vec4 source = texture2D(u_texture, v_texCoord);
-        source = u_hue * u_saturation * source;
+        source = u_hue * u_lightness * u_contrast * u_saturation * source;
+        // float y = getY(source.rgb * 255.);
+        // if (y < 85.) {
+        //     source.rgb = source.rgb * u_darkPartial; 
+        // } else if (y > 170.) {
+        //     source.rgb = source.rgb * u_lightPartial;
+        // }
+        
+        
         mediump vec3 yiq = RGBtoYIQ * source.rgb;
         yiq.b = clamp(yiq.b + u_tint * 0.5226 * 0.1, -0.5226, 0.5226);
         lowp vec3 rgb = YIQtoRGB * yiq;
@@ -71,7 +85,11 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
         u_temperature: 0,
         u_tint: 0,
         u_hue: createHueRotateMatrix(0),
-        u_saturation: createSaturateMatrix(0)
+        u_saturation: createSaturateMatrix(0),
+        u_contrast: createContrastMatrix(1),
+        u_lightness: createLightnessMatrix(1),
+        u_lightPartial: 1,
+        u_darkPartial: 1
     };
 
     const viewport = () => {
@@ -93,6 +111,13 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
         setUniforms(uniformSetter, uniforms);
     };
 
+    const setLight = (contrast: number, lightness: number, lightPartial: number, darkPartial: number) => {
+        uniforms.u_contrast = createContrastMatrix(contrast);
+        uniforms.u_lightness = createLightnessMatrix(lightness);
+        uniforms.u_lightPartial = lightPartial;
+        uniforms.u_darkPartial = darkPartial;
+    };
+
     setAttributes(attributeSetter, attributes);
     setUniforms(uniformSetter, uniforms);
 
@@ -100,6 +125,7 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
     return {
         program,
         viewport,
-        setColor
+        setColor,
+        setLight
     }
 };

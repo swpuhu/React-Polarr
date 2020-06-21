@@ -24,6 +24,8 @@ export enum ActionType {
     updateTint,
     updateColorType,
     updateColorValue,
+    updateLightType,
+    updateLightValue,
     startClipPath,
     finishClipPath,
     updateTransform,
@@ -58,6 +60,7 @@ export type WebGLRenderer = {
     setIntensity?: (intensity: number) => void
     setClip? :(l: number, r: number, t: number, b: number) => void
     setFilter? : (type: LutFilterType, intensity: number) => void
+    setLight?: (contrast: number, lightness: number, lightPartial: number, darkPartial: number) => void
 }
 
 export type MyImage = ImageBitmap | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
@@ -80,7 +83,7 @@ export type Transform = {
 }
 
 export type Color = {
-    editingProperty: Exclude<keyof Color, 'editingProperty'> | '';
+    editingProperty: Exclude<keyof Color, 'editingProperty'> | ''
     temperature: number
     tint: number
     hue: number
@@ -88,10 +91,17 @@ export type Color = {
 }
 
 export type Effect = {
-    editingProperty: Exclude<keyof Effect, 'editingProperty'> | '';
+    editingProperty: Exclude<keyof Effect, 'editingProperty'> | ''
     colorOffset: number
 }
 
+export type Light = {
+    editingProperty: Exclude<keyof Light, 'editingProperty'> | ''
+    contrast: number,
+    lightness: number,
+    lightPartial: number,
+    darkPartial: number
+}
 export type FilterCategoryType = 'cinema' | 'vintage'
 export type VintageFilterType = 'normal' | 'flowerStone' | 'fluorite' | 'fluoriteBlue' | 'fluoriteVenus' | 'fuchsite' | 'talc' | 'tanzanite' |
                                 'tektite' | 'thulite'
@@ -116,6 +126,7 @@ export type Layer = {
     originPosition: Position;
     transform: Transform;
     color: Color,
+    light: Light,
     effect: Effect,
     filter: Filter<FilterCategoryType>
 }

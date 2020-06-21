@@ -31,6 +31,14 @@ const Wrapper = styled.div`
     &.colorOffset {
         background: linear-gradient(45deg,#929292,#0095ff);
     }
+    
+    &.lightness {
+        background: linear-gradient(45deg,#000000, #ffffff);
+    }
+    
+    &.contrast {
+        background: linear-gradient(45deg,#333, #cccccc, #333,  #cccccc, #333,  #cccccc);
+    }
     > .flex {
         display: flex;
         width: 100%;
