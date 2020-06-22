@@ -39,6 +39,15 @@ const Wrapper = styled.div`
     &.contrast {
         background: linear-gradient(45deg,#333, #cccccc, #333,  #cccccc, #333,  #cccccc);
     }
+    
+    &.lightPartial {
+        background: linear-gradient(45deg,#333, #eee);
+    }
+    
+    &.darkPartial {
+        background: linear-gradient(45deg,#222, #888);
+    }
+    
     > .flex {
         display: flex;
         width: 100%;

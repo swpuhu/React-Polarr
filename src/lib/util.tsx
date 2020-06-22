@@ -48,7 +48,7 @@ export const initLayer = (source: MyImage): Layer => {
             editingProperty: '',
             contrast: 0,
             lightness: 0,
-            lightPartial: 0,
+            lightPartial: 255,
             darkPartial: 0,
         }
     }
@@ -315,15 +315,3 @@ export const getLastStateIndex = (layers: Layer[]) => {
     }
     return layers.length - 1;
 };
-
-
-export function objIsEqual <T extends object>(obj1: T, obj2: T) {
-    for (let key in obj1) {
-        if (obj2.hasOwnProperty(key) && obj1.hasOwnProperty(key) && obj1[key] === obj2[key]) {
-
-        } else {
-            return false;
-        }
-    }
-    return true;
-}

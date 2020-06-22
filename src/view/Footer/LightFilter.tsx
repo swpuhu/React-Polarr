@@ -52,30 +52,30 @@ export const LightFilter:React.FC = (props) => {
                 }
             }
         },
-        // {
-        //     type: "lightPartial",
-        //     min: -180,
-        //     max: 180,
-        //     value: layer ? layer.light.lightPartial: 0,
-        //     label: "亮部",
-        //     onChange: (value) => {
-        //         if (layer) {
-        //             dispatch({type: ActionType.updateLightValue, payload: {type: "lightPartial", value: value}});
-        //         }
-        //     }
-        // },
-        // {
-        //     type: "darkPartial",
-        //     min: -100,
-        //     max: 100,
-        //     value: layer ? layer.light.darkPartial : 0,
-        //     label: "暗部",
-        //     onChange: (value) => {
-        //         if (layer) {
-        //             dispatch({type: ActionType.updateLightValue, payload: {type: "darkPartial", value: value}});
-        //         }
-        //     }
-        // }
+        {
+            type: "lightPartial",
+            min: 0,
+            max: 255,
+            value: layer ? layer.light.lightPartial: 0,
+            label: "白色色阶",
+            onChange: (value) => {
+                if (layer) {
+                    dispatch({type: ActionType.updateLightValue, payload: {type: "lightPartial", value: value}});
+                }
+            }
+        },
+        {
+            type: "darkPartial",
+            min: 0,
+            max: 255,
+            value: layer ? layer.light.darkPartial : 0,
+            label: "黑色色阶",
+            onChange: (value) => {
+                if (layer) {
+                    dispatch({type: ActionType.updateLightValue, payload: {type: "darkPartial", value: value}});
+                }
+            }
+        }
     ];
 
     return (

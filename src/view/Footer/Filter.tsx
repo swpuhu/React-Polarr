@@ -175,6 +175,7 @@ export const Filter:React.FC = (props) => {
                                          label={item.subType ? labelMap[item.subType] : ''}
                                          className={item.subType ? item.subType : ''}
                                          onClick={() => {
+                                             dispatch({type: ActionType.addHistory, payload: labelMap[item.subType]});
                                              dispatch({type: ActionType.updateFilterCategory, payload: firstClass.type});
                                              dispatch({type: ActionType.updateFilterSubType, payload: item.subType});
                                          }}

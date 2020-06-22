@@ -60,7 +60,7 @@ const Main: React.FC = () => {
     const layer = getLastState(states.historyLayers);
     const {input} = useFile((file) => {
     });
-    console.log(states.historyLayers);
+    // console.log(states.historyLayers);
     const open = () => {
         input.click();
     };

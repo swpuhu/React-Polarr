@@ -166,7 +166,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                 renderCount = passFramebuffer(gl, filters.colorFilter.program, renderCount, () => {
                     if (filters.colorFilter && filters.colorFilter.setColor && filters.colorFilter.setLight) {
                         filters.colorFilter.setColor(layer.color.temperature, layer.color.tint, layer.color.hue, layer.color.saturation);
-                        filters.colorFilter.setLight(contrastMap(layer.light.contrast), lightMap(layer.light.lightness), lightMap(layer.light.lightPartial), lightMap(layer.light.darkPartial));
+                        filters.colorFilter.setLight(contrastMap(layer.light.contrast), lightMap(layer.light.lightness), layer.light.lightPartial / 255, layer.light.darkPartial / 255);
                     }
                 });
                 // 第一次渲染要回复到全屏的顶点位置

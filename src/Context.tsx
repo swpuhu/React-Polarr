@@ -1,6 +1,6 @@
 import React, {createContext, useReducer} from "react";
 import {ActionType, EditStatus, EditType, Layer, Position, ProcessStatus, StateType} from "./types/type";
-import {clone, getLastStateIndex, initLayer, objIsEqual, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
+import {clone, getLastStateIndex, initLayer, updateLayerProperty, updateLayerSubProperty} from "./lib/util";
 import imgSrc from './icons/example.jpg';
 
 let mode = 0;

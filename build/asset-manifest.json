@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/polarr/static/css/main.27810728.chunk.css",
-    "main.js": "/polarr/build/static/js/main.33e77d64.chunk.js",
-    "main.js.map": "/polarr/build/static/js/main.33e77d64.chunk.js.map",
+    "main.js": "/polarr/build/static/js/main.7e764c5d.chunk.js",
+    "main.js.map": "/polarr/build/static/js/main.7e764c5d.chunk.js.map",
     "runtime-main.js": "/polarr/build/static/js/runtime-main.544c5042.js",
     "runtime-main.js.map": "/polarr/build/static/js/runtime-main.544c5042.js.map",
     "build/static/js/2.159a00b3.chunk.js": "/polarr/build/static/js/2.159a00b3.chunk.js",
     "build/static/js/2.159a00b3.chunk.js.map": "/polarr/build/static/js/2.159a00b3.chunk.js.map",
+    "5fec625542cdb0a77d15.worker.js": "/polarr/5fec625542cdb0a77d15.worker.js",
+    "5fec625542cdb0a77d15.worker.js.map": "/polarr/5fec625542cdb0a77d15.worker.js.map",
     "build/static/js/2.159a00b3.chunk.js.LICENSE.txt": "/polarr/build/static/js/2.159a00b3.chunk.js.LICENSE.txt",
-    "e37bde1c74be17663942.worker.js": "/polarr/e37bde1c74be17663942.worker.js",
-    "e37bde1c74be17663942.worker.js.map": "/polarr/e37bde1c74be17663942.worker.js.map",
     "index.html": "/polarr/index.html",
-    "precache-manifest.229b1c2dc151db5a65abe6997f210c52.js": "/polarr/precache-manifest.229b1c2dc151db5a65abe6997f210c52.js",
+    "precache-manifest.ff4d1fd70d02a994ed96fef08019c277.js": "/polarr/precache-manifest.ff4d1fd70d02a994ed96fef08019c277.js",
     "service-worker.js": "/polarr/service-worker.js",
     "static/css/main.27810728.chunk.css.map": "/polarr/static/css/main.27810728.chunk.css.map",
     "static/media/Flower Stone.cube.jpeg": "/polarr/static/media/Flower Stone.cube.fa1c8cea.jpeg",
@@ -39,6 +39,6 @@
     "build/static/js/runtime-main.544c5042.js",
     "build/static/js/2.159a00b3.chunk.js",
     "static/css/main.27810728.chunk.css",
-    "build/static/js/main.33e77d64.chunk.js"
+    "build/static/js/main.7e764c5d.chunk.js"
   ]
 }

@@ -31,21 +31,58 @@ export const ColorFilter = (gl: WebGLRenderingContext | WebGL2RenderingContext, 
     uniform float u_lightPartial;
     uniform float u_darkPartial;   
     varying vec2 v_texCoord;
-    float getY(vec3 rgb) {
-        return 0.299 * rgb.x + 0.587 * rgb.y + 0.114 * rgb.z;
+    
+    vec3 YUV2RGB(vec3 YUV) {
+        mat3 matYUV2RGB = mat3(
+            1.0, 1.0, 1.0,
+            0.0, -0.344116, 1.771973,
+            1.401978, -0.714111, 0.0
+        );
+        vec3 rgb = matYUV2RGB * vec3(YUV[0], YUV[1] - 128.0, YUV[2] - 128.0); 
+        return rgb;
     }
+    
+    vec3 RGB2YUV(vec3 RGB) {
+        mat3 matRGB2YUV = mat3(
+            0.29895, -0.168701, 0.5,
+            0.587036, -0.331299, -0.418701,
+            0.114014, 0.5, -0.081299
+        );
+        vec3 mid = matRGB2YUV * RGB;
+        vec3 yuv = vec3(mid[0], mid[1] + 128.0, mid[2] + 128.0); 
+        return yuv;
+    }
+    
     const lowp vec3 warmFilter = vec3(0.93, 0.54, 0.0);
     const mediump mat3 RGBtoYIQ = mat3(0.299, 0.587, 0.114, 0.596, -0.274, -0.322, 0.212, -0.523, 0.311);
     const mediump mat3 YIQtoRGB = mat3(1.0, 0.956, 0.621, 1.0, -0.272, -0.647, 1.0, -1.105, 1.702);
     void main () {
         vec4 source = texture2D(u_texture, v_texCoord);
         source = u_hue * u_lightness * u_contrast * u_saturation * source;
-        // float y = getY(source.rgb * 255.);
-        // if (y < 85.) {
-        //     source.rgb = source.rgb * u_darkPartial; 
-        // } else if (y > 170.) {
-        //     source.rgb = source.rgb * u_lightPartial;
-        // }
+        vec3 diff = vec3(u_lightPartial - u_darkPartial);
+        vec3 rgbDiff = source.rgb - vec3(u_darkPartial);
+        if (rgbDiff.r < 0.) {
+            source.r = 0.0;
+        } else if (rgbDiff.r > u_lightPartial) {
+            source.r = 1.0;
+        } else {
+            source.r= rgbDiff.r / diff.r;
+        }
+        if (rgbDiff.g < 0.) {
+            source.g = 0.0;
+        } else if (rgbDiff.g > u_lightPartial) {
+            source.g = 1.0;
+        } else {
+            source.g= rgbDiff.g / diff.g;
+        }
+        if (rgbDiff.b < 0.) {
+            source.b = 0.0;
+        } else if (rgbDiff.b > u_lightPartial) {
+            source.b = 1.0;
+        } else {
+            source.b= rgbDiff.b / diff.b;
+        }
+        
         
         
         mediump vec3 yiq = RGBtoYIQ * source.rgb;
