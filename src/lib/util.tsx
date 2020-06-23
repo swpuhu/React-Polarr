@@ -37,7 +37,8 @@ export const initLayer = (source: MyImage): Layer => {
         },
         effect: {
             editingProperty: '',
-            colorOffset: 0
+            colorOffset: 0,
+            soul: 0
         },
         filter: {
             currentCategory: 'vintage',

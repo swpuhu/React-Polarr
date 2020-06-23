@@ -55,7 +55,7 @@ export type IdentityObject<T> = {
 export type WebGLRenderer = {
     viewport: () => void;
     program: WebGLProgram | null;
-    setScale?: (sx: number, sy: number, centerX?: number, centerY?: number) => void
+    setScale?: ((sx: number, sy: number, centerX?: number, centerY?: number) => void)
     setColor?: (temperature: number, tint: number, hue: number, saturation: number) => void
     setIntensity?: (intensity: number) => void
     setClip? :(l: number, r: number, t: number, b: number) => void
@@ -92,7 +92,8 @@ export type Color = {
 
 export type Effect = {
     editingProperty: Exclude<keyof Effect, 'editingProperty'> | ''
-    colorOffset: number
+    colorOffset: number,
+    soul: number
 }
 
 export type Light = {

@@ -5,6 +5,7 @@ import {ColorFilter} from "./shader/Color";
 import {ColorOffset} from "./shader/colorOffset";
 import {LutFilter} from "./shader/lutFilter";
 import {AlphaMaskFilter} from "./shader/alphaMaskFilter";
+import {SoulFilter} from "./shader/Soul";
 
 const vertexCoord2TexCoordX = mapValue(-1, 1, 0, 1);
 const vertexCoord2TexCoordY = mapValue(-1, 1, 1, 0);
@@ -48,7 +49,8 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
         colorFilter: ColorFilter(gl, vertexBuffer, texCoordBuffer),
         colorOffsetFilter: ColorOffset(gl, vertexBuffer, texCoordBuffer),
         lutFilter: LutFilter(gl, vertexBuffer, texCoordBuffer),
-        alphaMaskFilter: AlphaMaskFilter(gl, vertexBuffer, texCoordBuffer)
+        alphaMaskFilter: AlphaMaskFilter(gl, vertexBuffer, texCoordBuffer),
+        soulFilter: SoulFilter(gl, vertexBuffer, texCoordBuffer),
     };
     let [framebuffers, textures] = createFramebufferTexture(gl, 2, width, height);
     let texture = createTexture(gl);
@@ -78,13 +80,14 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
         }
     };
 
-    const passFramebuffer = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram | null, renderCount: number, fn: (...args: any) => void): number => {
+    const passFramebuffer = (gl: WebGLRenderingContext | WebGL2RenderingContext, program: WebGLProgram | null, renderCount: number, fn: (...args: any) => void, _fn?: (...args: any) => void): number => {
         gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffers[renderCount % 2]);
         gl.useProgram(program);
         gl.clear(gl.COLOR_BUFFER_BIT);
         fn();
         gl.drawArrays(gl.TRIANGLES, 0, 6);
         gl.bindTexture(gl.TEXTURE_2D, textures[renderCount % 2]);
+        _fn && _fn();
         return ++renderCount;
     };
 
@@ -134,8 +137,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                 gl.bufferData(gl.ARRAY_BUFFER, texCoordPoint, gl.STATIC_DRAW);
             } else {
                 let w = width * (1 - layer.transform.left - layer.transform.right);
-                let h = height * (1 - layer.transform.top - layer.transform.bottom)
-                debugger;
+                let h = height * (1 - layer.transform.top - layer.transform.bottom);
                 gl.canvas.width = w;
                 gl.canvas.height = h;
                 viewport(w, h);
@@ -163,18 +165,29 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
                 filters.normalFilter && gl.useProgram(filters.normalFilter.program);
                 gl.drawArrays(gl.TRIANGLES, 0, 6);
             } else {
-                renderCount = passFramebuffer(gl, filters.colorFilter.program, renderCount, () => {
-                    if (filters.colorFilter && filters.colorFilter.setColor && filters.colorFilter.setLight) {
-                        filters.colorFilter.setColor(layer.color.temperature, layer.color.tint, layer.color.hue, layer.color.saturation);
-                        filters.colorFilter.setLight(contrastMap(layer.light.contrast), lightMap(layer.light.lightness), layer.light.lightPartial / 255, layer.light.darkPartial / 255);
+                renderCount = passFramebuffer(gl, filters.soulFilter.program, renderCount, () => {
+                    if (filters.soulFilter.program && filters.soulFilter.setScale) {
+                        filters.soulFilter.setScale(layer.effect.soul / 100 + 1, layer.effect.soul / 100 + 1);
+                    }
+                }, () => {
+                    if (filters.soulFilter.program && filters.soulFilter.setScale) {
+                        filters.soulFilter.setScale(1, 1);
                     }
                 });
+
                 // 第一次渲染要回复到全屏的顶点位置
                 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, fullPoint, gl.STATIC_DRAW);
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, fullTexCoord, gl.STATIC_DRAW);
+
+                renderCount = passFramebuffer(gl, filters.colorFilter.program, renderCount, () => {
+                    if (filters.colorFilter && filters.colorFilter.setColor && filters.colorFilter.setLight) {
+                        filters.colorFilter.setColor(layer.color.temperature, layer.color.tint, layer.color.hue, layer.color.saturation);
+                        filters.colorFilter.setLight(contrastMap(layer.light.contrast), lightMap(layer.light.lightness), layer.light.lightPartial / 255, layer.light.darkPartial / 255);
+                    }
+                });
 
                 renderCount = passFramebuffer(gl, filters.colorOffsetFilter.program, renderCount, () => {
                     if (filters.colorOffsetFilter && filters.colorOffsetFilter.setIntensity) {

@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Context} from "../../Context";
-import {ActionType, Color} from "../../types/type";
+import {ActionType, Color, Effect} from "../../types/type";
 import styled from "styled-components";
 import {ControlSlider} from "../../components/ControlSlider";
 import {Indicator} from "../../components/Indicator";
@@ -20,12 +20,13 @@ export const EffectFilter:React.FC = (props) => {
     const {state: states, dispatch} = useContext(Context);
     const layer = getLastState(states.historyLayers);
     const indicators: {
-        type: 'colorOffset'
+        type: Exclude<keyof Effect, 'editingProperty'>
         min: number
         max: number
         value: number,
         label: string,
-        onChange: (value: number) => void
+        onChange: (value: number) => void,
+        step?: number
     }[] = [
         {
             type: "colorOffset",
@@ -36,6 +37,19 @@ export const EffectFilter:React.FC = (props) => {
             onChange: (value) => {
                 if (layer) {
                     dispatch({type: ActionType.updateEffectValue, payload: {type: "colorOffset", value: value}});
+                }
+            }
+        },
+        {
+            type: "soul",
+            min: 0,
+            max: 100,
+            step: 1,
+            value: layer ? layer.effect.soul: 0,
+            label: "灵魂出窍",
+            onChange: (value) => {
+                if (layer) {
+                    dispatch({type: ActionType.updateEffectValue, payload: {type: "soul", value: value}});
                 }
             }
         }
@@ -49,7 +63,7 @@ export const EffectFilter:React.FC = (props) => {
                     if (layer && layer.effect.editingProperty === item.type) {
                         isShow = true;
                     }
-                    return isShow ? <ControlSlider className={isShow ? '' : 'hide'} key={item.type} onChange={item.onChange} value={item.value} min={item.min} max={item.max} step={1} label={item.label}/> : null
+                    return isShow ? <ControlSlider className={isShow ? '' : 'hide'} key={item.type} onChange={item.onChange} value={item.value} min={item.min} max={item.max} step={item.step ? item.step : 1} label={item.label}/> : null
                 })
             }
             <Wrapper>

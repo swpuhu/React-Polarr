@@ -79,10 +79,10 @@ type Props = {
     onClick?: () => void
 }
 export const Indicator:React.FC<Props> = (props) => {
-    let mid = (props.min + props.max) / 2;
-    let halfRange = (props.max - props.min) / 2;
-    let percent = props.value > mid ? props.value / halfRange: -props.value / halfRange;
-    percent *= 100;
+    // let mid = (props.min + props.max) / 2;
+    // let halfRange = (props.max - props.min) / 2;
+    // let percent = props.value > mid ? props.value / halfRange: -props.value / halfRange;
+    // percent *= 100;
     return (
         <Wrapper onClick={props.onClick} className={cs(props.className, props.isActive ? 'active' : '')}>
             <div className="flex">
@@ -93,9 +93,9 @@ export const Indicator:React.FC<Props> = (props) => {
                     {props.label}
                 </div>
             </div>
-            <div className="mask" style={{
-                clipPath: props.value > mid ? `polygon(0% 0%, ${percent}% 0%, 100% ${100 - percent}%, 100% 100%, 0% 0%)` : `polygon(0% 0%, 0% ${percent}%, ${100 - percent}% 100%, 100% 100%, 0% 0%)`,
-            }}/>
+            {/*<div className="mask" style={{*/}
+            {/*    clipPath: props.value > mid ? `polygon(0% 0%, ${percent}% 0%, 100% ${100 - percent}%, 100% 100%, 0% 0%)` : `polygon(0% 0%, 0% ${percent}%, ${100 - percent}% 100%, 100% 100%, 0% 0%)`,*/}
+            {/*}}/>*/}
         </Wrapper>
     )
 }
