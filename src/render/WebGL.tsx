@@ -93,6 +93,7 @@ export const WebGL = (gl: WebGLRenderingContext, isSave: boolean = false): MyWeb
 
     const render = (state: StateType, layer: Layer | null, renderOrigin?: boolean): Array<number> => {
         let renderCount = 0;
+        gl.clear(gl.COLOR_BUFFER_BIT);
         if (layer) {
             if (!isSave) {
                 if (state.transformStatus === EditType.transform) {

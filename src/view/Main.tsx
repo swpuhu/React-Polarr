@@ -81,6 +81,8 @@ const Main: React.FC = () => {
                             layer && layer.source && offCanvas.viewport(layer.source.width, layer.source.height);
                         }
                         offCanvas.renderer.render(states, layer);
+                        layer && layer.source && offCanvas.viewport(layer.source.width, layer.source.height);
+                        offCanvas.renderer.render(states, layer);
                         saveCanvasPicture(offCanvas.canvasElement, '保存图片.jpeg').then(r => dispatch({type: ActionType.finishSavePicture, payload: null}))
 
                     }
